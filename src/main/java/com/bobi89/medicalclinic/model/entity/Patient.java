@@ -29,6 +29,14 @@ public class Patient {
                 + String.valueOf(r.nextInt(1950, 2020));
         this.email = firstName.toLowerCase() + lastName.toLowerCase() + "@gmail.com";
     }
+    public void update(Patient newPatientData) {
+        this.email = newPatientData.getEmail();
+        this.id = newPatientData.getId();
+        this.firstName = newPatientData.getFirstName();
+        this.lastName = newPatientData.getLastName();
+        this.password = newPatientData.getPassword();
+        this.birthday = newPatientData.getBirthday();
+    }
 
 //    @Override
 //    public int compareTo(Patient o) {

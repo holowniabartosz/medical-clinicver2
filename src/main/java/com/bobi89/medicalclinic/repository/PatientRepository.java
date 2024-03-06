@@ -1,17 +1,17 @@
 package com.bobi89.medicalclinic.repository;
 
+import com.bobi89.medicalclinic.model.entity.ChangePasswordCommand;
 import com.bobi89.medicalclinic.model.entity.Patient;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import java.util.HashSet;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@Component
+@Repository
 public class PatientRepository {
 
-    HashSet<Patient> patientSet;
+    private HashSet<Patient> patientSet;
 
     public PatientRepository(HashSet<Patient> patientSet) {
         this.patientSet = new HashSet<>();
@@ -19,12 +19,14 @@ public class PatientRepository {
 
     public HashSet<Patient> getAllPatientData() {
         return patientSet;
-
     }
 
-    public Optional<Patient> getPatient(String email) {
+    public Patient getPatient(String email) {
         return patientSet.stream()
-                .filter(s -> s.getEmail().equals(email)).findFirst();
+                .filter(s -> s.getEmail()
+                        .equals(email))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("No such patient"));
     }
 
     public void addBulkPatients(int nrOfNewPatients) {
@@ -49,10 +51,18 @@ public class PatientRepository {
         patientSet.removeIf(s -> s.getEmail().equals(patientEmail));
     }
 
-    public Optional<Patient> editPatient(String patientEmail, Patient newPatient) {
-        var editedPatient = patientSet.stream()
-                .filter(s -> s.getEmail().equals(patientEmail))
-                .findFirst();
+    public Patient editPatient(String email, Patient newPatient) {
+        var editedPatient = getPatient(email);
+        editedPatient.update(newPatient);
         return editedPatient;
+    }
+
+    public ChangePasswordCommand editPatientPassword (String email, ChangePasswordCommand pass){
+        var editedPatient = getPatient(email);
+        if (editedPatient.getPassword().equals(pass.getOldPassword())){
+            editedPatient.setPassword(pass.getNewPassword());
+        } else {
+            new IllegalArgumentException("Incorrect old password");
+        } return pass;
     }
 }

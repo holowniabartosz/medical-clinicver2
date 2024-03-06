@@ -1,5 +1,6 @@
 package com.bobi89.medicalclinic.controller;
 
+import com.bobi89.medicalclinic.model.entity.ChangePasswordCommand;
 import com.bobi89.medicalclinic.model.entity.Patient;
 import com.bobi89.medicalclinic.service.PatientService;
 import lombok.AllArgsConstructor;
@@ -52,6 +53,12 @@ public class PatientController {
     public Patient updatePatient(@PathVariable String email, @RequestBody Patient patient) {
         myPatientService.editPatient(email, patient);
         return patient;
+    }
+
+    @PutMapping("{email}/change-password")
+    public ChangePasswordCommand updatePatientPassword(@PathVariable String email, @RequestBody ChangePasswordCommand pass) {
+        myPatientService.editPatientPassword(email, pass);
+        return pass;
     }
 }
 

@@ -1,5 +1,6 @@
 package com.bobi89.medicalclinic.service;
 
+import com.bobi89.medicalclinic.model.entity.ChangePasswordCommand;
 import com.bobi89.medicalclinic.model.entity.Patient;
 import com.bobi89.medicalclinic.repository.PatientRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,8 +19,7 @@ public class PatientService {
     }
 
     public Patient getPatient(String email) {
-        return patientRepository.getPatient(email)
-                .orElseThrow(() -> new IllegalArgumentException("Patient not found."));
+        return patientRepository.getPatient(email);
     }
 
     public void addBulkPatients(int nrOfNewPatients) {
@@ -32,17 +32,12 @@ public class PatientService {
 
     public Patient addPatient(Patient patient) {
         var existingPatient = patientRepository.getPatient(patient.getEmail());
-        if (existingPatient.isPresent()) {
-            throw new IllegalArgumentException("Patient with given email exists.");
-        } else {
             patientRepository.addPatient(patient);
-        }
         return patient;
     }
 
     public void removePatient(String email) {
-        var existingPatient = patientRepository.getPatient(email)
-                .orElseThrow(() -> new IllegalArgumentException("Patient with given email does not exist."));
+        var existingPatient = patientRepository.getPatient(email);
         patientRepository.removePatient(email);
     }
 
@@ -50,9 +45,18 @@ public class PatientService {
         if (patientRepository.getAllPatientData().contains(patientRepository.getPatient(email))) {
             throw new IllegalArgumentException("Patient with given email exists.");
         } else {
-            patientRepository.removePatient(email);
-            patientRepository.addPatient(patient);
+            patientRepository.editPatient(email, patient);
             return patient;
         }
+    }
+
+    public ChangePasswordCommand editPatientPassword(String email, ChangePasswordCommand pass) {
+        if (patientRepository.getAllPatientData().contains(patientRepository.getPatient(email))) {
+            patientRepository.editPatientPassword(email, pass);
+        } else {
+            throw new IllegalArgumentException("Patient with given email does not exists.");
+
+        }
+        return pass;
     }
 }
