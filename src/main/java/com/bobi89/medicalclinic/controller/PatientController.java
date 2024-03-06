@@ -2,19 +2,17 @@ package com.bobi89.medicalclinic.controller;
 
 import com.bobi89.medicalclinic.model.entity.Patient;
 import com.bobi89.medicalclinic.service.PatientService;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Set;
 
 @RestController
+@AllArgsConstructor
 public class PatientController {
 
     private PatientService myPatientService;
-
-    public PatientController(PatientService patientService) {
-        myPatientService = patientService;
-    }
 
     @GetMapping("/show-all-patient-data")
     public Set<Patient> showAllPatientData() {
