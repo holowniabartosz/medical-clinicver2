@@ -42,11 +42,17 @@ public class PatientService {
     }
 
     public Patient editPatient(String email, Patient patient) {
-        if (patientRepository.getAllPatientData().contains(patientRepository.getPatient(email))) {
-            throw new IllegalArgumentException("Patient with given email exists.");
+        if (!patientRepository.getAllPatientData().contains(patientRepository.getPatient(email))) {
+            throw new IllegalArgumentException("Patient with given email does not exist.");
+        } if (patient.getPassword() == null ||
+                patient.getBirthday() == null ||
+                patient.getEmail() == null ||
+                patient.getPhoneNumber() == null ||
+                patient.getFirstName() == null ||
+                patient.getLastName() == null){
+            throw new NullPointerException("None of patient class fields should be null");
         } else {
-            patientRepository.editPatient(email, patient);
-            return patient;
+            return patientRepository.editPatient(email, patient);
         }
     }
 

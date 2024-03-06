@@ -10,7 +10,7 @@ import java.util.Random;
 public class Patient {
     private String email;
     private String password;
-    private int id;
+    private final int id;
     private String firstName;
     private String lastName;
     private String phoneNumber;
@@ -23,24 +23,20 @@ public class Patient {
         this.firstName = String.valueOf(FIRST_NAMES.values()[r.nextInt(0, (FIRST_NAMES.values().length - 1))]);
         this.lastName = String.valueOf(LAST_NAMES.values()[r.nextInt(0, (FIRST_NAMES.values().length - 1))]);
         this.phoneNumber =
-                String.valueOf(r.nextInt (100000000, 999999999));
-        this.birthday = String.valueOf(r.nextInt(1, 29)) + "/"
-                + String.valueOf(r.nextInt(1, 13)) + "/"
-                + String.valueOf(r.nextInt(1950, 2020));
+                String.valueOf(r.nextInt(100000000, 999999999));
+        this.birthday = r.nextInt(1, 29) + "/"
+                + r.nextInt(1, 13) + "/"
+                + r.nextInt(1950, 2020);
         this.email = firstName.toLowerCase() + lastName.toLowerCase() + "@gmail.com";
     }
+
     public void update(Patient newPatientData) {
         this.email = newPatientData.getEmail();
-        this.id = newPatientData.getId();
+//        this.id = newPatientData.getId();
         this.firstName = newPatientData.getFirstName();
         this.lastName = newPatientData.getLastName();
-        this.password = newPatientData.getPassword();
+//        this.password = newPatientData.getPassword();
         this.birthday = newPatientData.getBirthday();
+        this.phoneNumber = newPatientData.getPhoneNumber();
     }
-
-//    @Override
-//    public int compareTo(Patient o) {
-//        return Integer.compare(this.id, o.id);
-//    }
 }
-

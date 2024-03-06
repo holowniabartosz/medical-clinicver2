@@ -49,10 +49,10 @@ public class PatientController {
         return "Removed patient with e-mail: " + email;
     }
 
+    // response kłamie, bo zwraca nowe ID i password, a te się nie zmieniają przy tej edycji
     @PutMapping("{email}/edit-patient")
     public Patient updatePatient(@PathVariable String email, @RequestBody Patient patient) {
-        myPatientService.editPatient(email, patient);
-        return patient;
+        return myPatientService.editPatient(email, patient);
     }
 
     @PutMapping("{email}/change-password")
