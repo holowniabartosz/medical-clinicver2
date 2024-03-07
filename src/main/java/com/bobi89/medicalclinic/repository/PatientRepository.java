@@ -1,5 +1,7 @@
 package com.bobi89.medicalclinic.repository;
 
+import com.bobi89.medicalclinic.exceptions.exc.PatientNotFoundException;
+import com.bobi89.medicalclinic.exceptions.exc.PatientWithThisEmailExistsException;
 import com.bobi89.medicalclinic.model.entity.ChangePasswordCommand;
 import com.bobi89.medicalclinic.model.entity.Patient;
 import org.springframework.stereotype.Repository;
@@ -33,7 +35,8 @@ public class PatientRepository {
                 .filter(s -> s.getEmail()
                         .equals(email))
                 .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("No such patient"));
+                .orElseThrow(() ->
+                        new PatientNotFoundException("Patient not found"));
     }
 
     public Patient addPatient(Patient patient) {
@@ -44,7 +47,7 @@ public class PatientRepository {
         if (existingEmails.add(email)) {
             patientSet.add(patient);
         } else {
-            throw new IllegalArgumentException("Patient with this email already exists");
+            throw new PatientWithThisEmailExistsException("Patient with this email already exists");
         }
         return patient;
     }
@@ -62,7 +65,7 @@ public class PatientRepository {
     public ChangePasswordCommand editPatientPassword(String email, ChangePasswordCommand pass) {
         var editedPatient = getPatient(email);
         if (!editedPatient.getPassword().equals(pass.getOldPassword())) {
-            throw new IllegalArgumentException("Incorrect old password");
+            throw new IllegalArgumentException("Provided old password is incorrect");
         }
         editedPatient.setPassword(pass.getNewPassword());
         return pass;

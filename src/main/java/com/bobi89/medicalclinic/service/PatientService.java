@@ -1,5 +1,8 @@
 package com.bobi89.medicalclinic.service;
 
+import com.bobi89.medicalclinic.exceptions.exc.PatientIdChangeException;
+import com.bobi89.medicalclinic.exceptions.exc.PatientNotFoundException;
+import com.bobi89.medicalclinic.exceptions.exc.PatientNullFieldsException;
 import com.bobi89.medicalclinic.model.entity.ChangePasswordCommand;
 import com.bobi89.medicalclinic.model.entity.Patient;
 import com.bobi89.medicalclinic.repository.PatientRepository;
@@ -33,10 +36,8 @@ public class PatientService {
         patientRepository.removePatient(email);
     }
 
-    // nie można ID
     public Patient editPatient(String email, Patient patient) {
         checkIfIdChanged(email, patient);
-        validate(email);
         validateIfNull(patient);
         return patientRepository.editPatient(email, patient);
     }
@@ -45,16 +46,10 @@ public class PatientService {
     public ChangePasswordCommand editPatientPassword(String email, ChangePasswordCommand pass) {
         var editedPasswordPatient = patientRepository.getPatient(email);
         if (editedPasswordPatient == null) {
-            throw new IllegalArgumentException("Patient not found");
+            throw new PatientNotFoundException("Patient not found");
         }
         patientRepository.editPatientPassword(email, pass);
         return pass;
-    }
-
-    public void validate(String email) {
-        if (!patientRepository.getAllPatientData().contains(patientRepository.getPatient(email))) {
-            throw new IllegalArgumentException("Patient with given email does not exist.");
-        }
     }
 
     public void validateIfNull(Patient patient) {
@@ -64,13 +59,13 @@ public class PatientService {
                 patient.getPhoneNumber() == null ||
                 patient.getFirstName() == null ||
                 patient.getLastName() == null) {
-            throw new IllegalArgumentException("None of patient class fields should be null");
+            throw new PatientNullFieldsException("None of patient class fields should be null");
         }
     }
 
     public void checkIfIdChanged(String email, Patient patient) {
         if (!patient.getIdCardNr().equals(patientRepository.getPatient(email).getIdCardNr())) {
-            throw new IllegalArgumentException("ID can't be changed");
+            throw new PatientIdChangeException("ID can't be changed");
         }
     }
 }
