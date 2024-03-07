@@ -5,6 +5,7 @@ import com.bobi89.medicalclinic.model.entity.Patient;
 import org.springframework.stereotype.Repository;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -14,7 +15,13 @@ public class PatientRepository {
     private HashSet<Patient> patientSet;
 
     public PatientRepository(HashSet<Patient> patientSet) {
-        this.patientSet = new HashSet<>();
+        this.patientSet = new HashSet<>(List.of(
+                new Patient("jd@gmail.com","1234","4321",
+                        "John","Doe","987987987","01/02/2000"),
+                new Patient("ct@gmail.com","1234","4321",
+                        "Cindy","Tanner","987987987","01/02/2000"),
+                new Patient("mr@gmail.com","1234","4321",
+                        "Mark","Roberts","987987987","01/02/2000")));
     }
 
     public HashSet<Patient> getAllPatientData() {
@@ -29,21 +36,16 @@ public class PatientRepository {
                 .orElseThrow(() -> new IllegalArgumentException("No such patient"));
     }
 
-    public void addBulkPatients(int nrOfNewPatients) {
+    public Patient addPatient(Patient patient) {
         Set<String> existingEmails = new HashSet<>(patientSet.stream()
                 .map(s -> s.getEmail())
                 .collect(Collectors.toSet()));
-        for (int i = 0; i < nrOfNewPatients; i++) {
-            Patient patient = new Patient();
-            String email = patient.getEmail();
-            if (existingEmails.add(email)) { // Add and check simultaneously using 'add' method
-                patientSet.add(patient);
-            }
+        String email = patient.getEmail();
+        if (existingEmails.add(email)) {
+            patientSet.add(patient);
+        } else {
+            throw new IllegalArgumentException("Patien with this email already exists");
         }
-    }
-
-    public Patient addPatient(Patient patient) {
-        patientSet.add(patient);
         return patient;
     }
 
@@ -57,12 +59,12 @@ public class PatientRepository {
         return editedPatient;
     }
 
-    public ChangePasswordCommand editPatientPassword (String email, ChangePasswordCommand pass){
+    public ChangePasswordCommand editPatientPassword(String email, ChangePasswordCommand pass) {
         var editedPatient = getPatient(email);
-        if (editedPatient.getPassword().equals(pass.getOldPassword())){
-            editedPatient.setPassword(pass.getNewPassword());
-        } else {
-            new IllegalArgumentException("Incorrect old password");
-        } return pass;
+        if (!editedPatient.getPassword().equals(pass.getOldPassword())) {
+            throw new IllegalArgumentException("Incorrect old password");
+        }
+        editedPatient.setPassword(pass.getNewPassword());
+        return pass;
     }
 }

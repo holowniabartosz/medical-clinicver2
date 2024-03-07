@@ -22,17 +22,9 @@ public class PatientService {
         return patientRepository.getPatient(email);
     }
 
-    public void addBulkPatients(int nrOfNewPatients) {
-        if (nrOfNewPatients > 0) {
-            patientRepository.addBulkPatients(nrOfNewPatients);
-        } else {
-            throw new IllegalArgumentException("Number of new generated patients should be > 0");
-        }
-    }
-
     public Patient addPatient(Patient patient) {
         var existingPatient = patientRepository.getPatient(patient.getEmail());
-            patientRepository.addPatient(patient);
+        patientRepository.addPatient(patient);
         return patient;
     }
 
@@ -41,28 +33,38 @@ public class PatientService {
         patientRepository.removePatient(email);
     }
 
+    // nie można ID
     public Patient editPatient(String email, Patient patient) {
+        validate(email);
+        validateIfNull(patient);
+        return patientRepository.editPatient(email, patient);
+    }
+
+
+    public ChangePasswordCommand editPatientPassword(String email, ChangePasswordCommand pass) {
+        var editedPasswordPatient = patientRepository.getPatient(email);
+        if (editedPasswordPatient == null) {
+            throw new IllegalArgumentException("Patient not found");
+        }
+        patientRepository.editPatientPassword(email, pass);
+        return pass;
+    }
+
+    public void validate(String email) {
         if (!patientRepository.getAllPatientData().contains(patientRepository.getPatient(email))) {
             throw new IllegalArgumentException("Patient with given email does not exist.");
-        } if (patient.getPassword() == null ||
+        }
+    }
+
+    public void validateIfNull(Patient patient){
+        if (patient.getPassword() == null ||
                 patient.getBirthday() == null ||
                 patient.getEmail() == null ||
                 patient.getPhoneNumber() == null ||
                 patient.getFirstName() == null ||
-                patient.getLastName() == null){
-            throw new NullPointerException("None of patient class fields should be null");
-        } else {
-            return patientRepository.editPatient(email, patient);
+                patient.getLastName() == null) {
+            throw new IllegalArgumentException("None of patient class fields should be null");
         }
-    }
-
-    public ChangePasswordCommand editPatientPassword(String email, ChangePasswordCommand pass) {
-        if (patientRepository.getAllPatientData().contains(patientRepository.getPatient(email))) {
-            patientRepository.editPatientPassword(email, pass);
-        } else {
-            throw new IllegalArgumentException("Patient with given email does not exists.");
-
-        }
-        return pass;
     }
 }
+

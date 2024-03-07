@@ -11,29 +11,22 @@ import java.util.Set;
 
 @RestController
 @AllArgsConstructor
+@RequestMapping("/patients")
 public class PatientController {
 
     private PatientService myPatientService;
 
-    @GetMapping("/show-all-patient-data")
+    @GetMapping
     public Set<Patient> showAllPatientData() {
         return myPatientService.getPatients();
     }
 
-    @GetMapping("/{email}/show-patient-data")
+    @GetMapping("/{email}")
     public Patient showPatientData(@PathVariable String email) {
         return myPatientService.getPatient(email);
     }
 
-    @PostMapping("/{nrOfPatients}/add-bulk-patients")
-    @ResponseStatus(HttpStatus.CREATED)
-    public String addBulkPatients(@PathVariable int nrOfPatients) {
-        myPatientService
-                .addBulkPatients(nrOfPatients);
-        return "Added " + nrOfPatients + " patients";
-    }
-
-    @PostMapping("/add-patient")
+    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Patient addPatient(@RequestBody Patient patient) {
         myPatientService
@@ -41,22 +34,22 @@ public class PatientController {
         return patient;
     }
 
-    @DeleteMapping("/{email}/remove-patient")
+    @DeleteMapping("/{email}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public String getRemovePatient(@PathVariable String email) {
+    public String removePatient(@PathVariable String email) {
         myPatientService
                 .removePatient(email);
         return "Removed patient with e-mail: " + email;
     }
 
-    // response kłamie, bo zwraca nowe ID i password, a te się nie zmieniają przy tej edycji
-    @PutMapping("{email}/edit-patient")
+    @PutMapping("{email}")
     public Patient updatePatient(@PathVariable String email, @RequestBody Patient patient) {
         return myPatientService.editPatient(email, patient);
     }
 
-    @PutMapping("{email}/change-password")
-    public ChangePasswordCommand updatePatientPassword(@PathVariable String email, @RequestBody ChangePasswordCommand pass) {
+    @PatchMapping("password/{email}")
+    public ChangePasswordCommand updatePatientPassword(@PathVariable String email,
+                                                       @RequestBody ChangePasswordCommand pass) {
         myPatientService.editPatientPassword(email, pass);
         return pass;
     }
