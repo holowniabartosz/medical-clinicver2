@@ -44,7 +44,7 @@ public class PatientRepository {
         if (existingEmails.add(email)) {
             patientSet.add(patient);
         } else {
-            throw new IllegalArgumentException("Patien with this email already exists");
+            throw new IllegalArgumentException("Patient with this email already exists");
         }
         return patient;
     }

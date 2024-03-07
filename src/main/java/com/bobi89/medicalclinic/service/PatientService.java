@@ -23,9 +23,9 @@ public class PatientService {
     }
 
     public Patient addPatient(Patient patient) {
-        var existingPatient = patientRepository.getPatient(patient.getEmail());
-        patientRepository.addPatient(patient);
-        return patient;
+//        var existingPatient = patientRepository.getPatient(patient.getEmail());
+       patientRepository.addPatient(patient);
+       return patient;
     }
 
     public void removePatient(String email) {
@@ -35,6 +35,7 @@ public class PatientService {
 
     // nie można ID
     public Patient editPatient(String email, Patient patient) {
+        checkIfIdChanged(email, patient);
         validate(email);
         validateIfNull(patient);
         return patientRepository.editPatient(email, patient);
@@ -56,7 +57,7 @@ public class PatientService {
         }
     }
 
-    public void validateIfNull(Patient patient){
+    public void validateIfNull(Patient patient) {
         if (patient.getPassword() == null ||
                 patient.getBirthday() == null ||
                 patient.getEmail() == null ||
@@ -64,6 +65,12 @@ public class PatientService {
                 patient.getFirstName() == null ||
                 patient.getLastName() == null) {
             throw new IllegalArgumentException("None of patient class fields should be null");
+        }
+    }
+
+    public void checkIfIdChanged(String email, Patient patient) {
+        if (!patient.getIdCardNr().equals(patientRepository.getPatient(email).getIdCardNr())) {
+            throw new IllegalArgumentException("ID can't be changed");
         }
     }
 }
