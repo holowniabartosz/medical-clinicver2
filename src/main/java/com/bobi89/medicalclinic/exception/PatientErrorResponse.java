@@ -1,4 +1,4 @@
-package com.bobi89.medicalclinic.exceptions;
+package com.bobi89.medicalclinic.exception;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -10,6 +10,8 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PatientErrorResponse {
+
+//    private HttpStatus status;
     private int status;
     private String message;
     private long timestamp;

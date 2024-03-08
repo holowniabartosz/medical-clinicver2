@@ -1,6 +1,6 @@
-package com.bobi89.medicalclinic.exceptions;
+package com.bobi89.medicalclinic.exception;
 
-import com.bobi89.medicalclinic.exceptions.exc.*;
+import com.bobi89.medicalclinic.exception.exc.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @ControllerAdvice
 public class PatientRestExceptionHandler {
-    @ExceptionHandler
+    @ExceptionHandler(PatientNotFoundException.class)
     public ResponseEntity<PatientErrorResponse> handleException(PatientNotFoundException exc){
         // create a PatientErrorResponse
 
@@ -23,7 +23,7 @@ public class PatientRestExceptionHandler {
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler
+    @ExceptionHandler(PatientWithThisEmailExistsException.class)
     public ResponseEntity<PatientErrorResponse> handleException(PatientWithThisEmailExistsException exc){
 
         PatientErrorResponse error = new PatientErrorResponse();
@@ -35,7 +35,7 @@ public class PatientRestExceptionHandler {
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler
+    @ExceptionHandler(IncorrectOldPasswordException.class)
     public ResponseEntity<PatientErrorResponse> handleException(IncorrectOldPasswordException exc){
 
         PatientErrorResponse error = new PatientErrorResponse();
@@ -47,7 +47,7 @@ public class PatientRestExceptionHandler {
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler
+    @ExceptionHandler(PatientIdChangeException.class)
     public ResponseEntity<PatientErrorResponse> handleException(PatientIdChangeException exc){
 
         PatientErrorResponse error = new PatientErrorResponse();
@@ -59,7 +59,7 @@ public class PatientRestExceptionHandler {
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler
+    @ExceptionHandler(PatientNullFieldsException.class)
     public ResponseEntity<PatientErrorResponse> handleException(PatientNullFieldsException exc){
 
         PatientErrorResponse error = new PatientErrorResponse();
@@ -72,7 +72,7 @@ public class PatientRestExceptionHandler {
     }
 
     // default handler here
-    @ExceptionHandler
+    @ExceptionHandler(Exception.class)
     public ResponseEntity<PatientErrorResponse> handleException(Exception exc){
 
         PatientErrorResponse error = new PatientErrorResponse();

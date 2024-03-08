@@ -1,10 +1,10 @@
 package com.bobi89.medicalclinic.service;
 
-import com.bobi89.medicalclinic.exceptions.exc.PatientIdChangeException;
-import com.bobi89.medicalclinic.exceptions.exc.PatientNotFoundException;
-import com.bobi89.medicalclinic.exceptions.exc.PatientNullFieldsException;
+import com.bobi89.medicalclinic.exception.exc.PatientNotFoundException;
+import com.bobi89.medicalclinic.exception.exc.PatientNullFieldsException;
 import com.bobi89.medicalclinic.model.entity.ChangePasswordCommand;
 import com.bobi89.medicalclinic.model.entity.Patient;
+import com.bobi89.medicalclinic.model.entity.PatientDTO;
 import com.bobi89.medicalclinic.repository.PatientRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,31 +17,36 @@ public class PatientService {
 
     private final PatientRepository patientRepository;
 
-    public HashSet<Patient> getPatients() {
-        return patientRepository.getAllPatientData();
+    public HashSet<PatientDTO> getPatients() {
+        HashSet<Patient> patients = patientRepository.getAllPatientData();
+        HashSet<PatientDTO> patientsDTO = new HashSet<>();
+        for (Patient p : patients){
+            patientsDTO.add(PatientDTO.toDTO(p));
+        }
+        return patientsDTO;
     }
 
-    public Patient getPatient(String email) {
-        return patientRepository.getPatient(email);
+    public PatientDTO getPatient(String email) {
+        Patient nonDto = patientRepository.getPatient(email);
+        return PatientDTO.toDTO(nonDto);
     }
 
-    public Patient addPatient(Patient patient) {
-//        var existingPatient = patientRepository.getPatient(patient.getEmail());
-       patientRepository.addPatient(patient);
-       return patient;
+    public PatientDTO addPatient(PatientDTO patientDTO) {
+        patientRepository.addPatient(Patient.toPatient(patientDTO));
+        return patientDTO;
     }
 
     public void removePatient(String email) {
-        var existingPatient = patientRepository.getPatient(email);
         patientRepository.removePatient(email);
     }
 
-    public Patient editPatient(String email, Patient patient) {
-        checkIfIdChanged(email, patient);
-        validateIfNull(patient);
-        return patientRepository.editPatient(email, patient);
+    public PatientDTO editPatient(String email, PatientDTO patientDTO) {
+//        checkIfIdChanged(email, Patient.toPatient(patientDTO));
+        validateIfNull(Patient.toPatient(patientDTO));
+        Patient editedPatient = patientRepository.editPatient
+                (email, Patient.toPatient(patientDTO));
+        return PatientDTO.toDTO(editedPatient);
     }
-
 
     public ChangePasswordCommand editPatientPassword(String email, ChangePasswordCommand pass) {
         var editedPasswordPatient = patientRepository.getPatient(email);
@@ -53,9 +58,7 @@ public class PatientService {
     }
 
     public void validateIfNull(Patient patient) {
-        if (patient.getPassword() == null ||
-                patient.getBirthday() == null ||
-                patient.getEmail() == null ||
+        if (patient.getEmail() == null ||
                 patient.getPhoneNumber() == null ||
                 patient.getFirstName() == null ||
                 patient.getLastName() == null) {
@@ -63,10 +66,10 @@ public class PatientService {
         }
     }
 
-    public void checkIfIdChanged(String email, Patient patient) {
-        if (!patient.getIdCardNr().equals(patientRepository.getPatient(email).getIdCardNr())) {
-            throw new PatientIdChangeException("ID can't be changed");
-        }
-    }
+//    public void checkIfIdChanged(String email, Patient patient) {
+//        if (!patient.getIdCardNr().equals(patientRepository.getPatient(email).getIdCardNr())) {
+//            throw new PatientIdChangeException("ID can't be changed");
+//        }
+//    }
 }
 

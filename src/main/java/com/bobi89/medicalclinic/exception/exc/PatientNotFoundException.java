@@ -1,4 +1,4 @@
-package com.bobi89.medicalclinic.exceptions.exc;
+package com.bobi89.medicalclinic.exception.exc;
 
 public class PatientNotFoundException extends RuntimeException {
     public PatientNotFoundException(String message) {

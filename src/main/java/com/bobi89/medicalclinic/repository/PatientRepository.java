@@ -1,7 +1,7 @@
 package com.bobi89.medicalclinic.repository;
 
-import com.bobi89.medicalclinic.exceptions.exc.PatientNotFoundException;
-import com.bobi89.medicalclinic.exceptions.exc.PatientWithThisEmailExistsException;
+import com.bobi89.medicalclinic.exception.exc.PatientNotFoundException;
+import com.bobi89.medicalclinic.exception.exc.PatientWithThisEmailExistsException;
 import com.bobi89.medicalclinic.model.entity.ChangePasswordCommand;
 import com.bobi89.medicalclinic.model.entity.Patient;
 import org.springframework.stereotype.Repository;
@@ -45,6 +45,7 @@ public class PatientRepository {
                 .collect(Collectors.toSet()));
         String email = patient.getEmail();
         if (existingEmails.add(email)) {
+            patient.setPassword("1234");
             patientSet.add(patient);
         } else {
             throw new PatientWithThisEmailExistsException("Patient with this email already exists");

@@ -1,7 +1,7 @@
 package com.bobi89.medicalclinic.controller;
 
 import com.bobi89.medicalclinic.model.entity.ChangePasswordCommand;
-import com.bobi89.medicalclinic.model.entity.Patient;
+import com.bobi89.medicalclinic.model.entity.PatientDTO;
 import com.bobi89.medicalclinic.service.PatientService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -17,21 +17,21 @@ public class PatientController {
     private PatientService myPatientService;
 
     @GetMapping
-    public Set<Patient> showAllPatientData() {
+    public Set<PatientDTO> showAllPatientData() {
         return myPatientService.getPatients();
     }
 
     @GetMapping("/{email}")
-    public Patient showPatientData(@PathVariable String email) {
+    public PatientDTO showPatientData(@PathVariable String email) {
         return myPatientService.getPatient(email);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Patient addPatient(@RequestBody Patient patient) {
+    public PatientDTO addPatient(@RequestBody PatientDTO patientDTO) {
         myPatientService
-                .addPatient(patient);
-        return patient;
+                .addPatient(patientDTO);
+        return patientDTO;
     }
 
     @DeleteMapping("/{email}")
@@ -43,8 +43,8 @@ public class PatientController {
     }
 
     @PutMapping("{email}")
-    public Patient updatePatient(@PathVariable String email, @RequestBody Patient patient) {
-        return myPatientService.editPatient(email, patient);
+    public PatientDTO updatePatient(@PathVariable String email, @RequestBody PatientDTO patientDTO) {
+        return myPatientService.editPatient(email, patientDTO);
     }
 
     @PatchMapping("password/{email}")

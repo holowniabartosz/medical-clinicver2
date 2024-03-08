@@ -16,13 +16,23 @@ public class Patient {
     private String phoneNumber;
     private String birthday;
 
+    public Patient(String email, String firstName, String lastName, String phoneNumber) {
+        this.email = email;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phoneNumber = phoneNumber;
+    }
+
     public void update(Patient newPatientData) {
         this.email = newPatientData.getEmail();
-//        this.id = newPatientData.getId();
         this.firstName = newPatientData.getFirstName();
         this.lastName = newPatientData.getLastName();
-//        this.password = newPatientData.getPassword();
-        this.birthday = newPatientData.getBirthday();
         this.phoneNumber = newPatientData.getPhoneNumber();
+    }
+
+    public static Patient toPatient(PatientDTO patientDTO){
+        return new Patient(
+                patientDTO.getEmail(), patientDTO.getFirstName(),
+                patientDTO.getLastName(), patientDTO.getPhoneNumber());
     }
 }
