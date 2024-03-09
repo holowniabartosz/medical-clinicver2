@@ -1,12 +1,14 @@
 package com.bobi89.medicalclinic.model.entity;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
+@Getter
+@Setter
 public class Patient {
     private String email;
     private String password;
@@ -29,10 +31,10 @@ public class Patient {
         this.lastName = newPatientData.getLastName();
         this.phoneNumber = newPatientData.getPhoneNumber();
     }
-
-    public static Patient toPatient(PatientDTO patientDTO){
-        return new Patient(
-                patientDTO.getEmail(), patientDTO.getFirstName(),
-                patientDTO.getLastName(), patientDTO.getPhoneNumber());
-    }
+//
+//    public static Patient toPatient(PatientDTO patientDTO){
+//        return new Patient(
+//                patientDTO.getEmail(), patientDTO.getFirstName(),
+//                patientDTO.getLastName(), patientDTO.getPhoneNumber());
+//    }
 }

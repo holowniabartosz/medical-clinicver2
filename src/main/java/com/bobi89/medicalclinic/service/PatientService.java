@@ -5,6 +5,7 @@ import com.bobi89.medicalclinic.exception.exc.PatientNullFieldsException;
 import com.bobi89.medicalclinic.model.entity.ChangePasswordCommand;
 import com.bobi89.medicalclinic.model.entity.Patient;
 import com.bobi89.medicalclinic.model.entity.PatientDTO;
+import com.bobi89.medicalclinic.model.entity.mapper.PatientMapper;
 import com.bobi89.medicalclinic.repository.PatientRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,23 +17,24 @@ import java.util.HashSet;
 public class PatientService {
 
     private final PatientRepository patientRepository;
+    private final PatientMapper patientMapper;
 
     public HashSet<PatientDTO> getPatients() {
         HashSet<Patient> patients = patientRepository.getAllPatientData();
         HashSet<PatientDTO> patientsDTO = new HashSet<>();
         for (Patient p : patients){
-            patientsDTO.add(PatientDTO.toDTO(p));
+            patientsDTO.add(patientMapper.toDTO(p));
         }
         return patientsDTO;
     }
 
     public PatientDTO getPatient(String email) {
         Patient nonDto = patientRepository.getPatient(email);
-        return PatientDTO.toDTO(nonDto);
+        return patientMapper.toDTO(nonDto);
     }
 
     public PatientDTO addPatient(PatientDTO patientDTO) {
-        patientRepository.addPatient(Patient.toPatient(patientDTO));
+        patientRepository.addPatient(patientMapper.toPatient(patientDTO));
         return patientDTO;
     }
 
@@ -42,10 +44,10 @@ public class PatientService {
 
     public PatientDTO editPatient(String email, PatientDTO patientDTO) {
 //        checkIfIdChanged(email, Patient.toPatient(patientDTO));
-        validateIfNull(Patient.toPatient(patientDTO));
+        validateIfNull(patientMapper.toPatient(patientDTO));
         Patient editedPatient = patientRepository.editPatient
-                (email, Patient.toPatient(patientDTO));
-        return PatientDTO.toDTO(editedPatient);
+                (email, patientMapper.toPatient(patientDTO));
+        return patientMapper.toDTO(editedPatient);
     }
 
     public ChangePasswordCommand editPatientPassword(String email, ChangePasswordCommand pass) {
