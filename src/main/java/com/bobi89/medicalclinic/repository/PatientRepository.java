@@ -4,6 +4,7 @@ import com.bobi89.medicalclinic.exception.exc.PatientNotFoundException;
 import com.bobi89.medicalclinic.exception.exc.PatientWithThisEmailExistsException;
 import com.bobi89.medicalclinic.model.entity.ChangePasswordCommand;
 import com.bobi89.medicalclinic.model.entity.Patient;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.HashSet;
@@ -16,6 +17,7 @@ public class PatientRepository {
 
     private HashSet<Patient> patientSet;
 
+    @Autowired
     public PatientRepository(HashSet<Patient> patientSet) {
         this.patientSet = new HashSet<>(List.of(
                 new Patient("jd@gmail.com","1234","4321",

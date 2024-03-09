@@ -16,8 +16,8 @@ import java.util.HashSet;
 @RequiredArgsConstructor
 public class PatientService {
 
-    private final PatientRepository patientRepository;
-    private final PatientMapper patientMapper;
+    private PatientRepository patientRepository;
+    private PatientMapper patientMapper;
 
     public HashSet<PatientDTO> getPatients() {
         HashSet<Patient> patients = patientRepository.getAllPatientData();
