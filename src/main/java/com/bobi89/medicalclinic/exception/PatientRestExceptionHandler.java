@@ -71,16 +71,16 @@ public class PatientRestExceptionHandler {
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 
-    // default handler here
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<PatientErrorResponse> handleException(Exception exc){
-
-        PatientErrorResponse error = new PatientErrorResponse();
-
-        error.setStatus(HttpStatus.BAD_REQUEST.value());
-        error.setMessage("Malformed request");
-        error.setTimestamp(System.currentTimeMillis());
-
-        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
-    }
+//     default handler here
+//    @ExceptionHandler(Exception.class)
+//    public ResponseEntity<PatientErrorResponse> handleException(Exception exc){
+//
+//        PatientErrorResponse error = new PatientErrorResponse();
+//
+//        error.setStatus(HttpStatus.BAD_REQUEST.value());
+//        error.setMessage("Malformed request");
+//        error.setTimestamp(System.currentTimeMillis());
+//
+//        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+//    }
 }

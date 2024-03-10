@@ -1,40 +1,32 @@
 package com.bobi89.medicalclinic.model.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.persistence.*;
+import lombok.*;
 
-@NoArgsConstructor
+@Entity
 @AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
+//@Table(name="patient")
 public class Patient {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false,unique = true)
+    private long idCardNr;
     private String email;
     private String password;
-    private String idCardNr;
     private String firstName;
     private String lastName;
     private String phoneNumber;
     private String birthday;
 
-    public Patient(String email, String firstName, String lastName, String phoneNumber) {
-        this.email = email;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.phoneNumber = phoneNumber;
-    }
 
     public void update(Patient newPatientData) {
         this.email = newPatientData.getEmail();
         this.firstName = newPatientData.getFirstName();
         this.lastName = newPatientData.getLastName();
         this.phoneNumber = newPatientData.getPhoneNumber();
+        this.birthday = newPatientData.getBirthday();
     }
-//
-//    public static Patient toPatient(PatientDTO patientDTO){
-//        return new Patient(
-//                patientDTO.getEmail(), patientDTO.getFirstName(),
-//                patientDTO.getLastName(), patientDTO.getPhoneNumber());
-//    }
 }
