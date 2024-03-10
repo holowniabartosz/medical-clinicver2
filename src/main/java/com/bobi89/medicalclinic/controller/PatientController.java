@@ -2,6 +2,7 @@ package com.bobi89.medicalclinic.controller;
 
 import com.bobi89.medicalclinic.model.entity.ChangePasswordCommand;
 import com.bobi89.medicalclinic.model.entity.PatientDTO;
+import com.bobi89.medicalclinic.model.entity.PatientDTOwithPassword;
 import com.bobi89.medicalclinic.service.PatientServiceImpl;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -28,14 +29,14 @@ public class PatientController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public PatientDTO save(@RequestBody PatientDTO patientDTO) {
+    public PatientDTO save(@RequestBody PatientDTOwithPassword patientDTOwithPassword) {
         myPatientService
-                .save(patientDTO);
+                .save(patientDTOwithPassword);
         // ----------------------------------------------------------------
         // MUSIAŁEM TUTAJ PONOWNIE POBRAĆ Z BAZY, ŻEBY ID ZASSAŁO POPRAWNE,
         // NA POZIOMIE FUNKCJI W SERWISE NIE DZIAŁA
         // ----------------------------------------------------------------
-        return myPatientService.findByEmail(patientDTO.getEmail());
+        return myPatientService.findByEmail(patientDTOwithPassword.getEmail());
     }
 
     @DeleteMapping("/{email}")
@@ -48,7 +49,8 @@ public class PatientController {
 
     @PutMapping("/{email}")
     public PatientDTO update(@PathVariable String email, @RequestBody PatientDTO patientDTO) {
-        return myPatientService.update(email, patientDTO);
+        myPatientService.update(email, patientDTO);
+        return myPatientService.findByEmail(patientDTO.getEmail());
     }
 //
 //    @PutMapping("/update")

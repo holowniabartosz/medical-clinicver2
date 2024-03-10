@@ -7,6 +7,7 @@ import com.bobi89.medicalclinic.exception.exc.PatientWithThisEmailExistsExceptio
 import com.bobi89.medicalclinic.model.entity.ChangePasswordCommand;
 import com.bobi89.medicalclinic.model.entity.Patient;
 import com.bobi89.medicalclinic.model.entity.PatientDTO;
+import com.bobi89.medicalclinic.model.entity.PatientDTOwithPassword;
 import com.bobi89.medicalclinic.model.entity.mapper.PatientMapper;
 import com.bobi89.medicalclinic.repository.PatientJpaRepository;
 import jakarta.transaction.Transactional;
@@ -14,6 +15,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -42,16 +44,16 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
-    public PatientDTO save(PatientDTO patientDTO) {
-        if(patientJpaRepository.findByEmail(patientDTO.getEmail()).isPresent()){
+    public PatientDTO save(PatientDTOwithPassword patientDTOwithPassword) {
+        if(patientJpaRepository.findByEmail(patientDTOwithPassword.getEmail()).isPresent()){
             throw new PatientWithThisEmailExistsException("Patient is already in the database");
         }
-        validateIfNull(patientMapper.toPatient(patientDTO));
-        patientJpaRepository.save(patientMapper.toPatient(patientDTO));
+        validateIfNull(patientMapper.toPatient(patientDTOwithPassword));
+        patientJpaRepository.save(patientMapper.toPatient(patientDTOwithPassword));
         // ----------------------------------------------------------------
 //        return findByEmail(patientDTO.getEmail());
         // ----------------------------------------------------------------
-        return patientDTO;
+        return patientMapper.toDTO(patientDTOwithPassword);
     }
 
     @Override
@@ -81,17 +83,18 @@ public class PatientServiceImpl implements PatientService {
 //    }
 
 @Transactional
+// CRASH BEZ POLA PASSWORD W DTO???
 public ChangePasswordCommand editPatientPassword(String email, ChangePasswordCommand pass) {
-    var editedPasswordPatient = patientJpaRepository.findByEmail(email);
+    Optional<Patient> editedPasswordPatient = patientJpaRepository.findByEmail(email);
     if (editedPasswordPatient.isEmpty()) {
         throw new PatientNotFoundException("No such patient in the database");
     }
-    if(editedPasswordPatient.get().getPassword().equals(pass.getOldPassword())) {
-        editedPasswordPatient.get().setPassword(pass.getNewPassword());
-        return pass;
-    } else {
+    if (!editedPasswordPatient.get().getPassword().equals(pass.getOldPassword())) {
         throw new IncorrectOldPasswordException("Old password does not match");
     }
+    editedPasswordPatient.get().setPassword(pass.getNewPassword());
+//    patientJpaRepository.save(editedPasswordPatient.get());
+    return pass;
 }
 
 public void validateIfNull(Patient patient) {
