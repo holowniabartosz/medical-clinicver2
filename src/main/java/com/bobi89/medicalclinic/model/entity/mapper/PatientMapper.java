@@ -12,7 +12,7 @@ public interface PatientMapper {
 
     PatientDTO toDTO(Patient patient);
 
-    PatientDTO toDTO(PatientDTOwithPassword patientDTOwithPassword);
+//    PatientDTO toDTO(PatientDTOwithPassword patientDTOwithPassword);
 
     Patient toPatient(PatientDTO patientDTO);
 

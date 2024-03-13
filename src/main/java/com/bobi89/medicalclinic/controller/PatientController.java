@@ -30,13 +30,8 @@ public class PatientController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public PatientDTO save(@RequestBody PatientDTOwithPassword patientDTOwithPassword) {
-        myPatientService
+        return myPatientService
                 .save(patientDTOwithPassword);
-        // ----------------------------------------------------------------
-        // MUSIAŁEM TUTAJ PONOWNIE POBRAĆ Z BAZY, ŻEBY ID ZASSAŁO POPRAWNE,
-        // NA POZIOMIE FUNKCJI W SERWISE NIE DZIAŁA
-        // ----------------------------------------------------------------
-        return myPatientService.findByEmail(patientDTOwithPassword.getEmail());
     }
 
     @DeleteMapping("/{email}")
@@ -52,12 +47,7 @@ public class PatientController {
         myPatientService.update(email, patientDTO);
         return myPatientService.findByEmail(patientDTO.getEmail());
     }
-//
-//    @PutMapping("/update")
-//    public PatientDTO updateSimple(@RequestBody PatientDTO patientDTO) {
-//        return myPatientService.updateSimple(patientDTO);
-//    }
-//
+
     @PatchMapping("password/{email}")
     public ChangePasswordCommand updatePatientPassword(@PathVariable String email,
                                                        @RequestBody ChangePasswordCommand pass) {

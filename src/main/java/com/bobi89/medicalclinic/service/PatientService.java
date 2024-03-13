@@ -19,6 +19,4 @@ public interface PatientService {
     PatientDTO update(String email, PatientDTO patientDTO);
 
     ChangePasswordCommand editPatientPassword(String email, ChangePasswordCommand pass);
-
-//    PatientDTO updateSimple(PatientDTO patientDTO);
 }

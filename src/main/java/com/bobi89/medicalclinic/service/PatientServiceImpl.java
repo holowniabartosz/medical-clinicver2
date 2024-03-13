@@ -49,11 +49,8 @@ public class PatientServiceImpl implements PatientService {
             throw new PatientWithThisEmailExistsException("Patient is already in the database");
         }
         validateIfNull(patientMapper.toPatient(patientDTOwithPassword));
-        patientJpaRepository.save(patientMapper.toPatient(patientDTOwithPassword));
-        // ----------------------------------------------------------------
-//        return findByEmail(patientDTO.getEmail());
-        // ----------------------------------------------------------------
-        return patientMapper.toDTO(patientDTOwithPassword);
+        return patientMapper.toDTO(patientJpaRepository
+                .save(patientMapper.toPatient(patientDTOwithPassword)));
     }
 
     @Override
@@ -73,17 +70,7 @@ public class PatientServiceImpl implements PatientService {
         return patientDTO;
     }
 
-//    @Override
-//    public PatientDTO updateSimple(PatientDTO patientDTO) {
-//        patientJpaRepository.save(patientMapper.toPatient(patientDTO));
-//        // ----------------------------------------------------------------
-////        return findByEmail(patientDTO.getEmail());
-//        // ----------------------------------------------------------------
-//        return patientDTO;
-//    }
-
 @Transactional
-// CRASH BEZ POLA PASSWORD W DTO???
 public ChangePasswordCommand editPatientPassword(String email, ChangePasswordCommand pass) {
     Optional<Patient> editedPasswordPatient = patientJpaRepository.findByEmail(email);
     if (editedPasswordPatient.isEmpty()) {
@@ -93,7 +80,6 @@ public ChangePasswordCommand editPatientPassword(String email, ChangePasswordCom
         throw new IncorrectOldPasswordException("Old password does not match");
     }
     editedPasswordPatient.get().setPassword(pass.getNewPassword());
-//    patientJpaRepository.save(editedPasswordPatient.get());
     return pass;
 }
 
