@@ -8,11 +8,7 @@ import org.mapstruct.Mapper;
 @Mapper(componentModel = "spring")
 public interface PatientMapper {
 
-//    PatientMapper PATIENT_MAPPER = Mappers.getMapper((PatientMapper.class));
-
     PatientDTO toDTO(Patient patient);
-
-//    PatientDTO toDTO(PatientDTOwithPassword patientDTOwithPassword);
 
     Patient toPatient(PatientDTO patientDTO);
 

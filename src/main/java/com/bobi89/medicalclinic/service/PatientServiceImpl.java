@@ -95,11 +95,5 @@ public class PatientServiceImpl implements PatientService {
             throw new PatientNullFieldsException("None of patient class fields should be null");
         }
     }
-
-//    public void checkIfIdChanged(String email, Patient patient) {
-//        if (!patient.getIdCardNr().equals(patientRepository.getPatient(email).getIdCardNr())) {
-//            throw new PatientIdChangeException("ID can't be changed");
-//        }
-//    }
 }
 

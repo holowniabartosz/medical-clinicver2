@@ -1,5 +1,6 @@
 package com.bobi89.medicalclinic.service;
 
+import com.bobi89.medicalclinic.exception.exc.IncorrectOldPasswordException;
 import com.bobi89.medicalclinic.exception.exc.PatientNotFoundException;
 import com.bobi89.medicalclinic.exception.exc.PatientWithThisEmailExistsException;
 import com.bobi89.medicalclinic.model.entity.ChangePasswordCommand;
@@ -80,8 +81,6 @@ class PatientServiceImplTest {
         Patient patient = generatePatient();
         PatientDTOwithPassword patientDTOwithPassword = generatePatientDTOwithPassword();
 
-
-
         when(patientJpaRepository.findByEmail("john@gmail.com")).thenReturn(Optional.empty());
         when(patientJpaRepository.save(patient)).thenReturn(patient);
 
@@ -106,7 +105,7 @@ class PatientServiceImplTest {
 
         when(patientJpaRepository.findByEmail("john@gmail.com")).thenReturn(Optional.of((patient)));
 
-        //then (when??)
+        //then (when)
         Assertions.assertThrows(PatientWithThisEmailExistsException.class,
                 () -> patientService.save(patientDTOwithPassword));
     }
@@ -121,13 +120,12 @@ class PatientServiceImplTest {
         //then
         Assertions.assertDoesNotThrow(() ->
         patientService.deleteByEmail("john@gmail.com"));
+        // verify?
     }
 
     @Test
     void deleteByEmail_IfNotExist_ExceptionThrown() {
         //given
-        Patient patient = generatePatient();
-
         when(patientJpaRepository.findByEmail("john@gmail.com")).thenReturn(Optional.empty());
 
         //then
@@ -167,26 +165,55 @@ class PatientServiceImplTest {
     }
 
     @Test
-    void editPatientPassword() {
+    void editPatientPassword_PatientNotExist_ThrowException() {
         ChangePasswordCommand pass = new ChangePasswordCommand("1234", "4321");
 
+        when(patientJpaRepository.findByEmail("john@gmail.com"))
+                .thenReturn(Optional.empty());
+
+        Assertions.assertThrows(PatientNotFoundException.class,
+                () -> patientService.editPatientPassword("john@gmail.com", pass));
     }
 
     @Test
-    void validateIfNull() {
+    void editPatientPassword_WrongOldPassword_ThrowException() {
+        //given
+        ChangePasswordCommand pass = new ChangePasswordCommand("51234", "4321");
+        Patient patient = generatePatient();
+
+        when(patientJpaRepository.findByEmail("john@gmail.com"))
+                .thenReturn(Optional.of(patient));
+
+        //then (when)
+        Assertions.assertThrows(IncorrectOldPasswordException.class,
+                () -> patientService.editPatientPassword("john@gmail.com", pass));
     }
 
-    private Patient generatePatient(){
+    @Test
+    void editPatientPassword_CorrectPassword_ReturnPass() {
+        //given
+        ChangePasswordCommand pass = new ChangePasswordCommand("1234", "4321");
+        Patient patient = generatePatient();
+
+        when(patientJpaRepository.findByEmail("john@gmail.com"))
+                .thenReturn(Optional.of(patient));
+
+        //then (when)
+        Assertions.assertDoesNotThrow(() -> patientService.editPatientPassword("john@gmail.com", pass));
+        Assertions.assertEquals(pass.getNewPassword(), patient.getPassword());
+    }
+
+    private static Patient generatePatient(){
         return new Patient("999", "john@gmail.com","1234",
                 "John", "Doe", "123456789", "25/12/2000");
     }
 
-    private PatientDTO generatePatientDTO(){
+    private static PatientDTO generatePatientDTO(){
         return new PatientDTO("999", "john@gmail.com",
                 "John", "Doe", "123456789", "25/12/2000");
     }
 
-    private PatientDTOwithPassword generatePatientDTOwithPassword(){
+    private static PatientDTOwithPassword generatePatientDTOwithPassword(){
         return new PatientDTOwithPassword("999", "john@gmail.com",
                 "John", "Doe", "123456789", "25/12/2000", "1234");
     }
