@@ -27,10 +27,10 @@ public class PatientServiceImpl implements PatientService {
 
     @Override
     public List<PatientDTO> findAll() {
-        var allPatientsDTO = patientJpaRepository.findAll().stream()
+        var patients = patientJpaRepository.findAll().stream()
                 .map(p -> patientMapper.toDTO(p))
                 .collect(Collectors.toList());
-        return allPatientsDTO;
+        return patients;
     }
 
     @Override
@@ -45,7 +45,7 @@ public class PatientServiceImpl implements PatientService {
 
     @Override
     public PatientDTO save(PatientDTOwithPassword patientDTOwithPassword) {
-        if(patientJpaRepository.findByEmail(patientDTOwithPassword.getEmail()).isPresent()){
+        if (patientJpaRepository.findByEmail(patientDTOwithPassword.getEmail()).isPresent()) {
             throw new PatientWithThisEmailExistsException("Patient is already in the database");
         }
         validateIfNull(patientMapper.toPatient(patientDTOwithPassword));
@@ -60,38 +60,41 @@ public class PatientServiceImpl implements PatientService {
 
     @Transactional
     public PatientDTO update(String email, PatientDTO patientDTO) {
-        patientJpaRepository
-                .findByEmail(email)
-                .map(updatedPatient -> {
-                    updatedPatient.update(patientMapper.toPatient(patientDTO));
-                    patientJpaRepository.save(updatedPatient);
-                    return updatedPatient;
-                });
-        return patientDTO;
+        Optional<Patient> patientToUpdate = patientJpaRepository.findByEmail(email);
+        if (patientToUpdate.isEmpty()) {
+            throw new PatientNotFoundException("Patient not found");
+        } else {
+            patientToUpdate.map(updatedPatient -> {
+                updatedPatient.update(patientMapper.toPatient(patientDTO));
+                patientJpaRepository.save(updatedPatient);
+                return updatedPatient;
+            });
+            return patientDTO;
+        }
     }
 
-@Transactional
-public ChangePasswordCommand editPatientPassword(String email, ChangePasswordCommand pass) {
-    Optional<Patient> editedPasswordPatient = patientJpaRepository.findByEmail(email);
-    if (editedPasswordPatient.isEmpty()) {
-        throw new PatientNotFoundException("No such patient in the database");
+    @Transactional
+    public ChangePasswordCommand editPatientPassword(String email, ChangePasswordCommand pass) {
+        Optional<Patient> editedPasswordPatient = patientJpaRepository.findByEmail(email);
+        if (editedPasswordPatient.isEmpty()) {
+            throw new PatientNotFoundException("No such patient in the database");
+        }
+        if (!editedPasswordPatient.get().getPassword().equals(pass.getOldPassword())) {
+            throw new IncorrectOldPasswordException("Old password does not match");
+        }
+        editedPasswordPatient.get().setPassword(pass.getNewPassword());
+        return pass;
     }
-    if (!editedPasswordPatient.get().getPassword().equals(pass.getOldPassword())) {
-        throw new IncorrectOldPasswordException("Old password does not match");
-    }
-    editedPasswordPatient.get().setPassword(pass.getNewPassword());
-    return pass;
-}
 
-public void validateIfNull(Patient patient) {
-    if (patient.getEmail() == null ||
-            patient.getPhoneNumber() == null ||
-            patient.getFirstName() == null ||
-            patient.getLastName() == null ||
-            patient.getBirthday() == null) {
-        throw new PatientNullFieldsException("None of patient class fields should be null");
+    private void validateIfNull(Patient patient) {
+        if (patient.getEmail() == null ||
+                patient.getPhoneNumber() == null ||
+                patient.getFirstName() == null ||
+                patient.getLastName() == null ||
+                patient.getBirthday() == null) {
+            throw new PatientNullFieldsException("None of patient class fields should be null");
+        }
     }
-}
 
 //    public void checkIfIdChanged(String email, Patient patient) {
 //        if (!patient.getIdCardNr().equals(patientRepository.getPatient(email).getIdCardNr())) {

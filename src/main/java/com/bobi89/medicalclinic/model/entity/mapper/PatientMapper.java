@@ -18,5 +18,4 @@ public interface PatientMapper {
 
     Patient toPatient(PatientDTOwithPassword patientDTOwithPassword);
 
-
 }

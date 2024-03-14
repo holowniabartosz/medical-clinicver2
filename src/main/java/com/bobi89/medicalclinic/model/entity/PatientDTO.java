@@ -1,12 +1,14 @@
 package com.bobi89.medicalclinic.model.entity;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
+@Builder
 public class PatientDTO {
-    private long idCardNr;
+    private String idCardNr;
     private String email;
     private String firstName;
     private String lastName;
