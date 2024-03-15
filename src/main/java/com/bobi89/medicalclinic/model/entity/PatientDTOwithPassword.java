@@ -6,6 +6,7 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public class PatientDTOwithPassword {
+    private long id;
     private String idCardNr;
     private String email;
     private String firstName;

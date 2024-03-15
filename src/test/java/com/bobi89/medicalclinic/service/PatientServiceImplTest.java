@@ -40,7 +40,7 @@ class PatientServiceImplTest {
         //given
         List<Patient> patients = new ArrayList<>();
         Patient patient = generatePatient();
-        Patient patient2 = new Patient("991", "john@gmail.com1", "12341",
+        Patient patient2 = new Patient(1,"991", "john@gmail.com1", "12341",
                 "John1", "Doe1", "1234567891", "25/12/20001");
         patients.add(patient);
         patients.add(patient2);
@@ -95,6 +95,7 @@ class PatientServiceImplTest {
         Assertions.assertEquals("123456789", updatedPatient.getPhoneNumber());
         Assertions.assertEquals("25/12/2000", updatedPatient.getBirthday());
         Assertions.assertEquals("999", updatedPatient.getIdCardNr());
+        Assertions.assertEquals(0, updatedPatient.getId());
     }
 
     @Test
@@ -151,6 +152,7 @@ class PatientServiceImplTest {
         Assertions.assertEquals("123456789", updatedPatient.getPhoneNumber());
         Assertions.assertEquals("25/12/2000", updatedPatient.getBirthday());
         Assertions.assertEquals("999", updatedPatient.getIdCardNr());
+        Assertions.assertEquals(0, updatedPatient.getId());
     }
 
     @Test
@@ -204,17 +206,17 @@ class PatientServiceImplTest {
     }
 
     private static Patient generatePatient(){
-        return new Patient("999", "john@gmail.com","1234",
+        return new Patient(0,"999", "john@gmail.com","1234",
                 "John", "Doe", "123456789", "25/12/2000");
     }
 
     private static PatientDTO generatePatientDTO(){
-        return new PatientDTO("999", "john@gmail.com",
+        return new PatientDTO(0,"999", "john@gmail.com",
                 "John", "Doe", "123456789", "25/12/2000");
     }
 
     private static PatientDTOwithPassword generatePatientDTOwithPassword(){
-        return new PatientDTOwithPassword("999", "john@gmail.com",
+        return new PatientDTOwithPassword(0,"999", "john@gmail.com",
                 "John", "Doe", "123456789", "25/12/2000", "1234");
     }
 }

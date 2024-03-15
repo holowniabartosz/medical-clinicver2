@@ -25,6 +25,7 @@ public class PatientMapperTest {
         assertEquals(patient.getBirthday(), patientDTO.getBirthday());
         assertEquals(patient.getBirthday(), patientDTO.getBirthday());
         assertEquals(patient.getPhoneNumber(), patientDTO.getPhoneNumber());
+        assertEquals(patient.getId(), patientDTO.getId());
     }
 
     @Test
@@ -39,6 +40,7 @@ public class PatientMapperTest {
         assertEquals(patientDTO.getBirthday(), patient.getBirthday());
         assertEquals(patientDTO.getBirthday(), patient.getBirthday());
         assertEquals(patientDTO.getPhoneNumber(), patient.getPhoneNumber());
+        assertEquals(patientDTO.getId(), patient.getId());
     }
 
     @Test
@@ -54,20 +56,21 @@ public class PatientMapperTest {
         assertEquals(patientDTOWithPassword.getBirthday(), patient.getBirthday());
         assertEquals(patientDTOWithPassword.getPhoneNumber(), patient.getPhoneNumber());
         assertEquals(patientDTOWithPassword.getPassword(), patient.getPassword());
+        assertEquals(patientDTOWithPassword.getId(), patient.getId());
     }
 
     private static Patient generatePatient(){
-        return new Patient("999", "john@gmail.com","1234",
+        return new Patient(0,"999", "john@gmail.com","1234",
                 "John", "Doe", "123456789", "25/12/2000");
     }
 
     private static PatientDTO generatePatientDTO(){
-        return new PatientDTO("999", "john@gmail.com",
+        return new PatientDTO(0,"999", "john@gmail.com",
                 "John", "Doe", "123456789", "25/12/2000");
     }
 
     private static PatientDTOwithPassword generatePatientDTOwithPassword(){
-        return new PatientDTOwithPassword("999", "john@gmail.com",
+        return new PatientDTOwithPassword(0,"999", "john@gmail.com",
                 "John", "Doe", "123456789", "25/12/2000", "1234");
     }
 }

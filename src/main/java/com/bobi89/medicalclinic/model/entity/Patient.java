@@ -15,6 +15,7 @@ public class Patient {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false,unique = true)
+    private long id;
     private String idCardNr;
     private String email;
     private String password;
@@ -25,6 +26,7 @@ public class Patient {
 
 
     public void update(Patient newPatientData) {
+        this.id = newPatientData.getId();
         this.email = newPatientData.getEmail();
         this.firstName = newPatientData.getFirstName();
         this.lastName = newPatientData.getLastName();

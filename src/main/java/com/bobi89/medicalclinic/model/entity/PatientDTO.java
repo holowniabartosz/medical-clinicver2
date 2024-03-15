@@ -8,6 +8,7 @@ import lombok.Getter;
 @Getter
 @Builder
 public class PatientDTO {
+    private long id;
     private String idCardNr;
     private String email;
     private String firstName;
