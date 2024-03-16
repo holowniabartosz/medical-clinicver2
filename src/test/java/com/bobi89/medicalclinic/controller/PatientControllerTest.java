@@ -143,6 +143,8 @@ class PatientControllerTest {
     void deleteByEmail_PatientFound_Delete() throws Exception {
         String email = "john@gmail.com";
 
+
+
         mockMvc.perform(delete("/patients/{email}", email))
                 .andDo(print())
                 .andExpect(status().isNoContent());

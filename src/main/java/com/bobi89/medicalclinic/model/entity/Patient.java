@@ -14,7 +14,7 @@ public class Patient {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(nullable = false,unique = true)
+    @Column(nullable = false, unique = true)
     private Long id;
     private String idCardNr;
     private String email;
@@ -31,6 +31,4 @@ public class Patient {
         this.phoneNumber = newPatientData.getPhoneNumber();
         this.birthday = newPatientData.getBirthday();
     }
-
-
 }
