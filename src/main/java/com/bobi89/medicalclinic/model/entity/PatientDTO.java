@@ -1,12 +1,12 @@
 package com.bobi89.medicalclinic.model.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
+import lombok.*;
 
 @AllArgsConstructor
 @Getter
 @Builder
+@ToString
+@EqualsAndHashCode
 public class PatientDTO {
     private long id;
     private String idCardNr;

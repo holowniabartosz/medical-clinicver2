@@ -8,6 +8,7 @@ import com.bobi89.medicalclinic.model.entity.Patient;
 import com.bobi89.medicalclinic.model.entity.PatientDTO;
 import com.bobi89.medicalclinic.model.entity.PatientDTOwithPassword;
 import com.bobi89.medicalclinic.model.entity.mapper.PatientMapper;
+import com.bobi89.medicalclinic.model.entity.util.PatientCreator;
 import com.bobi89.medicalclinic.repository.PatientJpaRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,6 +20,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 class PatientServiceImplTest {
@@ -39,9 +42,8 @@ class PatientServiceImplTest {
     void findAll_patientsExists_returnPatients() {
         //given
         List<Patient> patients = new ArrayList<>();
-        Patient patient = generatePatient();
-        Patient patient2 = new Patient(1,"991", "john@gmail.com1", "12341",
-                "John1", "Doe1", "1234567891", "25/12/20001");
+        Patient patient = PatientCreator.createPatient(1, "john@gmail.com");
+        Patient patient2 = PatientCreator.createPatient(2, "john@gmail.com1");
         patients.add(patient);
         patients.add(patient2);
 
@@ -61,7 +63,7 @@ class PatientServiceImplTest {
     @Test
     void findByEmail_PatientExists_PatientReturned() {
         //given
-        Patient patient = generatePatient();
+        Patient patient = PatientCreator.createPatient(1, "john@gmail.com");
 
         when(patientJpaRepository.findByEmail("john@gmail.com"))
                 .thenReturn(Optional.of(patient));
@@ -78,8 +80,9 @@ class PatientServiceImplTest {
     @Test
     void save_IfUniqueEmail_PatientReturned() {
         //given
-        Patient patient = generatePatient();
-        PatientDTOwithPassword patientDTOwithPassword = generatePatientDTOwithPassword();
+        Patient patient = PatientCreator.createPatient(1, "john@gmail.com");
+        PatientDTOwithPassword patientDTOwithPassword =
+                PatientCreator.createPatientDTOwithPassword(1, "john@gmail.com");
 
         when(patientJpaRepository.findByEmail("john@gmail.com")).thenReturn(Optional.empty());
         when(patientJpaRepository.save(patient)).thenReturn(patient);
@@ -95,33 +98,37 @@ class PatientServiceImplTest {
         Assertions.assertEquals("123456789", updatedPatient.getPhoneNumber());
         Assertions.assertEquals("25/12/2000", updatedPatient.getBirthday());
         Assertions.assertEquals("999", updatedPatient.getIdCardNr());
-        Assertions.assertEquals(0, updatedPatient.getId());
+        Assertions.assertEquals(1, updatedPatient.getId());
     }
 
     @Test
     void save_IfEmailExists_ExceptionThrown() {
         //given
-        Patient patient = generatePatient();
-        PatientDTOwithPassword patientDTOwithPassword = generatePatientDTOwithPassword();
+        Patient patient = PatientCreator.createPatient(1, "john@gmail.com");
+        PatientDTOwithPassword patientDTOwithPassword =
+                PatientCreator.createPatientDTOwithPassword(1, "john@gmail.com");
 
         when(patientJpaRepository.findByEmail("john@gmail.com")).thenReturn(Optional.of((patient)));
 
         //then (when)
-        Assertions.assertThrows(PatientWithThisEmailExistsException.class,
+        var result = Assertions.assertThrows(PatientWithThisEmailExistsException.class,
                 () -> patientService.save(patientDTOwithPassword));
+
+        Assertions.assertEquals("Patient is already in the database", result.getMessage());
     }
 
     @Test
     void deleteByEmail_ifExists_PatientDeleted() {
         //given
-        Patient patient = generatePatient();
+        Patient patient = PatientCreator.createPatient(1, "john@gmail.com");
 
         when(patientJpaRepository.findByEmail("john@gmail.com")).thenReturn(Optional.of(patient));
 
         //then
         Assertions.assertDoesNotThrow(() ->
-        patientService.deleteByEmail("john@gmail.com"));
-        // verify?
+                patientService.deleteByEmail("john@gmail.com"));
+
+        verify(patientJpaRepository).delete(any());
     }
 
     @Test
@@ -130,14 +137,17 @@ class PatientServiceImplTest {
         when(patientJpaRepository.findByEmail("john@gmail.com")).thenReturn(Optional.empty());
 
         //then
-        Assertions.assertThrows(PatientNotFoundException.class,
+        var result = Assertions.assertThrows(PatientNotFoundException.class,
                 () -> patientService.deleteByEmail("john@gmail.com"));
+
+        Assertions.assertEquals("No such patient in the database", result.getMessage());
+
     }
 
     @Test
     void update_PatientExists_PatientReturned() {
-        Patient patient = generatePatient();
-        PatientDTO patientDTO = generatePatientDTO();
+        Patient patient = PatientCreator.createPatient(1, "john@gmail.com");
+        PatientDTO patientDTO = PatientCreator.createPatientDTO(1, "john@gmail.com");
 
         when(patientJpaRepository.findByEmail("john@gmail.com"))
                 .thenReturn(Optional.of(patient));
@@ -152,18 +162,20 @@ class PatientServiceImplTest {
         Assertions.assertEquals("123456789", updatedPatient.getPhoneNumber());
         Assertions.assertEquals("25/12/2000", updatedPatient.getBirthday());
         Assertions.assertEquals("999", updatedPatient.getIdCardNr());
-        Assertions.assertEquals(0, updatedPatient.getId());
+        Assertions.assertEquals(1, updatedPatient.getId());
     }
 
     @Test
     void update_PatientNotExist_ExceptionThrown() {
-        PatientDTO patientDTO = generatePatientDTO();
+        PatientDTO patientDTO = PatientCreator.createPatientDTO(1, "john@gmail.com");
 
         when(patientJpaRepository.findByEmail("john@gmail.com"))
                 .thenReturn(Optional.empty());
 
-        Assertions.assertThrows(PatientNotFoundException.class,
+        var result = Assertions.assertThrows(PatientNotFoundException.class,
                 () -> patientService.update("john@gmail.com", patientDTO));
+
+        Assertions.assertEquals("Patient not found", result.getMessage());
     }
 
     @Test
@@ -173,29 +185,33 @@ class PatientServiceImplTest {
         when(patientJpaRepository.findByEmail("john@gmail.com"))
                 .thenReturn(Optional.empty());
 
-        Assertions.assertThrows(PatientNotFoundException.class,
+        var result = Assertions.assertThrows(PatientNotFoundException.class,
                 () -> patientService.editPatientPassword("john@gmail.com", pass));
+
+        Assertions.assertEquals("No such patient in the database", result.getMessage());
     }
 
     @Test
     void editPatientPassword_WrongOldPassword_ThrowException() {
         //given
         ChangePasswordCommand pass = new ChangePasswordCommand("51234", "4321");
-        Patient patient = generatePatient();
+        Patient patient = PatientCreator.createPatient(1, "john@gmail.com");
 
         when(patientJpaRepository.findByEmail("john@gmail.com"))
                 .thenReturn(Optional.of(patient));
 
         //then (when)
-        Assertions.assertThrows(IncorrectOldPasswordException.class,
+        var result = Assertions.assertThrows(IncorrectOldPasswordException.class,
                 () -> patientService.editPatientPassword("john@gmail.com", pass));
+
+        Assertions.assertEquals("Old password does not match", result.getMessage());
     }
 
     @Test
     void editPatientPassword_CorrectPassword_ReturnPass() {
         //given
         ChangePasswordCommand pass = new ChangePasswordCommand("1234", "4321");
-        Patient patient = generatePatient();
+        Patient patient = PatientCreator.createPatient(1, "john@gmail.com");
 
         when(patientJpaRepository.findByEmail("john@gmail.com"))
                 .thenReturn(Optional.of(patient));
@@ -203,20 +219,5 @@ class PatientServiceImplTest {
         //then (when)
         Assertions.assertDoesNotThrow(() -> patientService.editPatientPassword("john@gmail.com", pass));
         Assertions.assertEquals(pass.getNewPassword(), patient.getPassword());
-    }
-
-    private static Patient generatePatient(){
-        return new Patient(0,"999", "john@gmail.com","1234",
-                "John", "Doe", "123456789", "25/12/2000");
-    }
-
-    private static PatientDTO generatePatientDTO(){
-        return new PatientDTO(0,"999", "john@gmail.com",
-                "John", "Doe", "123456789", "25/12/2000");
-    }
-
-    private static PatientDTOwithPassword generatePatientDTOwithPassword(){
-        return new PatientDTOwithPassword(0,"999", "john@gmail.com",
-                "John", "Doe", "123456789", "25/12/2000", "1234");
     }
 }

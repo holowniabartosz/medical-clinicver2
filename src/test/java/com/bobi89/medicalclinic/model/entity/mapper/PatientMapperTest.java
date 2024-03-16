@@ -3,6 +3,7 @@ package com.bobi89.medicalclinic.model.entity.mapper;
 import com.bobi89.medicalclinic.model.entity.Patient;
 import com.bobi89.medicalclinic.model.entity.PatientDTO;
 import com.bobi89.medicalclinic.model.entity.PatientDTOwithPassword;
+import com.bobi89.medicalclinic.model.entity.util.PatientCreator;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
 
@@ -15,7 +16,7 @@ public class PatientMapperTest {
     @Test
     void toDTO_MapsAllFields() {
 
-        Patient patient = generatePatient();
+        Patient patient = PatientCreator.createPatient(1,"john@gmail.com");
 
         PatientDTO patientDTO = mapper.toDTO(patient);
 
@@ -30,7 +31,7 @@ public class PatientMapperTest {
 
     @Test
     void toPatient_MapsAllFields() {
-        PatientDTO patientDTO = generatePatientDTO();
+        PatientDTO patientDTO = PatientCreator.createPatientDTO(1,"john@gmail.com");
 
         Patient patient = mapper.toPatient(patientDTO);
 
@@ -45,7 +46,7 @@ public class PatientMapperTest {
 
     @Test
     void toPatientWithPassword_MapsAllFieldsIncludingPassword() {
-        PatientDTOwithPassword patientDTOWithPassword = generatePatientDTOwithPassword();
+        PatientDTOwithPassword patientDTOWithPassword = PatientCreator.createPatientDTOwithPassword(1,"john@gmail.com");
 
         Patient patient = mapper.toPatient(patientDTOWithPassword);
 
@@ -59,18 +60,5 @@ public class PatientMapperTest {
         assertEquals(patientDTOWithPassword.getId(), patient.getId());
     }
 
-    private static Patient generatePatient(){
-        return new Patient(0,"999", "john@gmail.com","1234",
-                "John", "Doe", "123456789", "25/12/2000");
-    }
 
-    private static PatientDTO generatePatientDTO(){
-        return new PatientDTO(0,"999", "john@gmail.com",
-                "John", "Doe", "123456789", "25/12/2000");
-    }
-
-    private static PatientDTOwithPassword generatePatientDTOwithPassword(){
-        return new PatientDTOwithPassword(0,"999", "john@gmail.com",
-                "John", "Doe", "123456789", "25/12/2000", "1234");
-    }
 }
