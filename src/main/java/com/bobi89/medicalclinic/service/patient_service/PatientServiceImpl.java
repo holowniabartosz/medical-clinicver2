@@ -1,13 +1,13 @@
-package com.bobi89.medicalclinic.service;
+package com.bobi89.medicalclinic.service.patient_service;
 
 import com.bobi89.medicalclinic.exception.exc.IncorrectOldPasswordException;
-import com.bobi89.medicalclinic.exception.exc.PatientNotFoundException;
-import com.bobi89.medicalclinic.exception.exc.PatientNullFieldsException;
-import com.bobi89.medicalclinic.exception.exc.PatientWithThisEmailExistsException;
-import com.bobi89.medicalclinic.model.entity.ChangePasswordCommand;
-import com.bobi89.medicalclinic.model.entity.Patient;
-import com.bobi89.medicalclinic.model.entity.PatientDTO;
-import com.bobi89.medicalclinic.model.entity.PatientDTOwithPassword;
+import com.bobi89.medicalclinic.exception.exc.EntityNotFoundException;
+import com.bobi89.medicalclinic.exception.exc.EntityNullFieldsException;
+import com.bobi89.medicalclinic.exception.exc.EntityWithThisEmailExistsException;
+import com.bobi89.medicalclinic.model.entity.patient.ChangePasswordCommand;
+import com.bobi89.medicalclinic.model.entity.patient.Patient;
+import com.bobi89.medicalclinic.model.entity.patient.PatientDTO;
+import com.bobi89.medicalclinic.model.entity.patient.PatientDTOwithPassword;
 import com.bobi89.medicalclinic.model.entity.mapper.PatientMapper;
 import com.bobi89.medicalclinic.repository.PatientJpaRepository;
 import jakarta.transaction.Transactional;
@@ -27,17 +27,16 @@ public class PatientServiceImpl implements PatientService {
 
     @Override
     public List<PatientDTO> findAll() {
-        var patients = patientJpaRepository.findAll().stream()
+        return patientJpaRepository.findAll().stream()
                 .map(p -> patientMapper.toDTO(p))
                 .collect(Collectors.toList());
-        return patients;
     }
 
     @Override
     public PatientDTO findByEmail(String email) {
         var patient = patientJpaRepository.findByEmail(email);
         if (patient.isEmpty()) {
-            throw new PatientNotFoundException("No such patient in the database");
+            throw new EntityNotFoundException("No such patient in the database");
         } else {
             return patientMapper.toDTO(patient.get());
         }
@@ -46,7 +45,7 @@ public class PatientServiceImpl implements PatientService {
     @Override
     public PatientDTO save(PatientDTOwithPassword patientDTOwithPassword) {
         if (patientJpaRepository.findByEmail(patientDTOwithPassword.getEmail()).isPresent()) {
-            throw new PatientWithThisEmailExistsException("Patient is already in the database");
+            throw new EntityWithThisEmailExistsException("Patient is already in the database");
         }
         validateIfNull(patientMapper.toPatient(patientDTOwithPassword));
         return patientMapper.toDTO(patientJpaRepository
@@ -62,7 +61,7 @@ public class PatientServiceImpl implements PatientService {
     public PatientDTO update(String email, PatientDTO patientDTO) {
         Optional<Patient> patientToUpdate = patientJpaRepository.findByEmail(email);
         if (patientToUpdate.isEmpty()) {
-            throw new PatientNotFoundException("Patient not found");
+            throw new EntityNotFoundException("Patient not found");
         } else {
             patientToUpdate.map(updatedPatient -> {
                 updatedPatient.update(patientMapper.toPatient(patientDTO));
@@ -77,7 +76,7 @@ public class PatientServiceImpl implements PatientService {
     public ChangePasswordCommand editPatientPassword(String email, ChangePasswordCommand pass) {
         Optional<Patient> editedPasswordPatient = patientJpaRepository.findByEmail(email);
         if (editedPasswordPatient.isEmpty()) {
-            throw new PatientNotFoundException("No such patient in the database");
+            throw new EntityNotFoundException("No such patient in the database");
         }
         if (!editedPasswordPatient.get().getPassword().equals(pass.getOldPassword())) {
             throw new IncorrectOldPasswordException("Old password does not match");
@@ -92,7 +91,7 @@ public class PatientServiceImpl implements PatientService {
                 patient.getFirstName() == null ||
                 patient.getLastName() == null ||
                 patient.getBirthday() == null) {
-            throw new PatientNullFieldsException("None of patient class fields should be null");
+            throw new EntityNullFieldsException("None of patient class fields should be null");
         }
     }
 }

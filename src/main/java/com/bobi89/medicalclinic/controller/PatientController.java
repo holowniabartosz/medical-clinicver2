@@ -1,9 +1,9 @@
 package com.bobi89.medicalclinic.controller;
 
-import com.bobi89.medicalclinic.model.entity.ChangePasswordCommand;
-import com.bobi89.medicalclinic.model.entity.PatientDTO;
-import com.bobi89.medicalclinic.model.entity.PatientDTOwithPassword;
-import com.bobi89.medicalclinic.service.PatientServiceImpl;
+import com.bobi89.medicalclinic.model.entity.patient.ChangePasswordCommand;
+import com.bobi89.medicalclinic.model.entity.patient.PatientDTO;
+import com.bobi89.medicalclinic.model.entity.patient.PatientDTOwithPassword;
+import com.bobi89.medicalclinic.service.patient_service.PatientServiceImpl;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;

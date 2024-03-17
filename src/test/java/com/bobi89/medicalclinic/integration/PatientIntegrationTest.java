@@ -1,8 +1,8 @@
 package com.bobi89.medicalclinic.integration;
 
-import com.bobi89.medicalclinic.model.entity.ChangePasswordCommand;
-import com.bobi89.medicalclinic.model.entity.PatientDTO;
-import com.bobi89.medicalclinic.model.entity.PatientDTOwithPassword;
+import com.bobi89.medicalclinic.model.entity.patient.ChangePasswordCommand;
+import com.bobi89.medicalclinic.model.entity.patient.PatientDTO;
+import com.bobi89.medicalclinic.model.entity.patient.PatientDTOwithPassword;
 import com.bobi89.medicalclinic.model.entity.util.PatientCreator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;

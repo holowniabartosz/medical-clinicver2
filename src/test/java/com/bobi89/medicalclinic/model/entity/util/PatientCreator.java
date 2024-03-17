@@ -1,8 +1,8 @@
 package com.bobi89.medicalclinic.model.entity.util;
 
-import com.bobi89.medicalclinic.model.entity.Patient;
-import com.bobi89.medicalclinic.model.entity.PatientDTO;
-import com.bobi89.medicalclinic.model.entity.PatientDTOwithPassword;
+import com.bobi89.medicalclinic.model.entity.patient.Patient;
+import com.bobi89.medicalclinic.model.entity.patient.PatientDTO;
+import com.bobi89.medicalclinic.model.entity.patient.PatientDTOwithPassword;
 
 public class PatientCreator {
     public static Patient createPatient(long id, String email){

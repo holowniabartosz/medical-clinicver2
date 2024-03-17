@@ -1,15 +1,17 @@
 package com.bobi89.medicalclinic.service;
 
 import com.bobi89.medicalclinic.exception.exc.IncorrectOldPasswordException;
-import com.bobi89.medicalclinic.exception.exc.PatientNotFoundException;
-import com.bobi89.medicalclinic.exception.exc.PatientWithThisEmailExistsException;
-import com.bobi89.medicalclinic.model.entity.ChangePasswordCommand;
-import com.bobi89.medicalclinic.model.entity.Patient;
-import com.bobi89.medicalclinic.model.entity.PatientDTO;
-import com.bobi89.medicalclinic.model.entity.PatientDTOwithPassword;
+import com.bobi89.medicalclinic.exception.exc.EntityNotFoundException;
+import com.bobi89.medicalclinic.exception.exc.EntityWithThisEmailExistsException;
+import com.bobi89.medicalclinic.model.entity.patient.ChangePasswordCommand;
+import com.bobi89.medicalclinic.model.entity.patient.Patient;
+import com.bobi89.medicalclinic.model.entity.patient.PatientDTO;
+import com.bobi89.medicalclinic.model.entity.patient.PatientDTOwithPassword;
 import com.bobi89.medicalclinic.model.entity.mapper.PatientMapper;
 import com.bobi89.medicalclinic.model.entity.util.PatientCreator;
 import com.bobi89.medicalclinic.repository.PatientJpaRepository;
+import com.bobi89.medicalclinic.service.patient_service.PatientService;
+import com.bobi89.medicalclinic.service.patient_service.PatientServiceImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -111,7 +113,7 @@ class PatientServiceImplTest {
         when(patientJpaRepository.findByEmail("john@gmail.com")).thenReturn(Optional.of((patient)));
 
         //then (when)
-        var result = Assertions.assertThrows(PatientWithThisEmailExistsException.class,
+        var result = Assertions.assertThrows(EntityWithThisEmailExistsException.class,
                 () -> patientService.save(patientDTOwithPassword));
 
         Assertions.assertEquals("Patient is already in the database", result.getMessage());
@@ -137,7 +139,7 @@ class PatientServiceImplTest {
         when(patientJpaRepository.findByEmail("john@gmail.com")).thenReturn(Optional.empty());
 
         //then
-        var result = Assertions.assertThrows(PatientNotFoundException.class,
+        var result = Assertions.assertThrows(EntityNotFoundException.class,
                 () -> patientService.deleteByEmail("john@gmail.com"));
 
         Assertions.assertEquals("No such patient in the database", result.getMessage());
@@ -172,7 +174,7 @@ class PatientServiceImplTest {
         when(patientJpaRepository.findByEmail("john@gmail.com"))
                 .thenReturn(Optional.empty());
 
-        var result = Assertions.assertThrows(PatientNotFoundException.class,
+        var result = Assertions.assertThrows(EntityNotFoundException.class,
                 () -> patientService.update("john@gmail.com", patientDTO));
 
         Assertions.assertEquals("Patient not found", result.getMessage());
@@ -185,7 +187,7 @@ class PatientServiceImplTest {
         when(patientJpaRepository.findByEmail("john@gmail.com"))
                 .thenReturn(Optional.empty());
 
-        var result = Assertions.assertThrows(PatientNotFoundException.class,
+        var result = Assertions.assertThrows(EntityNotFoundException.class,
                 () -> patientService.editPatientPassword("john@gmail.com", pass));
 
         Assertions.assertEquals("No such patient in the database", result.getMessage());

@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class PatientErrorResponse {
+public class ErrorResponse {
 
 //    private HttpStatus status;
     private int status;

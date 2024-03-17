@@ -1,8 +1,8 @@
-package com.bobi89.medicalclinic.service;
+package com.bobi89.medicalclinic.service.patient_service;
 
-import com.bobi89.medicalclinic.model.entity.ChangePasswordCommand;
-import com.bobi89.medicalclinic.model.entity.PatientDTO;
-import com.bobi89.medicalclinic.model.entity.PatientDTOwithPassword;
+import com.bobi89.medicalclinic.model.entity.patient.ChangePasswordCommand;
+import com.bobi89.medicalclinic.model.entity.patient.PatientDTO;
+import com.bobi89.medicalclinic.model.entity.patient.PatientDTOwithPassword;
 
 import java.util.List;
 

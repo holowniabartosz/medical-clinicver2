@@ -1,6 +1,6 @@
 package com.bobi89.medicalclinic.repository;
 
-import com.bobi89.medicalclinic.model.entity.Patient;
+import com.bobi89.medicalclinic.model.entity.patient.Patient;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

@@ -1,8 +1,8 @@
 package com.bobi89.medicalclinic.model.entity.mapper;
 
-import com.bobi89.medicalclinic.model.entity.Patient;
-import com.bobi89.medicalclinic.model.entity.PatientDTO;
-import com.bobi89.medicalclinic.model.entity.PatientDTOwithPassword;
+import com.bobi89.medicalclinic.model.entity.patient.Patient;
+import com.bobi89.medicalclinic.model.entity.patient.PatientDTO;
+import com.bobi89.medicalclinic.model.entity.patient.PatientDTOwithPassword;
 import com.bobi89.medicalclinic.model.entity.util.PatientCreator;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;

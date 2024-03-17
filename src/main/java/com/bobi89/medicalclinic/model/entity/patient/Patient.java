@@ -1,4 +1,4 @@
-package com.bobi89.medicalclinic.model.entity;
+package com.bobi89.medicalclinic.model.entity.patient;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -15,7 +15,7 @@ public class Patient {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, unique = true)
-    private Long id;
+    private long id;
     private String idCardNr;
     private String email;
     private String password;

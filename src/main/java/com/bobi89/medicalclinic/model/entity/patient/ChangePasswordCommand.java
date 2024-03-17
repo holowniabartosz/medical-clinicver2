@@ -1,4 +1,4 @@
-package com.bobi89.medicalclinic.model.entity;
+package com.bobi89.medicalclinic.model.entity.patient;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

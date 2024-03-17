@@ -1,13 +1,13 @@
-package com.bobi89.medicalclinic.model.entity;
+package com.bobi89.medicalclinic.model.entity.patient;
 
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
+import lombok.*;
 
 @AllArgsConstructor
 @Getter
+@Builder
+@ToString
 @EqualsAndHashCode
-public class PatientDTOwithPassword {
+public class PatientDTO {
     private long id;
     private String idCardNr;
     private String email;
@@ -15,5 +15,6 @@ public class PatientDTOwithPassword {
     private String lastName;
     private String phoneNumber;
     private String birthday;
-    private String password;
+//    private String password;
+
 }

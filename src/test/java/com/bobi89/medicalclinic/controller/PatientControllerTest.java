@@ -1,13 +1,13 @@
 package com.bobi89.medicalclinic.controller;
 
-import com.bobi89.medicalclinic.exception.exc.PatientNotFoundException;
-import com.bobi89.medicalclinic.exception.exc.PatientNullFieldsException;
-import com.bobi89.medicalclinic.exception.exc.PatientWithThisEmailExistsException;
-import com.bobi89.medicalclinic.model.entity.ChangePasswordCommand;
-import com.bobi89.medicalclinic.model.entity.PatientDTO;
-import com.bobi89.medicalclinic.model.entity.PatientDTOwithPassword;
+import com.bobi89.medicalclinic.exception.exc.EntityNotFoundException;
+import com.bobi89.medicalclinic.exception.exc.EntityNullFieldsException;
+import com.bobi89.medicalclinic.exception.exc.EntityWithThisEmailExistsException;
+import com.bobi89.medicalclinic.model.entity.patient.ChangePasswordCommand;
+import com.bobi89.medicalclinic.model.entity.patient.PatientDTO;
+import com.bobi89.medicalclinic.model.entity.patient.PatientDTOwithPassword;
 import com.bobi89.medicalclinic.model.entity.util.PatientCreator;
-import com.bobi89.medicalclinic.service.PatientServiceImpl;
+import com.bobi89.medicalclinic.service.patient_service.PatientServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,7 +79,7 @@ class PatientControllerTest {
         String email = "unknown@gmail.com";
 
         when(patientServiceImpl.findByEmail(email))
-                .thenThrow(new PatientNotFoundException("No such patient"));
+                .thenThrow(new EntityNotFoundException("No such patient"));
 
         mockMvc.perform(get("/patients/{email}", email))
                 .andDo(print())
@@ -114,7 +114,7 @@ class PatientControllerTest {
         PatientDTOwithPassword patientDTOwithPassword = PatientCreator.createPatientDTOwithPassword(1, email);
 
         when(patientServiceImpl.save(patientDTOwithPassword))
-                .thenThrow(new PatientWithThisEmailExistsException("Patient is already in the database"));
+                .thenThrow(new EntityWithThisEmailExistsException("Patient is already in the database"));
 
         mockMvc.perform(post("/patients")
                         .content(objectMapper.writeValueAsString(patientDTOwithPassword))
@@ -129,7 +129,7 @@ class PatientControllerTest {
         PatientDTOwithPassword patientDTOwithPassword = PatientCreator.createPatientDTOwithPassword(1, null);
 
         when(patientServiceImpl.save(patientDTOwithPassword))
-                .thenThrow(new PatientNullFieldsException("None of patient class fields should be null"));
+                .thenThrow(new EntityNullFieldsException("None of patient class fields should be null"));
 
         mockMvc.perform(post("/patients")
                         .content(objectMapper.writeValueAsString(patientDTOwithPassword))
@@ -181,7 +181,7 @@ class PatientControllerTest {
         PatientDTO patientDTO = PatientCreator.createPatientDTO(1, email);
 
         when(patientServiceImpl.update(email, patientDTO))
-                .thenThrow(new PatientNotFoundException("Patient not found"));
+                .thenThrow(new EntityNotFoundException("Patient not found"));
 
         mockMvc.perform(put("/patients/{email}", email)
                         .content(objectMapper.writeValueAsString(patientDTO))

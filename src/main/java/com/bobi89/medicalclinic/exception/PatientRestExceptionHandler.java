@@ -8,11 +8,11 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @ControllerAdvice
 public class PatientRestExceptionHandler {
-    @ExceptionHandler(PatientNotFoundException.class)
-    public ResponseEntity<PatientErrorResponse> handleException(PatientNotFoundException exc){
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleException(EntityNotFoundException exc){
         // create a PatientErrorResponse
 
-        PatientErrorResponse error = new PatientErrorResponse();
+        ErrorResponse error = new ErrorResponse();
 
         error.setStatus(HttpStatus.NOT_FOUND.value());
         error.setMessage("Patient not found");
@@ -23,10 +23,10 @@ public class PatientRestExceptionHandler {
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(PatientWithThisEmailExistsException.class)
-    public ResponseEntity<PatientErrorResponse> handleException(PatientWithThisEmailExistsException exc){
+    @ExceptionHandler(EntityWithThisEmailExistsException.class)
+    public ResponseEntity<ErrorResponse> handleException(EntityWithThisEmailExistsException exc){
 
-        PatientErrorResponse error = new PatientErrorResponse();
+        ErrorResponse error = new ErrorResponse();
 
         error.setStatus(HttpStatus.BAD_REQUEST.value());
         error.setMessage("Patient with this email already exists");
@@ -36,9 +36,9 @@ public class PatientRestExceptionHandler {
     }
 
     @ExceptionHandler(IncorrectOldPasswordException.class)
-    public ResponseEntity<PatientErrorResponse> handleException(IncorrectOldPasswordException exc){
+    public ResponseEntity<ErrorResponse> handleException(IncorrectOldPasswordException exc){
 
-        PatientErrorResponse error = new PatientErrorResponse();
+        ErrorResponse error = new ErrorResponse();
 
         error.setStatus(HttpStatus.BAD_REQUEST.value());
         error.setMessage("Provided old password is incorrect");
@@ -47,22 +47,10 @@ public class PatientRestExceptionHandler {
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(PatientIdChangeException.class)
-    public ResponseEntity<PatientErrorResponse> handleException(PatientIdChangeException exc){
+    @ExceptionHandler(EntityNullFieldsException.class)
+    public ResponseEntity<ErrorResponse> handleException(EntityNullFieldsException exc){
 
-        PatientErrorResponse error = new PatientErrorResponse();
-
-        error.setStatus(HttpStatus.BAD_REQUEST.value());
-        error.setMessage("Cannot change patient ID");
-        error.setTimestamp(System.currentTimeMillis());
-
-        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
-    }
-
-    @ExceptionHandler(PatientNullFieldsException.class)
-    public ResponseEntity<PatientErrorResponse> handleException(PatientNullFieldsException exc){
-
-        PatientErrorResponse error = new PatientErrorResponse();
+        ErrorResponse error = new ErrorResponse();
 
         error.setStatus(HttpStatus.BAD_REQUEST.value());
         error.setMessage("Patient fields cannot be empty");
