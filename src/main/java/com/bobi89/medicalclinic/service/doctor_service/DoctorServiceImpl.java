@@ -5,6 +5,7 @@ import com.bobi89.medicalclinic.exception.exc.EntityNullFieldsException;
 import com.bobi89.medicalclinic.exception.exc.EntityWithThisIdExistsException;
 import com.bobi89.medicalclinic.model.entity.doctor.Doctor;
 import com.bobi89.medicalclinic.model.entity.doctor.DoctorDTO;
+import com.bobi89.medicalclinic.model.entity.doctor.DoctorDTOwithPassword;
 import com.bobi89.medicalclinic.model.entity.mapper.DoctorMapper;
 import com.bobi89.medicalclinic.repository.DoctorJpaRepository;
 import lombok.AllArgsConstructor;
@@ -38,13 +39,13 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
     @Override
-    public DoctorDTO save(DoctorDTO doctorDTO) {
-        if (doctorJpaRepository.findById(doctorDTO.getId()).isPresent()) {
+    public DoctorDTO save(DoctorDTOwithPassword doctorDTOwithPassword) {
+        if (doctorJpaRepository.findByEmail(doctorDTOwithPassword.getEmail()).isPresent()) {
             throw new EntityWithThisIdExistsException("Doctor is already in the database");
         }
-        validateIfNull(doctorMapper.toDoctor(doctorDTO));
+        validateIfNull(doctorMapper.toDoctor(doctorDTOwithPassword));
         return doctorMapper.toDTO(doctorJpaRepository
-                .save(doctorMapper.toDoctor(doctorDTO)));
+                .save(doctorMapper.toDoctor(doctorDTOwithPassword)));
     }
 
     private void validateIfNull(Doctor doctor) {

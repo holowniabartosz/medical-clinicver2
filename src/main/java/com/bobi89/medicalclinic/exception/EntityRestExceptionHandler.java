@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @ControllerAdvice
-public class PatientRestExceptionHandler {
+public class EntityRestExceptionHandler {
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleException(EntityNotFoundException exc){
         // create a PatientErrorResponse
@@ -15,12 +15,24 @@ public class PatientRestExceptionHandler {
         ErrorResponse error = new ErrorResponse();
 
         error.setStatus(HttpStatus.NOT_FOUND.value());
-        error.setMessage("Patient not found");
+        error.setMessage("Entity not found");
         error.setTimestamp(System.currentTimeMillis());
 
         // return ResponseEntity
 
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(EntityWithThisIdExistsException.class)
+    public ResponseEntity<ErrorResponse> handleException(EntityWithThisIdExistsException exc) {
+
+        ErrorResponse error = new ErrorResponse();
+
+        error.setStatus(HttpStatus.BAD_REQUEST.value());
+        error.setMessage("Entity with this ID already exists");
+        error.setTimestamp(System.currentTimeMillis());
+
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(EntityWithThisEmailExistsException.class)
@@ -29,7 +41,7 @@ public class PatientRestExceptionHandler {
         ErrorResponse error = new ErrorResponse();
 
         error.setStatus(HttpStatus.BAD_REQUEST.value());
-        error.setMessage("Patient with this email already exists");
+        error.setMessage("Entity with this email already exists");
         error.setTimestamp(System.currentTimeMillis());
 
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
@@ -53,7 +65,7 @@ public class PatientRestExceptionHandler {
         ErrorResponse error = new ErrorResponse();
 
         error.setStatus(HttpStatus.BAD_REQUEST.value());
-        error.setMessage("Patient fields cannot be empty");
+        error.setMessage("Entity fields cannot be empty");
         error.setTimestamp(System.currentTimeMillis());
 
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);

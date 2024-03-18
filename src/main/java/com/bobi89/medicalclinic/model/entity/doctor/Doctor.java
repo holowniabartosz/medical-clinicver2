@@ -2,14 +2,17 @@ package com.bobi89.medicalclinic.model.entity.doctor;
 
 import com.bobi89.medicalclinic.model.entity.location.Location;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.*;
 
 import java.util.Set;
 
 @Entity
-@Data
 @AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
+@Builder
+@EqualsAndHashCode
 public class Doctor {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,4 +24,11 @@ public class Doctor {
 
     @ManyToMany(mappedBy = "doctors")
     private Set<Location> locations;
+
+    public Doctor(long id,String email, String password, FieldOfExpertise fieldOfExpertise) {
+        this.id = id;
+        this.email = email;
+        this.password = password;
+        this.fieldOfExpertise = fieldOfExpertise;
+    }
 }

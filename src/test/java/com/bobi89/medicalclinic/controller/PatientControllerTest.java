@@ -84,7 +84,7 @@ class PatientControllerTest {
         mockMvc.perform(get("/patients/{email}", email))
                 .andDo(print())
                 .andExpect(status().isNotFound())
-                .andExpect(jsonPath("$.message").value("Patient not found"));
+                .andExpect(jsonPath("$.message").value("Entity not found"));
     }
 
     @Test
@@ -121,7 +121,7 @@ class PatientControllerTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.message").value("Patient with this email already exists"));
+                .andExpect(jsonPath("$.message").value("Entity with this email already exists"));
     }
 
     @Test
@@ -136,7 +136,7 @@ class PatientControllerTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.message").value("Patient fields cannot be empty"));
+                .andExpect(jsonPath("$.message").value("Entity fields cannot be empty"));
     }
 
     @Test
@@ -188,7 +188,7 @@ class PatientControllerTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isNotFound())
-                .andExpect(jsonPath("$.message").value("Patient not found"));
+                .andExpect(jsonPath("$.message").value("Entity not found"));
     }
 
     @Test
