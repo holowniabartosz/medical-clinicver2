@@ -11,4 +11,6 @@ public interface LocationService {
     LocationDTO findById(long id);
 
     LocationDTO save(LocationDTO locationDTO);
+
+    LocationDTO addDoctorToLocation(long doctorId, long locationId);
 }

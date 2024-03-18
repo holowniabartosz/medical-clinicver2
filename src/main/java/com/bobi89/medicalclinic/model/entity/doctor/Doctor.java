@@ -4,6 +4,7 @@ import com.bobi89.medicalclinic.model.entity.location.Location;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -12,12 +13,11 @@ import java.util.Set;
 @Getter
 @Setter
 @Builder
-@EqualsAndHashCode
 public class Doctor {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, unique = true)
-    private long id;
+    private Long id;
     private String email;
     private String password;
     private FieldOfExpertise fieldOfExpertise;
@@ -30,5 +30,24 @@ public class Doctor {
         this.email = email;
         this.password = password;
         this.fieldOfExpertise = fieldOfExpertise;
+        this.locations = new HashSet<>();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (!(o instanceof Doctor))
+            return false;
+
+        Doctor other = (Doctor) o;
+
+        return id != null &&
+                id.equals(other.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
     }
 }

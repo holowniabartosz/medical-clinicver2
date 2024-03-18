@@ -8,6 +8,7 @@ import com.bobi89.medicalclinic.model.entity.doctor.DoctorDTO;
 import com.bobi89.medicalclinic.model.entity.doctor.DoctorDTOwithPassword;
 import com.bobi89.medicalclinic.model.entity.mapper.DoctorMapper;
 import com.bobi89.medicalclinic.repository.DoctorJpaRepository;
+import com.bobi89.medicalclinic.repository.LocationJpaRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +21,7 @@ public class DoctorServiceImpl implements DoctorService {
 
     private DoctorJpaRepository doctorJpaRepository;
     private DoctorMapper doctorMapper;
+    private LocationJpaRepository locationJpaRepository;
 
     @Override
     public List<DoctorDTO> findAll() {
@@ -46,6 +48,16 @@ public class DoctorServiceImpl implements DoctorService {
         validateIfNull(doctorMapper.toDoctor(doctorDTOwithPassword));
         return doctorMapper.toDTO(doctorJpaRepository
                 .save(doctorMapper.toDoctor(doctorDTOwithPassword)));
+    }
+
+    @Override
+    public DoctorDTO addLocationToDoctor(long locationId, long doctorId) {
+        var doctor = doctorJpaRepository.findById(doctorId);
+        var location = locationJpaRepository.findById(locationId);
+        if (location.isEmpty() || doctor.isEmpty()) {
+            throw new EntityNotFoundException("Location or doctor not found");
+        } doctor.get().getLocations().add(location.get());
+        return doctorMapper.toDTO(doctorJpaRepository.save(doctor.get()));
     }
 
     private void validateIfNull(Doctor doctor) {

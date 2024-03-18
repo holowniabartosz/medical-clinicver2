@@ -6,6 +6,7 @@ import com.bobi89.medicalclinic.model.entity.doctor.DoctorDTOwithPassword;
 import com.bobi89.medicalclinic.model.entity.mapper.DoctorMapper;
 import com.bobi89.medicalclinic.model.entity.util.DoctorCreator;
 import com.bobi89.medicalclinic.repository.DoctorJpaRepository;
+import com.bobi89.medicalclinic.repository.LocationJpaRepository;
 import com.bobi89.medicalclinic.service.doctor_service.DoctorService;
 import com.bobi89.medicalclinic.service.doctor_service.DoctorServiceImpl;
 import org.junit.jupiter.api.Assertions;
@@ -25,13 +26,15 @@ class DoctorServiceImplTest {
     private DoctorMapper doctorMapper;
     private DoctorJpaRepository doctorJpaRepository;
     private DoctorService doctorService;
+    private LocationJpaRepository locationJpaRepository;
 
 
     @BeforeEach
     void setup() {
         this.doctorJpaRepository = Mockito.mock(DoctorJpaRepository.class);
         this.doctorMapper = Mappers.getMapper(DoctorMapper.class);
-        this.doctorService = new DoctorServiceImpl(doctorJpaRepository, doctorMapper);
+        this.locationJpaRepository = Mockito.mock(LocationJpaRepository.class);
+        this.doctorService = new DoctorServiceImpl(doctorJpaRepository, doctorMapper, locationJpaRepository);
     }
 
     @Test

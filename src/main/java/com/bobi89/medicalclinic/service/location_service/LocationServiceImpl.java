@@ -6,6 +6,7 @@ import com.bobi89.medicalclinic.exception.exc.EntityWithThisIdExistsException;
 import com.bobi89.medicalclinic.model.entity.location.Location;
 import com.bobi89.medicalclinic.model.entity.location.LocationDTO;
 import com.bobi89.medicalclinic.model.entity.mapper.LocationMapper;
+import com.bobi89.medicalclinic.repository.DoctorJpaRepository;
 import com.bobi89.medicalclinic.repository.LocationJpaRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,7 @@ public class LocationServiceImpl implements LocationService {
 
     private LocationJpaRepository locationJpaRepository;
     private LocationMapper locationMapper;
+    private DoctorJpaRepository doctorJpaRepository;
 
     @Override
     public List<LocationDTO> findAll() {
@@ -28,7 +30,7 @@ public class LocationServiceImpl implements LocationService {
     }
 
     @Override
-    public LocationDTO findById(long id){
+    public LocationDTO findById(long id) {
         var location = locationJpaRepository.findById(id);
         if (location.isEmpty()) {
             throw new EntityNotFoundException("No such location in the database");
@@ -45,6 +47,16 @@ public class LocationServiceImpl implements LocationService {
         validateIfNull(locationMapper.toLocation(locationDTO));
         return locationMapper.toDTO(locationJpaRepository
                 .save(locationMapper.toLocation(locationDTO)));
+    }
+
+    @Override
+    public LocationDTO addDoctorToLocation(long doctorId, long locationId) {
+        var doctor = doctorJpaRepository.findById(doctorId);
+        var location = locationJpaRepository.findById(locationId);
+        if (location.isEmpty() || doctor.isEmpty()) {
+            throw new EntityNotFoundException("Location or doctor not found");
+        } location.get().getDoctors().add(doctor.get());
+        return locationMapper.toDTO(locationJpaRepository.save(location.get()));
     }
 
     private void validateIfNull(Location location) {

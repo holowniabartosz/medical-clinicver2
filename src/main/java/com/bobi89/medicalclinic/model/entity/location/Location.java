@@ -4,6 +4,7 @@ import com.bobi89.medicalclinic.model.entity.doctor.Doctor;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -28,12 +29,32 @@ public class Location {
     )
     private Set<Doctor> doctors;
 
-    public Location(Long id, String name, String city, String ZIPcode, String street, String streetNr) {
+    public Location(Long id, String name, String city, String ZIPcode,
+                    String street, String streetNr) {
         this.id = id;
         this.name = name;
         this.city = city;
         this.ZIPcode = ZIPcode;
         this.street = street;
         this.streetNr = streetNr;
+        this.doctors = new HashSet<>();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (!(o instanceof Location))
+            return false;
+
+        Location other = (Location) o;
+
+        return id != null &&
+                id.equals(other.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
     }
 }

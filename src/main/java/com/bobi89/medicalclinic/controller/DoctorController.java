@@ -32,4 +32,10 @@ public class DoctorController {
         return doctorService
                 .save(doctorDTOwithPassword);
     }
+
+    @PostMapping("/doctors/{doctorId}/assign")
+    @ResponseStatus(HttpStatus.CREATED)
+    public DoctorDTO addLocationToDoctor(@RequestBody long locationId, long doctorId) {
+        return doctorService.addLocationToDoctor(locationId, doctorId);
+    }
 }

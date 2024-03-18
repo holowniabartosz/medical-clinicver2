@@ -4,6 +4,7 @@ import com.bobi89.medicalclinic.model.entity.location.Location;
 import com.bobi89.medicalclinic.model.entity.location.LocationDTO;
 import com.bobi89.medicalclinic.model.entity.mapper.LocationMapper;
 import com.bobi89.medicalclinic.model.entity.util.LocationCreator;
+import com.bobi89.medicalclinic.repository.DoctorJpaRepository;
 import com.bobi89.medicalclinic.repository.LocationJpaRepository;
 import com.bobi89.medicalclinic.service.location_service.LocationService;
 import com.bobi89.medicalclinic.service.location_service.LocationServiceImpl;
@@ -24,13 +25,15 @@ class LocationServiceImplTest {
     private LocationMapper locationMapper;
     private LocationJpaRepository locationJpaRepository;
     private LocationService locationService;
+    private DoctorJpaRepository doctorJpaRepository;
 
 
     @BeforeEach
     void setup() {
         this.locationJpaRepository = Mockito.mock(LocationJpaRepository.class);
         this.locationMapper = Mappers.getMapper(LocationMapper.class);
-        this.locationService = new LocationServiceImpl(locationJpaRepository, locationMapper);
+        this.doctorJpaRepository = Mockito.mock(DoctorJpaRepository.class);
+        this.locationService = new LocationServiceImpl(locationJpaRepository, locationMapper, doctorJpaRepository);
     }
 
     @Test
