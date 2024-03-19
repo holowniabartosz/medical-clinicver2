@@ -1,6 +1,7 @@
 package com.bobi89.medicalclinic.model.entity.doctor;
 
 import com.bobi89.medicalclinic.model.entity.location.Location;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -23,7 +24,7 @@ public class Doctor {
     private FieldOfExpertise fieldOfExpertise;
 
     @ManyToMany(mappedBy = "doctors")
-//    @JsonBackReference
+    @JsonBackReference
     private Set<Location> locations;
 
     public Doctor(long id,String email, String password, FieldOfExpertise fieldOfExpertise) {

@@ -5,6 +5,7 @@ import com.bobi89.medicalclinic.exception.exc.EntityNullFieldsException;
 import com.bobi89.medicalclinic.exception.exc.EntityWithThisIdExistsException;
 import com.bobi89.medicalclinic.model.entity.doctor.Doctor;
 import com.bobi89.medicalclinic.model.entity.doctor.DoctorDTO;
+import com.bobi89.medicalclinic.model.entity.doctor.DoctorDTOnonRecurring;
 import com.bobi89.medicalclinic.model.entity.doctor.DoctorDTOwithPassword;
 import com.bobi89.medicalclinic.model.entity.mapper.DoctorMapper;
 import com.bobi89.medicalclinic.repository.DoctorJpaRepository;
@@ -51,13 +52,13 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
     @Override
-    public DoctorDTO addLocationToDoctor(long locationId, long doctorId) {
+    public DoctorDTOnonRecurring addLocationToDoctor(long locationId, long doctorId) {
         var doctor = doctorJpaRepository.findById(doctorId);
         var location = locationJpaRepository.findById(locationId);
         if (location.isEmpty() || doctor.isEmpty()) {
             throw new EntityNotFoundException("Location or doctor not found");
         } doctor.get().getLocations().add(location.get());
-        return doctorMapper.toDTO(doctorJpaRepository.save(doctor.get()));
+        return doctorMapper.toDTOnonRecurring(doctorJpaRepository.save(doctor.get()));
     }
 
     private void validateIfNull(Doctor doctor) {
