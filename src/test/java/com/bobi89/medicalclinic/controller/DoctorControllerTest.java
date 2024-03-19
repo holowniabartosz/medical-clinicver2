@@ -3,7 +3,7 @@ package com.bobi89.medicalclinic.controller;
 import com.bobi89.medicalclinic.model.entity.doctor.DoctorDTO;
 import com.bobi89.medicalclinic.model.entity.doctor.DoctorDTOwithPassword;
 import com.bobi89.medicalclinic.model.entity.util.DoctorCreator;
-import com.bobi89.medicalclinic.service.doctor_service.DoctorServiceImpl;
+import com.bobi89.medicalclinic.service.doctor_service.DoctorService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +16,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -28,7 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class DoctorControllerTest {
 
     @MockBean
-    private DoctorServiceImpl doctorServiceImpl;
+    private DoctorService doctorService;
     @Autowired
     private ObjectMapper objectMapper;
     @Autowired
@@ -43,7 +44,7 @@ class DoctorControllerTest {
         doctors.add(doctorDTO);
         doctors.add(doctorDTO2);
 
-        when(doctorServiceImpl.findAll()).thenReturn(doctors);
+        when(doctorService.findAll()).thenReturn(doctors);
 
         mockMvc.perform(get("/doctors"))
                 .andDo(print())
@@ -58,7 +59,7 @@ class DoctorControllerTest {
         String email = "doctor@gmail.com";
         DoctorDTO doctorDTO = DoctorCreator.createDoctorDTO(id,email);
 
-        when(doctorServiceImpl.findById(id)).thenReturn(doctorDTO);
+        when(doctorService.findById(id)).thenReturn(doctorDTO);
 
         mockMvc.perform(get("/doctors/{id}", id))
                 .andDo(print())
@@ -74,7 +75,7 @@ class DoctorControllerTest {
         DoctorDTO doctorDTO = DoctorCreator.createDoctorDTO(id,email);
         DoctorDTOwithPassword doctorDTOwithPassword = DoctorCreator.createDoctorDTOwithPassword(id, email);
 
-        when(doctorServiceImpl.save(doctorDTOwithPassword)).thenReturn(doctorDTO);
+        when(doctorService.save(any())).thenReturn(doctorDTO);
 
         mockMvc.perform(post("/doctors")
                         .content(objectMapper.writeValueAsString(doctorDTOwithPassword))

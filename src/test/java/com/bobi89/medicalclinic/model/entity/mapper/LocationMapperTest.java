@@ -22,7 +22,7 @@ public class LocationMapperTest {
         assertEquals(location.getId(), locationDTO.getId());
         assertEquals(location.getName(), locationDTO.getName());
         assertEquals(location.getCity(), locationDTO.getCity());
-        assertEquals(location.getZIPcode(), locationDTO.getZIPcode());
+        assertEquals(location.getZipCode(), locationDTO.getZipCode());
         assertEquals(location.getStreet(), locationDTO.getStreet());
         assertEquals(location.getStreetNr(), locationDTO.getStreetNr());
     }
@@ -36,7 +36,7 @@ public class LocationMapperTest {
         assertEquals(locationDTO.getId(), location.getId());
         assertEquals(locationDTO.getName(), location.getName());
         assertEquals(locationDTO.getCity(), location.getCity());
-        assertEquals(locationDTO.getZIPcode(), location.getZIPcode());
+        assertEquals(locationDTO.getZipCode(), location.getZipCode());
         assertEquals(locationDTO.getStreet(), location.getStreet());
         assertEquals(locationDTO.getStreetNr(), location.getStreetNr());
     }

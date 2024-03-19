@@ -7,12 +7,21 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Getter
-@ToString
+@NoArgsConstructor
 @EqualsAndHashCode
+@Builder
+@ToString
+@AllArgsConstructor
+//@JsonIdentityInfo(
+//        generator = ObjectIdGenerators.PropertyGenerator.class,
+//        property = "id")
 public class DoctorDTO {
-    private long id;
+
+    private Long id;
     private String email;
     private FieldOfExpertise fieldOfExpertise;
+
+//    @JsonBackReference
     private Set<Location> locations;
 
     public DoctorDTO(long id,String email, FieldOfExpertise fieldOfExpertise) {
@@ -21,4 +30,22 @@ public class DoctorDTO {
         this.fieldOfExpertise = fieldOfExpertise;
         this.locations = new HashSet<>();
     }
+
+    //    @Override
+//    public boolean equals(Object o) {
+//        if (this == o) return true;
+//
+//        if (!(o instanceof DoctorDTO))
+//            return false;
+//
+//        DoctorDTO other = (DoctorDTO) o;
+//
+//        return id != null &&
+//                id.equals(other.getId());
+//    }
+//
+//    @Override
+//    public int hashCode() {
+//        return getClass().hashCode();
+//    }
 }

@@ -5,6 +5,7 @@ import com.bobi89.medicalclinic.model.entity.doctor.DoctorDTO;
 import com.bobi89.medicalclinic.model.entity.doctor.DoctorDTOwithPassword;
 import org.mapstruct.Mapper;
 
+
 @Mapper(componentModel = "spring")
 public interface DoctorMapper {
 

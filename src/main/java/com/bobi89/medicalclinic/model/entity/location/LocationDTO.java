@@ -1,30 +1,38 @@
 package com.bobi89.medicalclinic.model.entity.location;
 
 import com.bobi89.medicalclinic.model.entity.doctor.Doctor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
+import lombok.*;
 
 import java.util.HashSet;
 import java.util.Set;
 
 @Getter
 @EqualsAndHashCode
+@NoArgsConstructor
+@Builder
+@ToString
+@AllArgsConstructor
+//@JsonIdentityInfo(
+//        generator = ObjectIdGenerators.PropertyGenerator.class,
+//        property = "id")
 public class LocationDTO {
 
     private long id;
     private String name;
     private String city;
-    private String ZIPcode;
+    private String zipCode;
     private String street;
     private String streetNr;
+
+//    @JsonManagedReference
     private Set<Doctor> doctors;
 
     public LocationDTO(long id, String name, String city,
-                       String ZIPcode, String street, String streetNr) {
+                       String zipCode, String street, String streetNr) {
         this.id = id;
         this.name = name;
         this.city = city;
-        this.ZIPcode = ZIPcode;
+        this.zipCode = zipCode;
         this.street = street;
         this.streetNr = streetNr;
         this.doctors = new HashSet<>();

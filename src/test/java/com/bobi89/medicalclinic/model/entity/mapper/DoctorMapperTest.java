@@ -10,8 +10,12 @@ import org.mapstruct.factory.Mappers;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class DoctorMapperTest {
-
     private DoctorMapper mapper = Mappers.getMapper(DoctorMapper.class);
+
+//    @BeforeEach
+//    void setup(){
+//        this.mapper = Mappers.getMapper(DoctorMapper.class);
+//    }
 
     @Test
     void toDTO_MapsAllFields() {

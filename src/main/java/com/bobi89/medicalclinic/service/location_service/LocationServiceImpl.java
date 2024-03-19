@@ -63,7 +63,7 @@ public class LocationServiceImpl implements LocationService {
         if (location.getStreetNr() == null ||
                 location.getName() == null ||
                 location.getCity() == null ||
-                location.getZIPcode() == null ||
+                location.getZipCode() == null ||
                 location.getStreet() == null) {
             throw new EntityNullFieldsException("None of location class fields should be null");
         }

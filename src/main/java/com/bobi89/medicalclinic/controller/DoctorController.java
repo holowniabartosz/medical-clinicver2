@@ -35,7 +35,7 @@ public class DoctorController {
 
     @PostMapping("/{doctorId}/assign")
     @ResponseStatus(HttpStatus.CREATED)
-    public DoctorDTO addLocationToDoctor(@RequestBody long locationId, long doctorId) {
+    public DoctorDTO addLocationToDoctor(@RequestBody long locationId, @PathVariable long doctorId) {
         return doctorService.addLocationToDoctor(locationId, doctorId);
     }
 }

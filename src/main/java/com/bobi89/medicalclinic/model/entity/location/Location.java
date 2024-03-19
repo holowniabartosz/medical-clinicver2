@@ -19,7 +19,7 @@ public class Location {
     @Column(nullable = false, unique = true)
     private String name;
     private String city;
-    private String ZIPcode;
+    private String zipCode;
     private String street;
     private String streetNr;
 
@@ -29,6 +29,7 @@ public class Location {
             joinColumns = @JoinColumn(name = "location_id"),
             inverseJoinColumns = @JoinColumn(name = "doctor_id")
     )
+//    @JsonManagedReference
     private Set<Doctor> doctors;
 
     public Location(Long id, String name, String city, String ZIPcode,
@@ -36,7 +37,7 @@ public class Location {
         this.id = id;
         this.name = name;
         this.city = city;
-        this.ZIPcode = ZIPcode;
+        this.zipCode = ZIPcode;
         this.street = street;
         this.streetNr = streetNr;
         this.doctors = new HashSet<>();

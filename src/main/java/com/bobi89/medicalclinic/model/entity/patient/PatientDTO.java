@@ -7,6 +7,7 @@ import lombok.*;
 @Builder
 @ToString
 @EqualsAndHashCode
+@NoArgsConstructor
 public class PatientDTO {
     private long id;
     private String idCardNr;
