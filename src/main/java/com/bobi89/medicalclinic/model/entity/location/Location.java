@@ -1,7 +1,6 @@
 package com.bobi89.medicalclinic.model.entity.location;
 
 import com.bobi89.medicalclinic.model.entity.doctor.Doctor;
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -30,7 +29,6 @@ public class Location {
             joinColumns = @JoinColumn(name = "location_id"),
             inverseJoinColumns = @JoinColumn(name = "doctor_id")
     )
-    @JsonBackReference
     private Set<Doctor> doctors;
 
     public Location(Long id, String name, String city, String ZIPcode,

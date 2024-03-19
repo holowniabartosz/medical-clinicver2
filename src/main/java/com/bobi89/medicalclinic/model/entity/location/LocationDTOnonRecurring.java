@@ -16,7 +16,7 @@ import java.util.Set;
 //        property = "id")
 public class LocationDTOnonRecurring {
 
-    private long id;
+    private Long id;
     private String name;
     private String city;
     private String zipCode;

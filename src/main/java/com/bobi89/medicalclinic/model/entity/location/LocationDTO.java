@@ -17,7 +17,7 @@ import java.util.Set;
 //        property = "id")
 public class LocationDTO {
 
-    private long id;
+    private Long id;
     private String name;
     private String city;
     private String zipCode;

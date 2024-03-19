@@ -3,6 +3,7 @@ package com.bobi89.medicalclinic.service.location_service;
 import com.bobi89.medicalclinic.exception.exc.EntityNotFoundException;
 import com.bobi89.medicalclinic.exception.exc.EntityNullFieldsException;
 import com.bobi89.medicalclinic.exception.exc.EntityWithThisIdExistsException;
+import com.bobi89.medicalclinic.model.entity.doctor.Doctor;
 import com.bobi89.medicalclinic.model.entity.location.Location;
 import com.bobi89.medicalclinic.model.entity.location.LocationDTO;
 import com.bobi89.medicalclinic.model.entity.location.LocationDTOnonRecurring;
@@ -57,7 +58,7 @@ public class LocationServiceImpl implements LocationService {
         if (location.isEmpty() || doctor.isEmpty()) {
             throw new EntityNotFoundException("Location or doctor not found");
         } location.get().getDoctors().add(doctor.get());
-        return locationMapper.toDTOnonRecurring(locationJpaRepository.save(location.get()));
+        return toDTOnonRecurring(locationJpaRepository.save(location.get()));
     }
 
     private void validateIfNull(Location location) {
@@ -68,6 +69,21 @@ public class LocationServiceImpl implements LocationService {
                 location.getStreet() == null) {
             throw new EntityNullFieldsException("None of location class fields should be null");
         }
+    }
+
+    private static LocationDTOnonRecurring toDTOnonRecurring(Location location){
+        return new LocationDTOnonRecurring(
+                location.getId(),
+                location.getName(),
+                location.getCity(),
+                location.getZipCode(),
+                location.getStreet(),
+                location.getStreetNr(),
+                location.getDoctors().stream()
+                        .map(Doctor::getEmail)
+                        .collect(Collectors.toSet())
+        );
+
     }
 }
 
