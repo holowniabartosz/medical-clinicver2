@@ -1,15 +1,17 @@
 package com.bobi89.medicalclinic.model.entity.location;
 
 import com.bobi89.medicalclinic.model.entity.doctor.Doctor;
-import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 
 import java.util.HashSet;
 import java.util.Set;
 
-@Data
+@Getter
+@EqualsAndHashCode
 public class LocationDTO {
 
-    private Long id;
+    private long id;
     private String name;
     private String city;
     private String ZIPcode;
@@ -17,7 +19,7 @@ public class LocationDTO {
     private String streetNr;
     private Set<Doctor> doctors;
 
-    public LocationDTO(Long id, String name, String city,
+    public LocationDTO(long id, String name, String city,
                        String ZIPcode, String street, String streetNr) {
         this.id = id;
         this.name = name;

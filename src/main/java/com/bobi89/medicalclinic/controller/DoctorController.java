@@ -33,7 +33,7 @@ public class DoctorController {
                 .save(doctorDTOwithPassword);
     }
 
-    @PostMapping("/doctors/{doctorId}/assign")
+    @PostMapping("/{doctorId}/assign")
     @ResponseStatus(HttpStatus.CREATED)
     public DoctorDTO addLocationToDoctor(@RequestBody long locationId, long doctorId) {
         return doctorService.addLocationToDoctor(locationId, doctorId);

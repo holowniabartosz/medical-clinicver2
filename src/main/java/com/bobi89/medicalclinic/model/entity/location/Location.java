@@ -3,10 +3,12 @@ package com.bobi89.medicalclinic.model.entity.location;
 import com.bobi89.medicalclinic.model.entity.doctor.Doctor;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.HashSet;
 import java.util.Set;
 
+@NoArgsConstructor
 @Entity
 @Data
 public class Location {

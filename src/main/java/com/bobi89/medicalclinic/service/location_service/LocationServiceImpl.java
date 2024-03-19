@@ -41,7 +41,7 @@ public class LocationServiceImpl implements LocationService {
 
     @Override
     public LocationDTO save(LocationDTO locationDTO) {
-        if (locationJpaRepository.findById(locationDTO.getId()).isPresent()) {
+        if (locationJpaRepository.findByName(locationDTO.getName()).isPresent()) {
             throw new EntityWithThisIdExistsException("Location is already in the database");
         }
         validateIfNull(locationMapper.toLocation(locationDTO));
