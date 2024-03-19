@@ -1,6 +1,5 @@
 package com.bobi89.medicalclinic.model.entity.doctor;
 
-import com.bobi89.medicalclinic.model.entity.location.Location;
 import lombok.*;
 
 import java.util.HashSet;
@@ -22,13 +21,13 @@ public class DoctorDTO {
     private FieldOfExpertise fieldOfExpertise;
 
 //    @JsonBackReference
-    private Set<Location> locations;
+    private Set<String> locationsNames;
 
     public DoctorDTO(long id,String email, FieldOfExpertise fieldOfExpertise) {
         this.id = id;
         this.email = email;
         this.fieldOfExpertise = fieldOfExpertise;
-        this.locations = new HashSet<>();
+        this.locationsNames = new HashSet<>();
     }
 
     //    @Override

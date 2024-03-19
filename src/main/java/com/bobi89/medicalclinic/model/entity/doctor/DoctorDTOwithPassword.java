@@ -1,7 +1,7 @@
 package com.bobi89.medicalclinic.model.entity.doctor;
 
-import com.bobi89.medicalclinic.model.entity.location.Location;
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -14,14 +14,14 @@ public class DoctorDTOwithPassword {
     private String email;
     private String password;
     private FieldOfExpertise fieldOfExpertise;
-    private Set<Location> locations;
+    private Set<String> locationsNames;
 
     public DoctorDTOwithPassword(long id,String email, String password, FieldOfExpertise fieldOfExpertise) {
         this.id = id;
         this.email = email;
         this.password = password;
         this.fieldOfExpertise = fieldOfExpertise;
-        this.locations = new HashSet<>();
+        this.locationsNames = new HashSet<>();
     }
 
     @Override

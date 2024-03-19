@@ -1,7 +1,6 @@
 package com.bobi89.medicalclinic.controller;
 
 import com.bobi89.medicalclinic.model.entity.location.LocationDTO;
-import com.bobi89.medicalclinic.model.entity.location.LocationDTOnonRecurring;
 import com.bobi89.medicalclinic.service.location_service.LocationService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -35,7 +34,7 @@ public class LocationController {
 
     @PostMapping("/{locationId}/assign")
     @ResponseStatus(HttpStatus.CREATED)
-    public LocationDTOnonRecurring addDoctorToLocation(@RequestBody long doctorId, @PathVariable long locationId) {
+    public LocationDTO addDoctorToLocation(@RequestBody long doctorId, @PathVariable long locationId) {
         return locationService.addDoctorToLocation(doctorId,locationId);
     }
 }

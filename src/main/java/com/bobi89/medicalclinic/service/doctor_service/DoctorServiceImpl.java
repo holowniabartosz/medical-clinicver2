@@ -5,9 +5,7 @@ import com.bobi89.medicalclinic.exception.exc.EntityNullFieldsException;
 import com.bobi89.medicalclinic.exception.exc.EntityWithThisIdExistsException;
 import com.bobi89.medicalclinic.model.entity.doctor.Doctor;
 import com.bobi89.medicalclinic.model.entity.doctor.DoctorDTO;
-import com.bobi89.medicalclinic.model.entity.doctor.DoctorDTOnonRecurring;
 import com.bobi89.medicalclinic.model.entity.doctor.DoctorDTOwithPassword;
-import com.bobi89.medicalclinic.model.entity.location.Location;
 import com.bobi89.medicalclinic.model.entity.mapper.DoctorMapper;
 import com.bobi89.medicalclinic.repository.DoctorJpaRepository;
 import com.bobi89.medicalclinic.repository.LocationJpaRepository;
@@ -53,13 +51,13 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
     @Override
-    public DoctorDTOnonRecurring addLocationToDoctor(long locationId, long doctorId) {
+    public DoctorDTO addLocationToDoctor(long locationId, long doctorId) {
         var doctor = doctorJpaRepository.findById(doctorId);
         var location = locationJpaRepository.findById(locationId);
         if (location.isEmpty() || doctor.isEmpty()) {
             throw new EntityNotFoundException("Location or doctor not found");
         } doctor.get().getLocations().add(location.get());
-        return toDTOnonRecurring(doctorJpaRepository.save(doctor.get()));
+        return doctorMapper.toDTO(doctorJpaRepository.save(doctor.get()));
     }
 
     private void validateIfNull(Doctor doctor) {
@@ -69,18 +67,6 @@ public class DoctorServiceImpl implements DoctorService {
         {
             throw new EntityNullFieldsException("None of doctor class fields should be null");
         }
-    }
-
-    private static DoctorDTOnonRecurring toDTOnonRecurring(Doctor doctor){
-        return new DoctorDTOnonRecurring(
-                doctor.getId(),
-                doctor.getEmail(),
-                doctor.getFieldOfExpertise(),
-                doctor.getLocations().stream()
-                        .map(Location::getName)
-                        .collect(Collectors.toSet())
-        );
-
     }
 }
 

@@ -1,6 +1,5 @@
 package com.bobi89.medicalclinic.model.entity.location;
 
-import com.bobi89.medicalclinic.model.entity.doctor.Doctor;
 import lombok.*;
 
 import java.util.HashSet;
@@ -25,7 +24,7 @@ public class LocationDTO {
     private String streetNr;
 
 //    @JsonManagedReference
-    private Set<Doctor> doctors;
+    private Set<String> doctorsEmails;
 
     public LocationDTO(long id, String name, String city,
                        String zipCode, String street, String streetNr) {
@@ -35,6 +34,6 @@ public class LocationDTO {
         this.zipCode = zipCode;
         this.street = street;
         this.streetNr = streetNr;
-        this.doctors = new HashSet<>();
+        this.doctorsEmails = new HashSet<>();
     }
 }

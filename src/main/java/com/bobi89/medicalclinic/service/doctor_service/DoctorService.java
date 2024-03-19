@@ -1,7 +1,6 @@
 package com.bobi89.medicalclinic.service.doctor_service;
 
 import com.bobi89.medicalclinic.model.entity.doctor.DoctorDTO;
-import com.bobi89.medicalclinic.model.entity.doctor.DoctorDTOnonRecurring;
 import com.bobi89.medicalclinic.model.entity.doctor.DoctorDTOwithPassword;
 
 import java.util.List;
@@ -13,5 +12,5 @@ public interface DoctorService {
 
     DoctorDTO save(DoctorDTOwithPassword doctorDTOwithPassword);
 
-    DoctorDTOnonRecurring addLocationToDoctor(long locationId, long doctorId);
+    DoctorDTO addLocationToDoctor(long locationId, long doctorId);
 }

@@ -1,7 +1,6 @@
 package com.bobi89.medicalclinic.controller;
 
 import com.bobi89.medicalclinic.model.entity.doctor.DoctorDTO;
-import com.bobi89.medicalclinic.model.entity.doctor.DoctorDTOnonRecurring;
 import com.bobi89.medicalclinic.model.entity.doctor.DoctorDTOwithPassword;
 import com.bobi89.medicalclinic.service.doctor_service.DoctorService;
 import lombok.AllArgsConstructor;
@@ -36,7 +35,7 @@ public class DoctorController {
 
     @PostMapping("/{doctorId}/assign")
     @ResponseStatus(HttpStatus.CREATED)
-    public DoctorDTOnonRecurring addLocationToDoctor(@RequestBody long locationId, @PathVariable long doctorId) {
+    public DoctorDTO addLocationToDoctor(@RequestBody long locationId, @PathVariable long doctorId) {
         return doctorService.addLocationToDoctor(locationId, doctorId);
     }
 }
