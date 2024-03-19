@@ -1,8 +1,10 @@
 package com.bobi89.medicalclinic.service;
 
+import com.bobi89.medicalclinic.model.entity.doctor.Doctor;
 import com.bobi89.medicalclinic.model.entity.location.Location;
 import com.bobi89.medicalclinic.model.entity.location.LocationDTO;
 import com.bobi89.medicalclinic.model.entity.mapper.LocationMapper;
+import com.bobi89.medicalclinic.model.entity.util.DoctorCreator;
 import com.bobi89.medicalclinic.model.entity.util.LocationCreator;
 import com.bobi89.medicalclinic.repository.DoctorJpaRepository;
 import com.bobi89.medicalclinic.repository.LocationJpaRepository;
@@ -92,5 +94,30 @@ class LocationServiceImplTest {
         Assertions.assertNotNull(updatedLocation);
         Assertions.assertEquals("London", updatedLocation.getCity());
         Assertions.assertEquals(1, updatedLocation.getId());
+    }
+
+    @Test
+    void addDoctorToLocation_Correct_LocationDTOReturned() {
+        //given
+        Long doctorId = 1L;
+        Long locationId = 10L;
+        String email = "doctor@gmail.com";
+
+        Doctor doctor = DoctorCreator.createDoctor(doctorId, email);
+
+        Location location = LocationCreator.createLocation(1, "London");
+
+        when(doctorJpaRepository.findById(doctorId)).thenReturn(Optional.of(doctor));
+        when(locationJpaRepository.findById(locationId)).thenReturn(Optional.of(location));
+        when(locationJpaRepository.save(location)).thenReturn(location);
+
+        //when
+        var locationDtoReturned = locationService
+                .addDoctorToLocation(doctorId,locationId);
+
+        //then
+        Assertions.assertNotNull(locationDtoReturned);
+        Assertions.assertEquals("London", locationDtoReturned.getCity());
+        Assertions.assertEquals(1, locationDtoReturned.getId());
     }
 }
