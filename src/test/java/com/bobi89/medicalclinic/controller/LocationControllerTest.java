@@ -84,4 +84,22 @@ class LocationControllerTest {
                 .andExpect(jsonPath("$.city").value(locationDTO.getCity()));
     }
 
+    @Test
+    void addDoctorToLocation_CorrectDoctor_ReturnLocation() throws Exception {
+        Long doctorId = 1L;
+        Long locationId = 10L;
+        String city = "London";
+        LocationDTO locationDTO = LocationCreator.createLocationDTO(locationId, city);
+
+        when(locationServiceImpl.addDoctorToLocation(doctorId,locationId)).thenReturn(locationDTO);
+
+        mockMvc.perform(post("/locations/{locationId}/assign", locationId)
+                        .content(objectMapper.writeValueAsString(doctorId))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().is2xxSuccessful())
+                .andExpect(jsonPath("$.id").value(locationDTO.getId()))
+                .andExpect(jsonPath("$.city").value(locationDTO.getCity()));
+    }
+
 }

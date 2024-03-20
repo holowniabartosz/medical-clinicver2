@@ -23,7 +23,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Sql(scripts = {"file:src/test/resources/scripts/insert_doctor_data.sql"},
         config = @SqlConfig(encoding = "UTF-8", transactionMode = SqlConfig.TransactionMode.ISOLATED),
         executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+@Sql(scripts = {"file:src/test/resources/scripts/insert_location_data.sql"},
+        config = @SqlConfig(encoding = "UTF-8", transactionMode = SqlConfig.TransactionMode.ISOLATED),
+        executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 @Sql(scripts = {"file:src/test/resources/scripts/clear_doctor_data.sql"},
+        config = @SqlConfig(encoding = "UTF-8", transactionMode = SqlConfig.TransactionMode.ISOLATED),
+        executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+@Sql(scripts = {"file:src/test/resources/scripts/clear_location_data.sql"},
         config = @SqlConfig(encoding = "UTF-8", transactionMode = SqlConfig.TransactionMode.ISOLATED),
         executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 public class DoctorIntegrationTest {
@@ -67,5 +73,21 @@ public class DoctorIntegrationTest {
                 .andExpect(status().is2xxSuccessful())
                 .andExpect(jsonPath("$.id").value(doctorDTOwithPassword.getId()))
                 .andExpect(jsonPath("$.email").value(doctorDTOwithPassword.getEmail()));
+    }
+
+    @Test
+    void addLocationToDoctor_CorrectLocation_ReturnDoctor() throws Exception {
+        Long doctorId = 1L;
+        Long locationId = 1L;
+        String email = "doctor@gmail.com";
+//        DoctorDTO doctorDTO = DoctorCreator.createDoctorDTO(doctorId, email);
+
+        mockMvc.perform(post("/doctors/{doctorId}/assign", doctorId)
+                        .content(objectMapper.writeValueAsString(locationId))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().is2xxSuccessful())
+                .andExpect(jsonPath("$.id").value(doctorId))
+                .andExpect(jsonPath("$.email").value(email));
     }
 }

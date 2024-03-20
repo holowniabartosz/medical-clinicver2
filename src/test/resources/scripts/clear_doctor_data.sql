@@ -1,2 +1,3 @@
+DELETE FROM location_doctor
 DELETE FROM doctor
 ALTER TABLE doctor ALTER COLUMN id RESTART WITH 1

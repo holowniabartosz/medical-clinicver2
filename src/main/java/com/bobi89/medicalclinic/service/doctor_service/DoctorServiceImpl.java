@@ -56,8 +56,11 @@ public class DoctorServiceImpl implements DoctorService {
         var location = locationJpaRepository.findById(locationId);
         if (location.isEmpty() || doctor.isEmpty()) {
             throw new EntityNotFoundException("Location or doctor not found");
-        } doctor.get().getLocations().add(location.get());
-        return doctorMapper.toDTO(doctorJpaRepository.save(doctor.get()));
+        }
+//        doctor.get().getLocations().add(location.get());
+        location.get().getDoctors().add(doctor.get());
+        locationJpaRepository.save(location.get());
+        return doctorMapper.toDTO(doctor.get());
     }
 
     private void validateIfNull(Doctor doctor) {

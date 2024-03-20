@@ -11,9 +11,6 @@ import java.util.Set;
 @Builder
 @ToString
 @AllArgsConstructor
-//@JsonIdentityInfo(
-//        generator = ObjectIdGenerators.PropertyGenerator.class,
-//        property = "id")
 public class LocationDTO {
 
     private Long id;
@@ -22,8 +19,6 @@ public class LocationDTO {
     private String zipCode;
     private String street;
     private String streetNr;
-
-//    @JsonManagedReference
     private Set<String> doctorsEmails;
 
     public LocationDTO(long id, String name, String city,

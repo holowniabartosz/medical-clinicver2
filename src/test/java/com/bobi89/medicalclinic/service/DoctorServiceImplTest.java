@@ -3,8 +3,10 @@ package com.bobi89.medicalclinic.service;
 import com.bobi89.medicalclinic.model.entity.doctor.Doctor;
 import com.bobi89.medicalclinic.model.entity.doctor.DoctorDTO;
 import com.bobi89.medicalclinic.model.entity.doctor.DoctorDTOwithPassword;
+import com.bobi89.medicalclinic.model.entity.location.Location;
 import com.bobi89.medicalclinic.model.entity.mapper.DoctorMapper;
 import com.bobi89.medicalclinic.model.entity.util.DoctorCreator;
+import com.bobi89.medicalclinic.model.entity.util.LocationCreator;
 import com.bobi89.medicalclinic.repository.DoctorJpaRepository;
 import com.bobi89.medicalclinic.repository.LocationJpaRepository;
 import com.bobi89.medicalclinic.service.doctor_service.DoctorService;
@@ -41,7 +43,7 @@ class DoctorServiceImplTest {
     void findAll_doctorsExists_returnDoctors() {
         //given
         List<Doctor> doctors = new ArrayList<>();
-        Doctor doctor = DoctorCreator.createDoctor(0,"doctor@gmail.com");
+        Doctor doctor = DoctorCreator.createDoctor(0, "doctor@gmail.com");
         Doctor doctor2 = DoctorCreator.createDoctor(1, "doctor@gmail.com1");
         doctors.add(doctor);
         doctors.add(doctor2);
@@ -62,7 +64,7 @@ class DoctorServiceImplTest {
     @Test
     void findByEmail_DoctorExists_DoctorReturned() {
         //given
-        Doctor doctor = DoctorCreator.createDoctor(0,"doctor@gmail.com");
+        Doctor doctor = DoctorCreator.createDoctor(0, "doctor@gmail.com");
 
         when(doctorJpaRepository.findById(0L))
                 .thenReturn(Optional.of(doctor));
@@ -94,5 +96,31 @@ class DoctorServiceImplTest {
         Assertions.assertNotNull(updatedDoctor);
         Assertions.assertEquals("doctor@gmail.com", updatedDoctor.getEmail());
         Assertions.assertEquals(10, updatedDoctor.getId());
+    }
+
+    @Test
+    void addLocationtoDoctor_Correct_DoctorDTOReturned() {
+        //given
+        Long doctorId = 1L;
+        Long locationId = 10L;
+        String city = "London";
+        String email = "doctor@gmail.com";
+
+        Location location = LocationCreator.createLocation(doctorId, city);
+
+        Doctor doctor = DoctorCreator.createDoctor(doctorId, email);
+
+        when(doctorJpaRepository.findById(doctorId)).thenReturn(Optional.of(doctor));
+        when(locationJpaRepository.findById(locationId)).thenReturn(Optional.of(location));
+        when(doctorJpaRepository.save(doctor)).thenReturn(doctor);
+
+        //when
+        var doctorDtoReturned = doctorService
+                .addLocationToDoctor(locationId, doctorId);
+
+        //then
+        Assertions.assertNotNull(doctorDtoReturned);
+        Assertions.assertEquals(email, doctorDtoReturned.getEmail());
+        Assertions.assertEquals(doctorId, doctorDtoReturned.getId());
     }
 }

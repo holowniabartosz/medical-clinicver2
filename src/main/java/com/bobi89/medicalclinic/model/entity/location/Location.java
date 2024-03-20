@@ -23,7 +23,7 @@ public class Location {
     private String street;
     private String streetNr;
 
-    @ManyToMany
+    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinTable(
             name = "location_doctor",
             joinColumns = @JoinColumn(name = "location_id"),

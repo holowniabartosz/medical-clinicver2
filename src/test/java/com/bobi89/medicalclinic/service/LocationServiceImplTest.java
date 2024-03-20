@@ -102,10 +102,11 @@ class LocationServiceImplTest {
         Long doctorId = 1L;
         Long locationId = 10L;
         String email = "doctor@gmail.com";
+        String city = "London";
 
         Doctor doctor = DoctorCreator.createDoctor(doctorId, email);
 
-        Location location = LocationCreator.createLocation(1, "London");
+        Location location = LocationCreator.createLocation(locationId, city);
 
         when(doctorJpaRepository.findById(doctorId)).thenReturn(Optional.of(doctor));
         when(locationJpaRepository.findById(locationId)).thenReturn(Optional.of(location));
@@ -117,7 +118,7 @@ class LocationServiceImplTest {
 
         //then
         Assertions.assertNotNull(locationDtoReturned);
-        Assertions.assertEquals("London", locationDtoReturned.getCity());
-        Assertions.assertEquals(1, locationDtoReturned.getId());
+        Assertions.assertEquals(city, locationDtoReturned.getCity());
+        Assertions.assertEquals(locationId, locationDtoReturned.getId());
     }
 }

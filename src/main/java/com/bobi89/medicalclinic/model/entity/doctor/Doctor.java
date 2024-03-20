@@ -22,7 +22,8 @@ public class Doctor {
     private String password;
     private FieldOfExpertise fieldOfExpertise;
 
-    @ManyToMany(mappedBy = "doctors")
+    @ManyToMany(mappedBy = "doctors",
+            cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH})
     private Set<Location> locations;
 
     public Doctor(long id,String email, String password, FieldOfExpertise fieldOfExpertise) {
