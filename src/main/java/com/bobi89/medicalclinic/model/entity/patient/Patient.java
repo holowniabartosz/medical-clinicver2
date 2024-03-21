@@ -1,7 +1,10 @@
 package com.bobi89.medicalclinic.model.entity.patient;
 
+import com.bobi89.medicalclinic.model.entity.appointment.Appointment;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.Set;
 
 @Entity
 @AllArgsConstructor
@@ -22,6 +25,20 @@ public class Patient {
     private String lastName;
     private String phoneNumber;
     private String birthday;
+
+    @OneToMany(mappedBy = "patient")
+    private Set<Appointment> appointments;
+
+    public Patient(Long id, String idCardNr, String email, String password, String firstName, String lastName, String phoneNumber, String birthday) {
+        this.id = id;
+        this.idCardNr = idCardNr;
+        this.email = email;
+        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phoneNumber = phoneNumber;
+        this.birthday = birthday;
+    }
 
     public void update(Patient newPatientData) {
         this.email = newPatientData.getEmail();

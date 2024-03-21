@@ -1,5 +1,6 @@
 package com.bobi89.medicalclinic.controller;
 
+import com.bobi89.medicalclinic.model.entity.appointment.AppointmentRequest;
 import com.bobi89.medicalclinic.model.entity.patient.ChangePasswordCommand;
 import com.bobi89.medicalclinic.model.entity.patient.PatientDTO;
 import com.bobi89.medicalclinic.model.entity.patient.PatientDTOwithPassword;
@@ -53,6 +54,14 @@ public class PatientController {
                                                        @RequestBody ChangePasswordCommand pass) {
         patientService.editPatientPassword(email, pass);
         return pass;
+    }
+
+    @PostMapping("/{patientId}/{doctorId}/fitSlot")
+    @ResponseStatus(HttpStatus.CREATED)
+    public PatientDTO addAppointmentToPatient(@RequestBody AppointmentRequest appointmentRequest,
+                                            @PathVariable long patientId, @PathVariable long doctorId) {
+        return patientService.addAppointmentToPatient(appointmentRequest.getLocalDateTime(),
+                appointmentRequest.getDurationMinutes(), patientId, doctorId);
     }
 }
 

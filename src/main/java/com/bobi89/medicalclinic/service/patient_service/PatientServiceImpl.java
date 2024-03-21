@@ -1,19 +1,20 @@
 package com.bobi89.medicalclinic.service.patient_service;
 
-import com.bobi89.medicalclinic.exception.exc.IncorrectOldPasswordException;
-import com.bobi89.medicalclinic.exception.exc.EntityNotFoundException;
-import com.bobi89.medicalclinic.exception.exc.EntityNullFieldsException;
-import com.bobi89.medicalclinic.exception.exc.EntityWithThisEmailExistsException;
+import com.bobi89.medicalclinic.exception.exc.*;
+import com.bobi89.medicalclinic.model.entity.appointment.Appointment;
+import com.bobi89.medicalclinic.model.entity.mapper.PatientMapper;
 import com.bobi89.medicalclinic.model.entity.patient.ChangePasswordCommand;
 import com.bobi89.medicalclinic.model.entity.patient.Patient;
 import com.bobi89.medicalclinic.model.entity.patient.PatientDTO;
 import com.bobi89.medicalclinic.model.entity.patient.PatientDTOwithPassword;
-import com.bobi89.medicalclinic.model.entity.mapper.PatientMapper;
+import com.bobi89.medicalclinic.repository.AppointmentRepository;
+import com.bobi89.medicalclinic.repository.DoctorJpaRepository;
 import com.bobi89.medicalclinic.repository.PatientJpaRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -24,6 +25,9 @@ public class PatientServiceImpl implements PatientService {
 
     private PatientJpaRepository patientJpaRepository;
     private PatientMapper patientMapper;
+    private AppointmentRepository appointmentRepository;
+    private DoctorJpaRepository doctorJpaRepository;
+
 
     @Override
     public List<PatientDTO> findAll() {
@@ -58,6 +62,7 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Transactional
+    @Override
     public PatientDTO update(String email, PatientDTO patientDTO) {
         Optional<Patient> patientToUpdate = patientJpaRepository.findByEmail(email);
         if (patientToUpdate.isEmpty()) {
@@ -73,6 +78,7 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Transactional
+    @Override
     public ChangePasswordCommand editPatientPassword(String email, ChangePasswordCommand pass) {
         Optional<Patient> editedPasswordPatient = patientJpaRepository.findByEmail(email);
         if (editedPasswordPatient.isEmpty()) {
@@ -83,6 +89,33 @@ public class PatientServiceImpl implements PatientService {
         }
         editedPasswordPatient.get().setPassword(pass.getNewPassword());
         return pass;
+    }
+
+    @Transactional
+    @Override
+    public PatientDTO addAppointmentToPatient(LocalDateTime dateTime, int durationMinutes,
+                                              long patientId, long doctorId) {
+        var patient = patientJpaRepository.findById(patientId);
+        var doctor = doctorJpaRepository.findById(doctorId);
+
+        if (patient.isEmpty() || doctor.isEmpty()) {
+            throw new EntityNotFoundException("Patient or doctor not found");
+        }
+        var appointments = appointmentRepository.findAll();
+        var requestedAppointment = new Appointment(dateTime, durationMinutes, doctor.get());
+
+        var targetAppointment = appointments.stream().filter(s ->
+                        ((s.getStartDateTime().isBefore(requestedAppointment.getStartDateTime().plusSeconds(1)))
+                        &&
+                        (s.getEndDateTime().isAfter(requestedAppointment.getEndDateTime().minusSeconds(1)))
+                        && s.getPatient() == null))
+                .findFirst();
+        if (targetAppointment.isEmpty()){
+            throw new EntityNotFoundException("No doctor's appointment at this particular date and duration");
+        }
+        targetAppointment.get().setPatient(patient.get());
+        appointmentRepository.save(targetAppointment.get());
+        return patientMapper.toDTO(patient.get());
     }
 
     private void validateIfNull(Patient patient) {

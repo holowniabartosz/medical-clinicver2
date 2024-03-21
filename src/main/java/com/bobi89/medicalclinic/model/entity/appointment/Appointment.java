@@ -2,6 +2,7 @@ package com.bobi89.medicalclinic.model.entity.appointment;
 
 import com.bobi89.medicalclinic.exception.exc.DateInThePastException;
 import com.bobi89.medicalclinic.model.entity.doctor.Doctor;
+import com.bobi89.medicalclinic.model.entity.patient.Patient;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +22,9 @@ public class Appointment {
     private LocalDateTime startDateTime;
     private Duration duration;
     private LocalDateTime endDateTime;
-    private Long patientId;
+
+    @ManyToOne
+    private Patient patient;
 
     @ManyToOne
     private Doctor doctor;

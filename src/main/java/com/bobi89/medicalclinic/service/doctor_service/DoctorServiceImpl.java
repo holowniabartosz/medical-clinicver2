@@ -12,6 +12,7 @@ import com.bobi89.medicalclinic.model.entity.mapper.DoctorMapper;
 import com.bobi89.medicalclinic.repository.AppointmentRepository;
 import com.bobi89.medicalclinic.repository.DoctorJpaRepository;
 import com.bobi89.medicalclinic.repository.LocationJpaRepository;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -55,6 +56,7 @@ public class DoctorServiceImpl implements DoctorService {
                 .save(doctorMapper.toDoctor(doctorDTOwithPassword)));
     }
 
+    @Transactional
     @Override
     public DoctorDTO addLocationToDoctor(long locationId, long doctorId) {
         var doctor = doctorJpaRepository.findById(doctorId);
@@ -67,6 +69,7 @@ public class DoctorServiceImpl implements DoctorService {
         return doctorMapper.toDTO(doctor.get());
     }
 
+    @Transactional
     @Override
     public DoctorDTO addAppointmentToDoctor(LocalDateTime dateTime, int durationMinutes, long doctorId) {
         var doctor = doctorJpaRepository.findById(doctorId);
@@ -114,13 +117,6 @@ public class DoctorServiceImpl implements DoctorService {
                             s.getEndDateTime().isAfter(appointment.getEndDateTime()))
                 )
         ) {
-//        if (doctor.get().getAppointments()
-//                .stream().noneMatch(s ->
-//                        (s.getStartDateTime().isAfter(appointment.getEndDateTime()))
-//                                ||
-//                        (s.getEndDateTime().isBefore(appointment.getStartDateTime()))
-//                )
-//        ) {
             throw new AppointmentConflictDateException("Slot unavailable");
         } else return true;
     }

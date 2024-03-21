@@ -9,6 +9,8 @@ import com.bobi89.medicalclinic.model.entity.patient.PatientDTO;
 import com.bobi89.medicalclinic.model.entity.patient.PatientDTOwithPassword;
 import com.bobi89.medicalclinic.model.entity.mapper.PatientMapper;
 import com.bobi89.medicalclinic.model.entity.util.PatientCreator;
+import com.bobi89.medicalclinic.repository.AppointmentRepository;
+import com.bobi89.medicalclinic.repository.DoctorJpaRepository;
 import com.bobi89.medicalclinic.repository.PatientJpaRepository;
 import com.bobi89.medicalclinic.service.patient_service.PatientService;
 import com.bobi89.medicalclinic.service.patient_service.PatientServiceImpl;
@@ -31,13 +33,19 @@ class PatientServiceImplTest {
     private PatientMapper patientMapper;
     private PatientJpaRepository patientJpaRepository;
     private PatientService patientService;
+    private AppointmentRepository appointmentRepository;
+    private DoctorJpaRepository doctorJpaRepository;
 
 
     @BeforeEach
     void setup() {
         this.patientJpaRepository = Mockito.mock(PatientJpaRepository.class);
         this.patientMapper = Mappers.getMapper(PatientMapper.class);
-        this.patientService = new PatientServiceImpl(patientJpaRepository, patientMapper);
+        this.appointmentRepository = Mockito.mock(AppointmentRepository.class);
+        this.doctorJpaRepository = Mockito.mock(DoctorJpaRepository.class);
+        this.patientService = new PatientServiceImpl(patientJpaRepository, patientMapper, appointmentRepository,
+                doctorJpaRepository);
+
     }
 
     @Test

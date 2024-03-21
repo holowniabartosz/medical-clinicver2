@@ -5,6 +5,9 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+import java.util.Set;
+
 @AllArgsConstructor
 @Getter
 @EqualsAndHashCode
@@ -18,4 +21,18 @@ public class PatientDTOwithPassword {
     private String phoneNumber;
     private String birthday;
     private String password;
+    private Set<LocalDateTime> appointmentsDates;
+
+    public PatientDTOwithPassword(long id, String idCardNr, String email, String firstName, String lastName, String phoneNumber, String birthday, String password) {
+        this.id = id;
+        this.idCardNr = idCardNr;
+        this.email = email;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phoneNumber = phoneNumber;
+        this.birthday = birthday;
+        this.password = password;
+    }
 }
+
+
