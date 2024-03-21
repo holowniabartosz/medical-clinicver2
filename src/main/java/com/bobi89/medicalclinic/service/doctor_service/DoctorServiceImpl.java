@@ -1,17 +1,21 @@
 package com.bobi89.medicalclinic.service.doctor_service;
 
+import com.bobi89.medicalclinic.exception.exc.AppointmentConflictDateException;
 import com.bobi89.medicalclinic.exception.exc.EntityNotFoundException;
 import com.bobi89.medicalclinic.exception.exc.EntityNullFieldsException;
 import com.bobi89.medicalclinic.exception.exc.EntityWithThisIdExistsException;
+import com.bobi89.medicalclinic.model.entity.appointment.Appointment;
 import com.bobi89.medicalclinic.model.entity.doctor.Doctor;
 import com.bobi89.medicalclinic.model.entity.doctor.DoctorDTO;
 import com.bobi89.medicalclinic.model.entity.doctor.DoctorDTOwithPassword;
 import com.bobi89.medicalclinic.model.entity.mapper.DoctorMapper;
+import com.bobi89.medicalclinic.repository.AppointmentRepository;
 import com.bobi89.medicalclinic.repository.DoctorJpaRepository;
 import com.bobi89.medicalclinic.repository.LocationJpaRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,6 +26,7 @@ public class DoctorServiceImpl implements DoctorService {
     private DoctorJpaRepository doctorJpaRepository;
     private DoctorMapper doctorMapper;
     private LocationJpaRepository locationJpaRepository;
+    private AppointmentRepository appointmentRepository;
 
     @Override
     public List<DoctorDTO> findAll() {
@@ -31,7 +36,7 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
     @Override
-    public DoctorDTO findById(long id){
+    public DoctorDTO findById(long id) {
         var location = doctorJpaRepository.findById(id);
         if (location.isEmpty()) {
             throw new EntityNotFoundException("No such doctor in the database");
@@ -57,19 +62,67 @@ public class DoctorServiceImpl implements DoctorService {
         if (location.isEmpty() || doctor.isEmpty()) {
             throw new EntityNotFoundException("Location or doctor not found");
         }
-//        doctor.get().getLocations().add(location.get());
         location.get().getDoctors().add(doctor.get());
         locationJpaRepository.save(location.get());
         return doctorMapper.toDTO(doctor.get());
     }
 
+    @Override
+    public DoctorDTO addAppointmentToDoctor(LocalDateTime dateTime, int durationMinutes, long doctorId) {
+        var doctor = doctorJpaRepository.findById(doctorId);
+        if (doctor.isEmpty()) {
+            throw new EntityNotFoundException("Doctor not found");
+        }
+        if (isSlotAvailable(dateTime, durationMinutes, doctorId)) {
+            var appointment = new Appointment(dateTime, durationMinutes, doctor.get());
+            appointment.setDoctor(doctor.get());
+            appointmentRepository.save(appointment);
+            return doctorMapper.toDTO(doctor.get());
+        } else {
+            throw new RuntimeException("!@#$%^$@#!$!~#$%$^%@!$#! XD");
+        }
+    }
+
     private void validateIfNull(Doctor doctor) {
         if (doctor.getEmail() == null ||
                 doctor.getPassword() == null ||
-                doctor.getFieldOfExpertise() == null)
-        {
+                doctor.getFieldOfExpertise() == null) {
             throw new EntityNullFieldsException("None of doctor class fields should be null");
         }
+    }
+
+    private boolean isSlotAvailable(LocalDateTime startDateTime, int durationMinutes, long doctorId) {
+        var doctor = doctorJpaRepository.findById(doctorId);
+        if (doctor.isEmpty()) {
+            throw new EntityNotFoundException("Doctor not found");
+        }
+        var appointment = new Appointment(startDateTime, durationMinutes, doctor.get());
+        if (doctor.get().getAppointments()
+                .stream().anyMatch(s ->
+                        (s.getStartDateTime().isAfter(appointment.getStartDateTime()) &&
+                            s.getEndDateTime().isBefore(appointment.getEndDateTime()))
+                                ||
+                        (s.getStartDateTime().isAfter(appointment.getStartDateTime()) &&
+                            s.getEndDateTime().isAfter(appointment.getEndDateTime()) &&
+                            s.getStartDateTime().isBefore(appointment.getEndDateTime()))
+                                ||
+                        (s.getStartDateTime().isBefore(appointment.getStartDateTime()) &&
+                            s.getEndDateTime().isBefore(appointment.getEndDateTime()) &&
+                            s.getEndDateTime().isAfter(appointment.getStartDateTime()))
+                                ||
+                        (s.getStartDateTime().isBefore(appointment.getStartDateTime()) &&
+                            s.getEndDateTime().isAfter(appointment.getEndDateTime()))
+                )
+        ) {
+//        if (doctor.get().getAppointments()
+//                .stream().noneMatch(s ->
+//                        (s.getStartDateTime().isAfter(appointment.getEndDateTime()))
+//                                ||
+//                        (s.getEndDateTime().isBefore(appointment.getStartDateTime()))
+//                )
+//        ) {
+            throw new AppointmentConflictDateException("Slot unavailable");
+        } else return true;
     }
 }
 

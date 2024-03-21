@@ -1,5 +1,6 @@
 package com.bobi89.medicalclinic.controller;
 
+import com.bobi89.medicalclinic.model.entity.appointment.AppointmentRequest;
 import com.bobi89.medicalclinic.model.entity.doctor.DoctorDTO;
 import com.bobi89.medicalclinic.model.entity.doctor.DoctorDTOwithPassword;
 import com.bobi89.medicalclinic.service.doctor_service.DoctorService;
@@ -7,6 +8,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -38,4 +40,14 @@ public class DoctorController {
     public DoctorDTO addLocationToDoctor(@RequestBody long locationId, @PathVariable long doctorId) {
         return doctorService.addLocationToDoctor(locationId, doctorId);
     }
+
+    @PostMapping("/{doctorId}/scheduleSlot")
+    @ResponseStatus(HttpStatus.CREATED)
+    public DoctorDTO addAppointmentToDoctor(@RequestBody AppointmentRequest appointmentRequest,
+                                            @PathVariable long doctorId) {
+        return doctorService.addAppointmentToDoctor(appointmentRequest.getLocalDateTime(),
+                appointmentRequest.getDurationMinutes(), doctorId);
+    }
+
+
 }

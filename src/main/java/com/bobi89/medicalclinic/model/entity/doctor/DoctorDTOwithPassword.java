@@ -3,6 +3,7 @@ package com.bobi89.medicalclinic.model.entity.doctor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -15,13 +16,15 @@ public class DoctorDTOwithPassword {
     private String password;
     private FieldOfExpertise fieldOfExpertise;
     private Set<String> locationsNames;
+    private Set<LocalDateTime> appointmentsDates;
 
-    public DoctorDTOwithPassword(long id,String email, String password, FieldOfExpertise fieldOfExpertise) {
+    public DoctorDTOwithPassword(long id, String email, String password, FieldOfExpertise fieldOfExpertise) {
         this.id = id;
         this.email = email;
         this.password = password;
         this.fieldOfExpertise = fieldOfExpertise;
         this.locationsNames = new HashSet<>();
+        this.appointmentsDates = new HashSet<>();
     }
 
     @Override

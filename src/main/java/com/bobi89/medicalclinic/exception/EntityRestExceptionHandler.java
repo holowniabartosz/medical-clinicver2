@@ -71,6 +71,30 @@ public class EntityRestExceptionHandler {
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(DateInThePastException.class)
+    public ResponseEntity<ErrorResponse> handleException(DateInThePastException exc){
+
+        ErrorResponse error = new ErrorResponse();
+
+        error.setStatus(HttpStatus.BAD_REQUEST.value());
+        error.setMessage("Date is in the past");
+        error.setTimestamp(System.currentTimeMillis());
+
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(AppointmentConflictDateException.class)
+    public ResponseEntity<ErrorResponse> handleException(AppointmentConflictDateException exc){
+
+        ErrorResponse error = new ErrorResponse();
+
+        error.setStatus(HttpStatus.BAD_REQUEST.value());
+        error.setMessage("This appointment collides with another scheduled for this doctor");
+        error.setTimestamp(System.currentTimeMillis());
+
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
+
 //     default handler here
 //    @ExceptionHandler(Exception.class)
 //    public ResponseEntity<PatientErrorResponse> handleException(Exception exc){
