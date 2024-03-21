@@ -8,7 +8,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -45,7 +44,7 @@ public class DoctorController {
     @ResponseStatus(HttpStatus.CREATED)
     public DoctorDTO addAppointmentToDoctor(@RequestBody AppointmentRequest appointmentRequest,
                                             @PathVariable long doctorId) {
-        return doctorService.addAppointmentToDoctor(appointmentRequest.getLocalDateTime(),
+        return doctorService.addAppointmentToDoctorSQL(appointmentRequest.getLocalDateTime(),
                 appointmentRequest.getDurationMinutes(), doctorId);
     }
 

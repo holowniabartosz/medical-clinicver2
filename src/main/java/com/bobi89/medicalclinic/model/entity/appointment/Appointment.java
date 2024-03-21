@@ -14,6 +14,7 @@ import java.time.temporal.ChronoUnit;
 @Entity
 @Data
 @RequiredArgsConstructor
+@Table(name = "appointments")
 public class Appointment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

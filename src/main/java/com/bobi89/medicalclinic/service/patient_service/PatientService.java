@@ -23,4 +23,7 @@ public interface PatientService {
 
     PatientDTO addAppointmentToPatient(LocalDateTime dateTime, int durationMinutes,
                                        long patientId, long doctorId);
+
+    PatientDTO addAppointmentToPatientSQL(LocalDateTime dateTime, int durationMinutes,
+                                       long patientId, long doctorId);
 }

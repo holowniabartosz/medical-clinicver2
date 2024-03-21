@@ -60,7 +60,7 @@ public class PatientController {
     @ResponseStatus(HttpStatus.CREATED)
     public PatientDTO addAppointmentToPatient(@RequestBody AppointmentRequest appointmentRequest,
                                             @PathVariable long patientId, @PathVariable long doctorId) {
-        return patientService.addAppointmentToPatient(appointmentRequest.getLocalDateTime(),
+        return patientService.addAppointmentToPatientSQL(appointmentRequest.getLocalDateTime(),
                 appointmentRequest.getDurationMinutes(), patientId, doctorId);
     }
 }

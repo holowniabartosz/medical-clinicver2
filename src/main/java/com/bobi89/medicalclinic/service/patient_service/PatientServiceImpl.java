@@ -115,7 +115,23 @@ public class PatientServiceImpl implements PatientService {
         }
         targetAppointment.get().setPatient(patient.get());
         appointmentRepository.save(targetAppointment.get());
-        return patientMapper.toDTO(patient.get());
+        return patientMapper.toDTO(patientJpaRepository.findById(patientId).get());
+    }
+
+    @Transactional
+    @Override
+    public PatientDTO addAppointmentToPatientSQL(LocalDateTime startDateTime, int durationMinutes,
+                                              long patientId, long doctorId) {
+        var patient = patientJpaRepository.findById(patientId);
+        var doctor = doctorJpaRepository.findById(doctorId);
+
+        if (patient.isEmpty() || doctor.isEmpty()) {
+            throw new EntityNotFoundException("Patient or doctor not found");
+        }
+        var requestedAppointment = new Appointment(startDateTime, durationMinutes, doctor.get());
+        appointmentRepository.addPatientToAppointment((requestedAppointment.getStartDateTime().plusSeconds(1)),
+                (requestedAppointment.getEndDateTime().minusSeconds(1)),patientId, doctorId);
+        return patientMapper.toDTO(patientJpaRepository.findById(patientId).get());
     }
 
     private void validateIfNull(Patient patient) {

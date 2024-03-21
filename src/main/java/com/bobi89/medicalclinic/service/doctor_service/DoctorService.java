@@ -16,4 +16,6 @@ public interface DoctorService {
     DoctorDTO addLocationToDoctor(long locationId, long doctorId);
 
     DoctorDTO addAppointmentToDoctor(LocalDateTime dateTime, int durationMinutes, long doctorId);
+
+    DoctorDTO addAppointmentToDoctorSQL(LocalDateTime dateTime, int durationMinutes, long doctorId);
 }
