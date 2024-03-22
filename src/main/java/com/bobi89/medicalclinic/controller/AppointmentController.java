@@ -34,7 +34,7 @@ public class AppointmentController {
                 appointmentRequest.getDurationMinutes(), doctorId);
     }
 
-    @PatchMapping("/patient/{patientId}/wanted-doctor/{doctorId}")
+    @PatchMapping("/patient/{patientId}/requested-doctor/{doctorId}")
     @ResponseStatus(HttpStatus.CREATED)
     public AppointmentDTO addPatientToAppointment(@RequestBody AppointmentRequest appointmentRequest,
                                               @PathVariable long patientId, @PathVariable long doctorId) {
