@@ -38,11 +38,11 @@ public class DoctorServiceImpl implements DoctorService {
 
     @Override
     public DoctorDTO findById(long id) {
-        var location = doctorJpaRepository.findById(id);
-        if (location.isEmpty()) {
+        var doctor = doctorJpaRepository.findById(id);
+        if (doctor.isEmpty()) {
             throw new EntityNotFoundException("No such doctor in the database");
         } else {
-            return doctorMapper.toDTO(location.get());
+            return doctorMapper.toDTO(doctor.get());
         }
     }
 
@@ -69,71 +69,12 @@ public class DoctorServiceImpl implements DoctorService {
         return doctorMapper.toDTO(doctor.get());
     }
 
-    @Transactional
-    @Override
-    public DoctorDTO addAppointmentToDoctor(LocalDateTime dateTime, int durationMinutes, long doctorId) {
-        var doctor = doctorJpaRepository.findById(doctorId);
-        if (doctor.isEmpty()) {
-            throw new EntityNotFoundException("Doctor not found");
-        }
-        if (isSlotAvailable(dateTime, durationMinutes, doctorId)) {
-            var appointment = new Appointment(dateTime, durationMinutes, doctor.get());
-            appointment.setDoctor(doctor.get());
-            appointmentRepository.save(appointment);
-            return doctorMapper.toDTO(doctorJpaRepository.findById(doctorId).get());
-        } else {
-            throw new RuntimeException("!@#$%^$@#!$!~#$%$^%@!$#! XD");
-        }
-    }
-
-    @Transactional
-    @Override
-    public DoctorDTO addAppointmentToDoctorSQL(LocalDateTime startDateTime, int durationMinutes, long doctorId) {
-        var doctor = doctorJpaRepository.findById(doctorId);
-        if (doctor.isEmpty()) {
-            throw new EntityNotFoundException("Doctor not found");
-        }
-        var appointment = new Appointment(startDateTime, durationMinutes, doctor.get());
-        doctorJpaRepository.addAppointment(appointment.getStartDateTime(), appointment.getEndDateTime(), appointment.getDuration(), doctorId);
-//        if (!doctorJpaRepository.findById(doctorId).get().getAppointments().contains(appointment)) {
-//            throw new AppointmentConflictDateException("Slot unavailable");
-//        }
-        return doctorMapper.toDTO(doctorJpaRepository.findById(doctorId).get());
-    }
-
     private void validateIfNull(Doctor doctor) {
         if (doctor.getEmail() == null ||
                 doctor.getPassword() == null ||
                 doctor.getFieldOfExpertise() == null) {
             throw new EntityNullFieldsException("None of doctor class fields should be null");
         }
-    }
-
-    private boolean isSlotAvailable(LocalDateTime startDateTime, int durationMinutes, long doctorId) {
-        var doctor = doctorJpaRepository.findById(doctorId);
-        if (doctor.isEmpty()) {
-            throw new EntityNotFoundException("Doctor not found");
-        }
-        var appointment = new Appointment(startDateTime, durationMinutes, doctor.get());
-        if (doctor.get().getAppointments()
-                .stream().anyMatch(s ->
-                        (s.getStartDateTime().isAfter(appointment.getStartDateTime()) &&
-                                s.getEndDateTime().isBefore(appointment.getEndDateTime()))
-                                ||
-                                (s.getStartDateTime().isAfter(appointment.getStartDateTime()) &&
-                                        s.getEndDateTime().isAfter(appointment.getEndDateTime()) &&
-                                        s.getStartDateTime().isBefore(appointment.getEndDateTime()))
-                                ||
-                                (s.getStartDateTime().isBefore(appointment.getStartDateTime()) &&
-                                        s.getEndDateTime().isBefore(appointment.getEndDateTime()) &&
-                                        s.getEndDateTime().isAfter(appointment.getStartDateTime()))
-                                ||
-                                (s.getStartDateTime().isBefore(appointment.getStartDateTime()) &&
-                                        s.getEndDateTime().isAfter(appointment.getEndDateTime()))
-                )
-        ) {
-            throw new AppointmentConflictDateException("Slot unavailable");
-        } else return true;
     }
 }
 

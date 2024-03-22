@@ -93,7 +93,7 @@ class LocationControllerTest {
 
         when(locationServiceImpl.addDoctorToLocation(doctorId,locationId)).thenReturn(locationDTO);
 
-        mockMvc.perform(post("/locations/{locationId}/assign", locationId)
+        mockMvc.perform(post("/locations/{locationId}/assign-doctor", locationId)
                         .content(objectMapper.writeValueAsString(doctorId))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())

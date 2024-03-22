@@ -10,15 +10,10 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 public class EntityRestExceptionHandler {
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleException(EntityNotFoundException exc){
-        // create a PatientErrorResponse
 
-        ErrorResponse error = new ErrorResponse();
-
-        error.setStatus(HttpStatus.NOT_FOUND.value());
-        error.setMessage("Entity not found");
-        error.setTimestamp(System.currentTimeMillis());
-
-        // return ResponseEntity
+        ErrorResponse error = errorResponseGenerator(
+                "Entity not found",
+                HttpStatus.NOT_FOUND);
 
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
@@ -26,11 +21,9 @@ public class EntityRestExceptionHandler {
     @ExceptionHandler(EntityWithThisIdExistsException.class)
     public ResponseEntity<ErrorResponse> handleException(EntityWithThisIdExistsException exc) {
 
-        ErrorResponse error = new ErrorResponse();
-
-        error.setStatus(HttpStatus.BAD_REQUEST.value());
-        error.setMessage("Entity with this ID already exists");
-        error.setTimestamp(System.currentTimeMillis());
+        ErrorResponse error = errorResponseGenerator(
+                "Entity with this ID already exists",
+                HttpStatus.BAD_REQUEST);
 
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
@@ -38,11 +31,9 @@ public class EntityRestExceptionHandler {
     @ExceptionHandler(EntityWithThisEmailExistsException.class)
     public ResponseEntity<ErrorResponse> handleException(EntityWithThisEmailExistsException exc){
 
-        ErrorResponse error = new ErrorResponse();
-
-        error.setStatus(HttpStatus.BAD_REQUEST.value());
-        error.setMessage("Entity with this email already exists");
-        error.setTimestamp(System.currentTimeMillis());
+        ErrorResponse error = errorResponseGenerator(
+                "Entity with this email already exists",
+                HttpStatus.BAD_REQUEST);
 
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
@@ -50,11 +41,9 @@ public class EntityRestExceptionHandler {
     @ExceptionHandler(IncorrectOldPasswordException.class)
     public ResponseEntity<ErrorResponse> handleException(IncorrectOldPasswordException exc){
 
-        ErrorResponse error = new ErrorResponse();
-
-        error.setStatus(HttpStatus.BAD_REQUEST.value());
-        error.setMessage("Provided old password is incorrect");
-        error.setTimestamp(System.currentTimeMillis());
+        ErrorResponse error = errorResponseGenerator(
+                "Provided old password is incorrect",
+                HttpStatus.BAD_REQUEST);
 
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
@@ -62,11 +51,9 @@ public class EntityRestExceptionHandler {
     @ExceptionHandler(EntityNullFieldsException.class)
     public ResponseEntity<ErrorResponse> handleException(EntityNullFieldsException exc){
 
-        ErrorResponse error = new ErrorResponse();
-
-        error.setStatus(HttpStatus.BAD_REQUEST.value());
-        error.setMessage("Entity fields cannot be empty");
-        error.setTimestamp(System.currentTimeMillis());
+        ErrorResponse error = errorResponseGenerator(
+                "Entity fields cannot be empty",
+                HttpStatus.BAD_REQUEST);
 
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
@@ -74,11 +61,9 @@ public class EntityRestExceptionHandler {
     @ExceptionHandler(DateInThePastException.class)
     public ResponseEntity<ErrorResponse> handleException(DateInThePastException exc){
 
-        ErrorResponse error = new ErrorResponse();
-
-        error.setStatus(HttpStatus.BAD_REQUEST.value());
-        error.setMessage("Date is in the past");
-        error.setTimestamp(System.currentTimeMillis());
+        ErrorResponse error = errorResponseGenerator(
+                "Date is in the past",
+                HttpStatus.BAD_REQUEST);
 
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
@@ -86,25 +71,29 @@ public class EntityRestExceptionHandler {
     @ExceptionHandler(AppointmentConflictDateException.class)
     public ResponseEntity<ErrorResponse> handleException(AppointmentConflictDateException exc){
 
-        ErrorResponse error = new ErrorResponse();
+        ErrorResponse error = errorResponseGenerator(
+                "This appointment collides with another scheduled for this doctor",
+                HttpStatus.BAD_REQUEST);
 
-        error.setStatus(HttpStatus.BAD_REQUEST.value());
-        error.setMessage("This appointment collides with another scheduled for this doctor");
-        error.setTimestamp(System.currentTimeMillis());
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
+    @ExceptionHandler(AppointmentNotQuarterException.class)
+    public ResponseEntity<ErrorResponse> handleException(AppointmentNotQuarterException exc){
+
+        ErrorResponse error = errorResponseGenerator(
+                "Appointment's duration must be rounded up to a quarter of an hour",
+                HttpStatus.BAD_REQUEST);
 
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 
-//     default handler here
-//    @ExceptionHandler(Exception.class)
-//    public ResponseEntity<PatientErrorResponse> handleException(Exception exc){
-//
-//        PatientErrorResponse error = new PatientErrorResponse();
-//
-//        error.setStatus(HttpStatus.BAD_REQUEST.value());
-//        error.setMessage("Malformed request");
-//        error.setTimestamp(System.currentTimeMillis());
-//
-//        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
-//    }
+    private ErrorResponse errorResponseGenerator(String message, HttpStatus httpStatus){
+        ErrorResponse error = new ErrorResponse();
+
+        error.setStatus(httpStatus.value());
+        error.setMessage(message);
+        error.setTimestamp(System.currentTimeMillis());
+
+        return error;
+    }
 }

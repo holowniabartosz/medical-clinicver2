@@ -24,7 +24,7 @@ import java.util.Optional;
 
 import static org.mockito.Mockito.when;
 
-class DoctorServiceImplTest {
+class AppointmentServiceImplTest {
 
     private DoctorMapper doctorMapper;
     private DoctorJpaRepository doctorJpaRepository;

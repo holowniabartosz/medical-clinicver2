@@ -95,7 +95,7 @@ class DoctorControllerTest {
 
         when(doctorService.addLocationToDoctor(locationId,doctorId)).thenReturn(doctorDTO);
 
-        mockMvc.perform(post("/doctors/{doctorId}/assign", doctorId)
+        mockMvc.perform(post("/doctors/{doctorId}/assign-location", doctorId)
                         .content(objectMapper.writeValueAsString(locationId))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())

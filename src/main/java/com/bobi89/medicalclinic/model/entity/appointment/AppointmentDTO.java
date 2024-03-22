@@ -4,32 +4,25 @@ import com.bobi89.medicalclinic.exception.exc.AppointmentNotQuarterException;
 import com.bobi89.medicalclinic.exception.exc.DateInThePastException;
 import com.bobi89.medicalclinic.model.entity.doctor.Doctor;
 import com.bobi89.medicalclinic.model.entity.patient.Patient;
-import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
-@Entity
 @Data
-@Table(name = "appointments")
-public class Appointment {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(nullable = false, unique = true)
+public class AppointmentDTO {
+
     private Long id;
     private LocalDateTime startDateTime;
     private Duration duration;
     private LocalDateTime endDateTime;
 
-    @ManyToOne
     private Patient patient;
 
-    @ManyToOne
     private Doctor doctor;
 
-    public Appointment(LocalDateTime startDateTime, int durationMinutes, Doctor doctor) {
+    public AppointmentDTO(LocalDateTime startDateTime, int durationMinutes, Doctor doctor) {
         if (startDateTime.isBefore(LocalDateTime.now())){
             throw new DateInThePastException("Appointment cannot be in the past");
         }

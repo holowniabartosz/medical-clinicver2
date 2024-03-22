@@ -82,7 +82,7 @@ public class DoctorIntegrationTest {
         String email = "doctor@gmail.com";
 //        DoctorDTO doctorDTO = DoctorCreator.createDoctorDTO(doctorId, email);
 
-        mockMvc.perform(post("/doctors/{doctorId}/assign", doctorId)
+        mockMvc.perform(post("/doctors/{doctorId}/assign-location", doctorId)
                         .content(objectMapper.writeValueAsString(locationId))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
