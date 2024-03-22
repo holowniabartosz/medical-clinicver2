@@ -9,5 +9,5 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class AppointmentRequest {
     private LocalDateTime localDateTime;
-    private int durationMinutes;
+    private long durationMinutes;
 }

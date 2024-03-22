@@ -4,7 +4,6 @@ import com.bobi89.medicalclinic.model.entity.patient.ChangePasswordCommand;
 import com.bobi89.medicalclinic.model.entity.patient.PatientDTO;
 import com.bobi89.medicalclinic.model.entity.patient.PatientDTOwithPassword;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 public interface PatientService {
@@ -20,10 +19,4 @@ public interface PatientService {
     PatientDTO update(String email, PatientDTO patientDTO);
 
     ChangePasswordCommand editPatientPassword(String email, ChangePasswordCommand pass);
-
-    PatientDTO addAppointmentToPatient(LocalDateTime dateTime, int durationMinutes,
-                                       long patientId, long doctorId);
-
-    PatientDTO addAppointmentToPatientSQL(LocalDateTime dateTime, int durationMinutes,
-                                       long patientId, long doctorId);
 }

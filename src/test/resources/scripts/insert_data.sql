@@ -3,7 +3,7 @@ INSERT
         PATIENT
         (ID,ID_CARD_NR, EMAIL, PASSWORD, FIRST_NAME, LAST_NAME, PHONE_NUMBER, BIRTHDAY)
     VALUES
-        (default,'9876', 'john@gmail.com', '1234', 'J', 'D', '999999', '20/12/1900');
+        (default,'9876', 'john@gmail.com', '1234', 'J', 'D', '999999', DATE '1900-12-20');
 
 INSERT INTO PATIENT (ID,ID_CARD_NR, EMAIL, PASSWORD, FIRST_NAME, LAST_NAME, PHONE_NUMBER, BIRTHDAY)
-VALUES (default,'8765','john@gmail.com1','2345','1J','1D','888888','10/12/1900');
+VALUES (default,'8765','john@gmail.com1','2345','1J','1D','888888',DATE '1900-12-10');

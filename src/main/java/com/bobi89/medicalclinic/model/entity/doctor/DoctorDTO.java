@@ -20,7 +20,7 @@ public class DoctorDTO {
     private Set<String> locationsNames;
     private Set<LocalDateTime> appointmentsDates;
 
-    public DoctorDTO(long id,String email, FieldOfExpertise fieldOfExpertise) {
+    public DoctorDTO(long id, String email, FieldOfExpertise fieldOfExpertise) {
         this.id = id;
         this.email = email;
         this.fieldOfExpertise = fieldOfExpertise;

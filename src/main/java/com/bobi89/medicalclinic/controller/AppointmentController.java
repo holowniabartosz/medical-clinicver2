@@ -3,18 +3,19 @@ package com.bobi89.medicalclinic.controller;
 import com.bobi89.medicalclinic.model.entity.appointment.AppointmentDTO;
 import com.bobi89.medicalclinic.model.entity.appointment.AppointmentRequest;
 import com.bobi89.medicalclinic.service.appointment_service.AppointmentService;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.Duration;
 import java.util.List;
 
 @RestController
-@AllArgsConstructor
+@RequiredArgsConstructor
 @RequestMapping("/appointments")
 public class AppointmentController {
 
-    private AppointmentService appointmentService;
+    private final AppointmentService appointmentService;
 
     @GetMapping
     public List<AppointmentDTO> findAll() {
@@ -26,19 +27,17 @@ public class AppointmentController {
         return appointmentService.findById(id);
     }
 
-    @PostMapping("/{doctorId}/schedule-appointment-slot")
+    @PostMapping("/add-appointment-to-doctor/{doctorId}")
     @ResponseStatus(HttpStatus.CREATED)
     public AppointmentDTO addAppointmentToDoctor(@RequestBody AppointmentRequest appointmentRequest,
-                                            @PathVariable long doctorId) {
+                                                 @PathVariable long doctorId) {
         return appointmentService.addAppointmentToDoctor(appointmentRequest.getLocalDateTime(),
-                appointmentRequest.getDurationMinutes(), doctorId);
+                Duration.ofMinutes(appointmentRequest.getDurationMinutes()), doctorId);
     }
 
-    @PatchMapping("/patient/{patientId}/requested-doctor/{doctorId}")
+    @PatchMapping("/{appointmentId}")
     @ResponseStatus(HttpStatus.CREATED)
-    public AppointmentDTO addPatientToAppointment(@RequestBody AppointmentRequest appointmentRequest,
-                                              @PathVariable long patientId, @PathVariable long doctorId) {
-        return appointmentService.addPatientToAppointment(appointmentRequest.getLocalDateTime(),
-                appointmentRequest.getDurationMinutes(), patientId, doctorId);
+    public AppointmentDTO addPatientToAppointment(@PathVariable long appointmentId, @RequestBody long patientId) {
+        return appointmentService.addPatientToAppointment(appointmentId, patientId);
     }
 }

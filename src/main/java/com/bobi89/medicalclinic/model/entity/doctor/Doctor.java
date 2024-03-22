@@ -30,7 +30,7 @@ public class Doctor {
     @OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL)
     private Set<Appointment> appointments;
 
-    public Doctor(long id,String email, String password, FieldOfExpertise fieldOfExpertise) {
+    public Doctor(long id, String email, String password, FieldOfExpertise fieldOfExpertise) {
         this.id = id;
         this.email = email;
         this.password = password;

@@ -12,6 +12,7 @@ import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -44,48 +45,33 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Transactional
     @Override
-    public AppointmentDTO addAppointmentToDoctor(LocalDateTime startDateTime, int durationMinutes, long doctorId) {
+    public AppointmentDTO addAppointmentToDoctor(LocalDateTime startDateTime, Duration durationMinutes, long doctorId) {
         var doctor = doctorJpaRepository.findById(doctorId);
         if (doctor.isEmpty()) {
             throw new EntityNotFoundException("Doctor not found");
         }
-        var appointment = new Appointment(startDateTime, durationMinutes, doctor.get());
-        if (checkForConflictingSlots(appointment.getStartDateTime(), appointment.getEndDateTime(), doctor.get().getId()) != 0){
+        var appointment = new Appointment(startDateTime, durationMinutes.toMinutes(), doctor.get());
+        if (checkForConflictingSlots(appointment.getStartDateTime(), appointment.getEndDateTime(), doctor.get().getId()) != 0) {
             throw new AppointmentConflictDateException("Timeslot unavailable");
         }
-        return appointmentMapper.toDTO(appointmentRepository
-                .addAppointmentToDoctor(appointment.getStartDateTime(), appointment.getEndDateTime(),
-                appointment.getDuration(), doctorId));
+        appointmentRepository.save(appointment);
+        return appointmentMapper.toDTO(appointmentRepository.findByDoctorId(doctorId).get());
     }
 
     @Transactional
     @Override
-    public AppointmentDTO addPatientToAppointment(LocalDateTime startDateTime, int durationMinutes,
-                                                 long patientId, long doctorId) {
+    public AppointmentDTO addPatientToAppointment(long appointmentId, long patientId) {
         var patient = patientJpaRepository.findById(patientId);
-        var doctor = doctorJpaRepository.findById(doctorId);
-        if (patient.isEmpty() || doctor.isEmpty()) {
-            throw new EntityNotFoundException("Patient or doctor not found");
+        var appointment = appointmentRepository.findById(appointmentId);
+        if (patient.isEmpty() || appointment.isEmpty()) {
+            throw new EntityNotFoundException("Patient or appointment not found");
         }
-        var requestedAppointment = new Appointment(startDateTime, durationMinutes, doctor.get());
-        if(checkForAvailableSlotsForPatient(requestedAppointment.getStartDateTime(),
-                requestedAppointment.getEndDateTime(), patientId, doctorId) < 1){
-            throw new AppointmentConflictDateException("Timeslot unavailable");
-        }
-        appointmentRepository.addPatientToAppointment(requestedAppointment.getStartDateTime(),
-                requestedAppointment.getEndDateTime(), patientId, doctorId);
-        return appointmentMapper.toDTO(appointmentRepository.findByDoctorId(doctorId).get());
+        appointment.get().setPatient(patient.get());
+        return appointmentMapper.toDTO(appointmentRepository.findById(appointmentId).get());
     }
 
-    private int checkForConflictingSlots(LocalDateTime startDateTime, LocalDateTime endDateTime, long doctorId){
+    private int checkForConflictingSlots(LocalDateTime startDateTime, LocalDateTime endDateTime, long doctorId) {
         return appointmentRepository.checkForConflictingSlotsForDoctor(startDateTime, endDateTime, doctorId);
     }
-
-    private int checkForAvailableSlotsForPatient(LocalDateTime startDateTime, LocalDateTime endDateTime,
-                                                 long patientId, long doctorId){
-        return appointmentRepository.checkForAvailableSlotsForPatient(startDateTime, endDateTime,
-        patientId, doctorId);
-    }
-
 }
 

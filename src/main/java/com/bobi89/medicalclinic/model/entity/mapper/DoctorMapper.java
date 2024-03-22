@@ -23,25 +23,25 @@ public interface DoctorMapper {
     @Mapping(source = "appointments",
             target = "appointmentsDates", qualifiedByName = "appointmentsSetToDateSet")
     DoctorDTO toDTO(Doctor doctor);
+
     Doctor toDoctor(DoctorDTO doctorDTO);
+
     Doctor toDoctor(DoctorDTOwithPassword doctorDTOwithPassword);
 
     @Named("locationsSetToNameSet")
-    static Set<String> locationsSetToNameSet(Set<Location> locations){
-        if(locations == null){
+    static Set<String> locationsSetToNameSet(Set<Location> locations) {
+        if (locations == null) {
             return new HashSet<>();
-        }
-        else{
+        } else {
             return locations.stream().map(Location::getName).collect(Collectors.toSet());
         }
     }
 
     @Named("appointmentsSetToDateSet")
-    static Set<LocalDateTime> appointmentsSetToDateSet(Set<Appointment> appointments){
-        if(appointments == null){
+    static Set<LocalDateTime> appointmentsSetToDateSet(Set<Appointment> appointments) {
+        if (appointments == null) {
             return new HashSet<>();
-        }
-        else{
+        } else {
             return appointments.stream().map(Appointment::getStartDateTime).collect(Collectors.toSet());
         }
     }

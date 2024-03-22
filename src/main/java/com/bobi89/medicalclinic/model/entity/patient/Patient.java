@@ -4,6 +4,7 @@ import com.bobi89.medicalclinic.model.entity.appointment.Appointment;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.util.Set;
 
 @Entity
@@ -24,12 +25,13 @@ public class Patient {
     private String firstName;
     private String lastName;
     private String phoneNumber;
-    private String birthday;
+    private LocalDate birthday;
 
     @OneToMany(mappedBy = "patient")
     private Set<Appointment> appointments;
 
-    public Patient(Long id, String idCardNr, String email, String password, String firstName, String lastName, String phoneNumber, String birthday) {
+    public Patient(Long id, String idCardNr, String email, String password, String firstName, String lastName,
+                   String phoneNumber, LocalDate birthday) {
         this.id = id;
         this.idCardNr = idCardNr;
         this.email = email;

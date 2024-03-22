@@ -1,10 +1,12 @@
 package com.bobi89.medicalclinic.model.entity.patient;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Set;
 
@@ -19,11 +21,13 @@ public class PatientDTOwithPassword {
     private String firstName;
     private String lastName;
     private String phoneNumber;
-    private String birthday;
+    @JsonFormat(pattern = "dd/MM/yyyy")
+    private LocalDate birthday;
     private String password;
     private Set<LocalDateTime> appointmentsDates;
 
-    public PatientDTOwithPassword(long id, String idCardNr, String email, String firstName, String lastName, String phoneNumber, String birthday, String password) {
+    public PatientDTOwithPassword(long id, String idCardNr, String email, String firstName, String lastName,
+                                  String phoneNumber, LocalDate birthday, String password) {
         this.id = id;
         this.idCardNr = idCardNr;
         this.email = email;

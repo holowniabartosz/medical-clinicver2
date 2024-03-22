@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class EntityRestExceptionHandler {
     @ExceptionHandler(EntityNotFoundException.class)
-    public ResponseEntity<ErrorResponse> handleException(EntityNotFoundException exc){
+    public ResponseEntity<ErrorResponse> handleException(EntityNotFoundException exc) {
 
         ErrorResponse error = errorResponseGenerator(
                 "Entity not found",
@@ -29,7 +29,7 @@ public class EntityRestExceptionHandler {
     }
 
     @ExceptionHandler(EntityWithThisEmailExistsException.class)
-    public ResponseEntity<ErrorResponse> handleException(EntityWithThisEmailExistsException exc){
+    public ResponseEntity<ErrorResponse> handleException(EntityWithThisEmailExistsException exc) {
 
         ErrorResponse error = errorResponseGenerator(
                 "Entity with this email already exists",
@@ -39,7 +39,7 @@ public class EntityRestExceptionHandler {
     }
 
     @ExceptionHandler(IncorrectOldPasswordException.class)
-    public ResponseEntity<ErrorResponse> handleException(IncorrectOldPasswordException exc){
+    public ResponseEntity<ErrorResponse> handleException(IncorrectOldPasswordException exc) {
 
         ErrorResponse error = errorResponseGenerator(
                 "Provided old password is incorrect",
@@ -49,7 +49,7 @@ public class EntityRestExceptionHandler {
     }
 
     @ExceptionHandler(EntityNullFieldsException.class)
-    public ResponseEntity<ErrorResponse> handleException(EntityNullFieldsException exc){
+    public ResponseEntity<ErrorResponse> handleException(EntityNullFieldsException exc) {
 
         ErrorResponse error = errorResponseGenerator(
                 "Entity fields cannot be empty",
@@ -59,7 +59,7 @@ public class EntityRestExceptionHandler {
     }
 
     @ExceptionHandler(DateInThePastException.class)
-    public ResponseEntity<ErrorResponse> handleException(DateInThePastException exc){
+    public ResponseEntity<ErrorResponse> handleException(DateInThePastException exc) {
 
         ErrorResponse error = errorResponseGenerator(
                 "Date is in the past",
@@ -69,16 +69,17 @@ public class EntityRestExceptionHandler {
     }
 
     @ExceptionHandler(AppointmentConflictDateException.class)
-    public ResponseEntity<ErrorResponse> handleException(AppointmentConflictDateException exc){
+    public ResponseEntity<ErrorResponse> handleException(AppointmentConflictDateException exc) {
 
         ErrorResponse error = errorResponseGenerator(
-                "This appointment collides with another scheduled for this doctor",
+                "This appointment's date is incorrect",
                 HttpStatus.BAD_REQUEST);
 
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
+
     @ExceptionHandler(AppointmentNotQuarterException.class)
-    public ResponseEntity<ErrorResponse> handleException(AppointmentNotQuarterException exc){
+    public ResponseEntity<ErrorResponse> handleException(AppointmentNotQuarterException exc) {
 
         ErrorResponse error = errorResponseGenerator(
                 "Appointment's duration must be rounded up to a quarter of an hour",
@@ -87,7 +88,7 @@ public class EntityRestExceptionHandler {
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 
-    private ErrorResponse errorResponseGenerator(String message, HttpStatus httpStatus){
+    private ErrorResponse errorResponseGenerator(String message, HttpStatus httpStatus) {
         ErrorResponse error = new ErrorResponse();
 
         error.setStatus(httpStatus.value());

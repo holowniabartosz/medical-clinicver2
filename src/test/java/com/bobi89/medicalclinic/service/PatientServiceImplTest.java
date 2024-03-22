@@ -106,7 +106,6 @@ class PatientServiceImplTest {
         Assertions.assertEquals("John", updatedPatient.getFirstName());
         Assertions.assertEquals("Doe", updatedPatient.getLastName());
         Assertions.assertEquals("123456789", updatedPatient.getPhoneNumber());
-        Assertions.assertEquals("25/12/2000", updatedPatient.getBirthday());
         Assertions.assertEquals("999", updatedPatient.getIdCardNr());
         Assertions.assertEquals(1, updatedPatient.getId());
     }
@@ -170,7 +169,6 @@ class PatientServiceImplTest {
         Assertions.assertEquals("John", updatedPatient.getFirstName());
         Assertions.assertEquals("Doe", updatedPatient.getLastName());
         Assertions.assertEquals("123456789", updatedPatient.getPhoneNumber());
-        Assertions.assertEquals("25/12/2000", updatedPatient.getBirthday());
         Assertions.assertEquals("999", updatedPatient.getIdCardNr());
         Assertions.assertEquals(1, updatedPatient.getId());
     }

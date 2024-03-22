@@ -55,7 +55,8 @@ public class LocationServiceImpl implements LocationService {
         var location = locationJpaRepository.findById(locationId);
         if (location.isEmpty() || doctor.isEmpty()) {
             throw new EntityNotFoundException("Location or doctor not found");
-        } location.get().getDoctors().add(doctor.get());
+        }
+        location.get().getDoctors().add(doctor.get());
         return locationMapper.toDTO(locationJpaRepository.save(location.get()));
     }
 
