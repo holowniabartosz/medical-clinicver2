@@ -54,8 +54,7 @@ public class AppointmentServiceImpl implements AppointmentService {
         if (checkForConflictingSlots(appointment.getStartDateTime(), appointment.getEndDateTime(), doctor.get().getId()) != 0) {
             throw new AppointmentConflictDateException("Timeslot unavailable");
         }
-        appointmentRepository.save(appointment);
-        return appointmentMapper.toDTO(appointmentRepository.findByDoctorId(doctorId).get());
+        return appointmentMapper.toDTO(appointmentRepository.save(appointment));
     }
 
     @Transactional

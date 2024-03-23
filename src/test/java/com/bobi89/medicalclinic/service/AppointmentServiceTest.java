@@ -1,5 +1,7 @@
 package com.bobi89.medicalclinic.service;
 
+import com.bobi89.medicalclinic.exception.exc.AppointmentConflictDateException;
+import com.bobi89.medicalclinic.exception.exc.EntityNotFoundException;
 import com.bobi89.medicalclinic.model.entity.appointment.Appointment;
 import com.bobi89.medicalclinic.model.entity.doctor.Doctor;
 import com.bobi89.medicalclinic.model.entity.mapper.AppointmentMapper;
@@ -24,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 class AppointmentServiceTest {
@@ -77,8 +80,7 @@ class AppointmentServiceTest {
         Appointment appointment = AppointmentCreator.createAppointment(startDateTime, duration);
 
         when(doctorJpaRepository.findById(doctorId)).thenReturn(Optional.of(doctor));
-        when(appointmentRepository.save(appointment)).thenReturn(appointment);
-        when(appointmentRepository.findByDoctorId(doctorId)).thenReturn(Optional.of(appointment));
+        when(appointmentRepository.save(any())).thenReturn(appointment);
 
         var result = appointmentService.addAppointmentToDoctor(startDateTime,
                 Duration.ofMinutes(duration), doctorId);
@@ -86,6 +88,40 @@ class AppointmentServiceTest {
         Assertions.assertNotNull(result);
         Assertions.assertEquals(Duration.ofMinutes(duration), result.getDuration());
         Assertions.assertEquals(1, result.getDoctorId());
+    }
+
+    @Test
+    void addAppointmentToDoctor_DoctorNotFound_ThrowsException() throws Exception {
+        LocalDateTime startDateTime = LocalDateTime.of(2030, 12, 25, 18, 0);
+        long duration = 30;
+        long doctorId = 1;
+
+        when(doctorJpaRepository.findById(doctorId)).thenReturn(Optional.empty());
+
+        var result = Assertions.assertThrows(EntityNotFoundException.class,
+                () -> appointmentService.addAppointmentToDoctor(startDateTime,
+                        Duration.ofMinutes(duration), doctorId));
+
+        Assertions.assertEquals("Doctor not found", result.getMessage());
+    }
+
+    @Test
+    void addAppointmentToDoctor_TimeslotUnavailable_ThrowsException() throws Exception {
+        LocalDateTime startDateTime = LocalDateTime.of(2030, 12, 25, 18, 0);
+        long duration = 30;
+        long doctorId = 1;
+        Doctor doctor = DoctorCreator.createDoctor(doctorId, "doctor@gmail.com");
+        Appointment appointment = AppointmentCreator.createAppointment(startDateTime, duration);
+
+        when(doctorJpaRepository.findById(doctorId)).thenReturn(Optional.of(doctor));
+        when(appointmentRepository.checkForConflictingSlotsForDoctor(appointment.getStartDateTime(), appointment.getEndDateTime(), doctorId))
+                .thenReturn(1);
+
+        var result = Assertions.assertThrows(AppointmentConflictDateException.class,
+                () -> appointmentService.addAppointmentToDoctor(startDateTime,
+                        Duration.ofMinutes(duration), doctorId));
+
+        Assertions.assertEquals("Timeslot unavailable", result.getMessage());
     }
 
     @Test
@@ -109,5 +145,40 @@ class AppointmentServiceTest {
         Assertions.assertNotNull(result);
         Assertions.assertEquals(Duration.ofMinutes(duration), result.getDuration());
         Assertions.assertEquals(1, result.getDoctorId());
+    }
+
+    @Test
+    void addPatientToAppointment_PatientNotFound_ThrowsException() throws Exception {
+        LocalDateTime startDateTime = LocalDateTime.of(2030, 12, 25, 18, 0);
+        long duration = 30;
+        long appointmentId = 1;
+        long patientId = 1;
+        Appointment appointment = AppointmentCreator.createAppointment(startDateTime, duration);
+
+        when(patientJpaRepository.findById(patientId)).thenReturn(Optional.empty());
+        when(appointmentRepository.findById(appointment.getId())).thenReturn(Optional.of(appointment));
+
+        var result = Assertions.assertThrows(EntityNotFoundException.class,
+                () -> appointmentService.addPatientToAppointment(appointmentId, patientId));
+
+        Assertions.assertEquals("Patient or appointment not found", result.getMessage());
+    }
+
+    @Test
+    void addPatientToAppointment_AppointmentNotFound_ThrowsException() throws Exception {
+        LocalDateTime startDateTime = LocalDateTime.of(2030, 12, 25, 18, 0);
+        long duration = 30;
+        long appointmentId = 1;
+        long patientId = 1;
+        Patient patient = PatientCreator.createPatient(patientId, "john@gmail,com");
+        Appointment appointment = AppointmentCreator.createAppointment(startDateTime, duration);
+
+        when(patientJpaRepository.findById(patientId)).thenReturn(Optional.of(patient));
+        when(appointmentRepository.findById(appointment.getId())).thenReturn(Optional.empty());
+
+        var result = Assertions.assertThrows(EntityNotFoundException.class,
+                () -> appointmentService.addPatientToAppointment(appointmentId, patientId));
+
+        Assertions.assertEquals("Patient or appointment not found", result.getMessage());
     }
 }

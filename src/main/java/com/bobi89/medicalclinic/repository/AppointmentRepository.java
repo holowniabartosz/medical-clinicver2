@@ -13,7 +13,7 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
 
     @Query(nativeQuery = true, value =
             "SELECT COUNT(*) AS conflicting_appointments " +
-                    "FROM appointments " +
+                    "FROM appointment " +
                     "WHERE doctor_id = :doctorId " +
                     "AND ( " +
                     "  (:startDateTime BETWEEN start_date_time AND end_date_time) " +
