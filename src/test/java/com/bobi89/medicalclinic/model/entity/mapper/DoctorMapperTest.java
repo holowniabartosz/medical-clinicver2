@@ -15,7 +15,7 @@ public class DoctorMapperTest {
     @Test
     void toDTO_MapsAllFields() {
 
-        Doctor doctor = DoctorCreator.createDoctor(0,"doctor@gmail.com");
+        Doctor doctor = DoctorCreator.createDoctor(0, "doctor@gmail.com");
 
         DoctorDTO doctorDTO = mapper.toDTO(doctor);
 
@@ -26,7 +26,7 @@ public class DoctorMapperTest {
 
     @Test
     void toDoctor_MapsAllFields() {
-        DoctorDTO doctorDTO = DoctorCreator.createDoctorDTO(0,"doctor@gmail.com");
+        DoctorDTO doctorDTO = DoctorCreator.createDoctorDTO(0, "doctor@gmail.com");
 
         Doctor doctor = mapper.toDoctor(doctorDTO);
 
@@ -38,7 +38,7 @@ public class DoctorMapperTest {
     @Test
     void toDoctorWithPassword_MapsAllFieldsIncludingPassword() {
         DoctorDTOwithPassword doctorDTOwithPassword =
-                DoctorCreator.createDoctorDTOwithPassword(10,"doctor@gmail.com");
+                DoctorCreator.createDoctorDTOwithPassword(10, "doctor@gmail.com");
 
         Doctor doctor = mapper.toDoctor(doctorDTOwithPassword);
 

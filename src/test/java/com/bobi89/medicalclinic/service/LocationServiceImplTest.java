@@ -114,7 +114,7 @@ class LocationServiceImplTest {
 
         //when
         var locationDtoReturned = locationService
-                .addDoctorToLocation(doctorId,locationId);
+                .addDoctorToLocation(doctorId, locationId);
 
         //then
         Assertions.assertNotNull(locationDtoReturned);

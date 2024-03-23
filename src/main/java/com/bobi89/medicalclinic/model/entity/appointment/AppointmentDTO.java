@@ -1,12 +1,14 @@
 package com.bobi89.medicalclinic.model.entity.appointment;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
-@Data
+@Getter
+@Setter
 public class AppointmentDTO {
 
     private Long id;
@@ -26,5 +28,23 @@ public class AppointmentDTO {
         this.duration = Duration.ofMinutes(durationMinutes);
         this.endDateTime = this.startDateTime.plus(duration).truncatedTo(ChronoUnit.MINUTES);
         this.doctorId = doctorId;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (!(o instanceof AppointmentDTO))
+            return false;
+
+        AppointmentDTO other = (AppointmentDTO) o;
+
+        return id != null &&
+                id.equals(other.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
     }
 }

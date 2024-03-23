@@ -21,15 +21,4 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
                     "OR (start_date_time BETWEEN :startDateTime AND :endDateTime) " +
                     ")")
     int checkForConflictingSlotsForDoctor(LocalDateTime startDateTime, LocalDateTime endDateTime, long doctorId);
-//
-//    @Modifying
-//    @Transactional
-//    @Query(nativeQuery = true, value =
-//            "UPDATE appointments a " +
-//                    "SET a.patient_id = :patientId " +
-//                    "WHERE a.start_date_time = :startDateTime " +
-//                    "AND a.end_date_time = :endDateTime " +
-//                    "AND a.doctor_id = :doctorId")
-//    void addPatientToAppointment(LocalDateTime startDateTime, LocalDateTime endDateTime,
-//                                 long patientId, long doctorId);
 }

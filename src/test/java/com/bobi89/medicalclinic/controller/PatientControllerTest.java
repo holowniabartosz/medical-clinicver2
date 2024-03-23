@@ -142,7 +142,6 @@ class PatientControllerTest {
         String email = "john@gmail.com";
 
 
-
         mockMvc.perform(delete("/patients/{email}", email))
                 .andDo(print())
                 .andExpect(status().isNoContent());

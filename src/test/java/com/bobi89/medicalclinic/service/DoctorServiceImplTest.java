@@ -24,14 +24,13 @@ import java.util.Optional;
 
 import static org.mockito.Mockito.when;
 
-class AppointmentServiceImplTest {
+class DoctorServiceImplTest {
 
     private DoctorMapper doctorMapper;
     private DoctorJpaRepository doctorJpaRepository;
     private DoctorService doctorService;
     private LocationJpaRepository locationJpaRepository;
     private AppointmentRepository appointmentRepository;
-
 
 
     @BeforeEach

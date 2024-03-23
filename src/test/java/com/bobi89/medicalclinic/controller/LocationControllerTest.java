@@ -91,7 +91,7 @@ class LocationControllerTest {
         String city = "London";
         LocationDTO locationDTO = LocationCreator.createLocationDTO(locationId, city);
 
-        when(locationServiceImpl.addDoctorToLocation(doctorId,locationId)).thenReturn(locationDTO);
+        when(locationServiceImpl.addDoctorToLocation(doctorId, locationId)).thenReturn(locationDTO);
 
         mockMvc.perform(post("/locations/{locationId}/assign-doctor", locationId)
                         .content(objectMapper.writeValueAsString(doctorId))

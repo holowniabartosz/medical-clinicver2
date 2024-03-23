@@ -150,7 +150,6 @@ class PatientServiceImplTest {
                 () -> patientService.deleteByEmail("john@gmail.com"));
 
         Assertions.assertEquals("No such patient in the database", result.getMessage());
-
     }
 
     @Test

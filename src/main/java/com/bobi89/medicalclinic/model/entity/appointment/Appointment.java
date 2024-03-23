@@ -3,8 +3,9 @@ package com.bobi89.medicalclinic.model.entity.appointment;
 import com.bobi89.medicalclinic.model.entity.doctor.Doctor;
 import com.bobi89.medicalclinic.model.entity.patient.Patient;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -12,7 +13,8 @@ import java.time.temporal.ChronoUnit;
 
 @NoArgsConstructor
 @Entity
-@Data
+@Getter
+@Setter
 @Table(name = "appointments")
 public class Appointment {
     @Id

@@ -16,7 +16,7 @@ public class PatientMapperTest {
     @Test
     void toDTO_MapsAllFields() {
 
-        Patient patient = PatientCreator.createPatient(1,"john@gmail.com");
+        Patient patient = PatientCreator.createPatient(1, "john@gmail.com");
 
         PatientDTO patientDTO = mapper.toDTO(patient);
 
@@ -31,7 +31,7 @@ public class PatientMapperTest {
 
     @Test
     void toPatient_MapsAllFields() {
-        PatientDTO patientDTO = PatientCreator.createPatientDTO(1,"john@gmail.com");
+        PatientDTO patientDTO = PatientCreator.createPatientDTO(1, "john@gmail.com");
 
         Patient patient = mapper.toPatient(patientDTO);
 
@@ -46,7 +46,7 @@ public class PatientMapperTest {
 
     @Test
     void toPatientWithPassword_MapsAllFieldsIncludingPassword() {
-        PatientDTOwithPassword patientDTOWithPassword = PatientCreator.createPatientDTOwithPassword(1,"john@gmail.com");
+        PatientDTOwithPassword patientDTOWithPassword = PatientCreator.createPatientDTOwithPassword(1, "john@gmail.com");
 
         Patient patient = mapper.toPatient(patientDTOWithPassword);
 

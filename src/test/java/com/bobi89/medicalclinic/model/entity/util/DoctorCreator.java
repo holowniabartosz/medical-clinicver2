@@ -17,7 +17,7 @@ public class DoctorCreator {
     }
 
     public static DoctorDTOwithPassword createDoctorDTOwithPassword(long id, String email) {
-        return new DoctorDTOwithPassword(id ,email, "1234",
+        return new DoctorDTOwithPassword(id, email, "1234",
                 FieldOfExpertise.OPHTAMOLOGIST);
     }
 }
