@@ -53,9 +53,9 @@ class AppointmentIntegrationTest {
         long duration = 30;
         long doctorId = 1;
         AppointmentRequest appointmentRequest = new AppointmentRequest(
-                LocalDateTime.of(2029, 11, 25, 20, 0), duration);
+                LocalDateTime.of(2029, 11, 25, 20, 0), duration, doctorId);
 
-        mockMvc.perform(post("/appointments/add-appointment-to-doctor/{doctorId}", doctorId)
+        mockMvc.perform(post("/appointments")
                         .content(objectMapper.writeValueAsString(appointmentRequest))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())

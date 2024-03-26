@@ -27,12 +27,12 @@ public class AppointmentController {
         return appointmentService.findById(id);
     }
 
-    @PostMapping("/add-appointment-to-doctor/{doctorId}")
+    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public AppointmentDTO addAppointmentToDoctor(@RequestBody AppointmentRequest appointmentRequest,
-                                                 @PathVariable long doctorId) {
+    public AppointmentDTO addAppointmentToDoctor(@RequestBody AppointmentRequest appointmentRequest) {
         return appointmentService.addAppointmentToDoctor(appointmentRequest.getLocalDateTime(),
-                Duration.ofMinutes(appointmentRequest.getDurationMinutes()), doctorId);
+                Duration.ofMinutes(appointmentRequest.getDurationMinutes()),
+                appointmentRequest.getDoctorId());
     }
 
     @PatchMapping("/{appointmentId}")

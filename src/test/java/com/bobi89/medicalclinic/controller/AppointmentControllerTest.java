@@ -61,12 +61,12 @@ class AppointmentControllerTest {
         long doctorId = 1;
         AppointmentDTO appointmentDTO = AppointmentCreator.createAppointmentDTO(startDateTime, duration, doctorId);
         AppointmentRequest appointmentRequest = new AppointmentRequest(
-                LocalDateTime.of(2030, 12, 25, 18, 0), duration);
+                LocalDateTime.of(2030, 12, 25, 18, 0), duration,doctorId);
 
         when(appointmentService.addAppointmentToDoctor(appointmentDTO.getStartDateTime(),
-                appointmentDTO.getDuration(), doctorId)).thenReturn(appointmentDTO);
+                appointmentDTO.getDuration(), appointmentDTO.getDoctorId())).thenReturn(appointmentDTO);
 
-        mockMvc.perform(post("/appointments/add-appointment-to-doctor/{doctorId}", doctorId)
+        mockMvc.perform(post("/appointments")
                 .content(objectMapper.writeValueAsString(appointmentRequest))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())

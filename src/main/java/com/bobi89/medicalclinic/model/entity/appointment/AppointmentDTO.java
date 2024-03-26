@@ -21,9 +21,6 @@ public class AppointmentDTO {
     private Long doctorId;
 
     public AppointmentDTO(LocalDateTime startDateTime, long durationMinutes, long doctorId) {
-
-        AppointmentDTOValidator.validate(startDateTime, durationMinutes);
-
         this.startDateTime = startDateTime.truncatedTo(ChronoUnit.MINUTES);
         this.duration = Duration.ofMinutes(durationMinutes);
         this.endDateTime = this.startDateTime.plus(duration).truncatedTo(ChronoUnit.MINUTES);

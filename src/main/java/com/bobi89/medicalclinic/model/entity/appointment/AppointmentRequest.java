@@ -10,4 +10,5 @@ import java.time.LocalDateTime;
 public class AppointmentRequest {
     private LocalDateTime localDateTime;
     private long durationMinutes;
+    private long doctorId;
 }

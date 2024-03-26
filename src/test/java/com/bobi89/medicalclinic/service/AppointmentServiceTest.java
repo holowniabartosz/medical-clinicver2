@@ -81,6 +81,8 @@ class AppointmentServiceTest {
 
         when(doctorJpaRepository.findById(doctorId)).thenReturn(Optional.of(doctor));
         when(appointmentRepository.save(any())).thenReturn(appointment);
+        when(appointmentRepository.checkForConflictingSlotsForDoctor(startDateTime,
+                appointment.getEndDateTime(),doctorId)).thenReturn(0);
 
         var result = appointmentService.addAppointmentToDoctor(startDateTime,
                 Duration.ofMinutes(duration), doctorId);

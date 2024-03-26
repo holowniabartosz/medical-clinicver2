@@ -4,6 +4,7 @@ import com.bobi89.medicalclinic.exception.exc.AppointmentConflictDateException;
 import com.bobi89.medicalclinic.exception.exc.EntityNotFoundException;
 import com.bobi89.medicalclinic.model.entity.appointment.Appointment;
 import com.bobi89.medicalclinic.model.entity.appointment.AppointmentDTO;
+import com.bobi89.medicalclinic.model.entity.appointment.AppointmentValidator;
 import com.bobi89.medicalclinic.model.entity.mapper.AppointmentMapper;
 import com.bobi89.medicalclinic.repository.AppointmentRepository;
 import com.bobi89.medicalclinic.repository.DoctorJpaRepository;
@@ -38,9 +39,8 @@ public class AppointmentServiceImpl implements AppointmentService {
         var appointment = appointmentRepository.findById(id);
         if (appointment.isEmpty()) {
             throw new EntityNotFoundException("No such appointment in the database");
-        } else {
-            return appointmentMapper.toDTO(appointment.get());
         }
+        return appointmentMapper.toDTO(appointment.get());
     }
 
     @Transactional
@@ -50,8 +50,10 @@ public class AppointmentServiceImpl implements AppointmentService {
         if (doctor.isEmpty()) {
             throw new EntityNotFoundException("Doctor not found");
         }
+        AppointmentValidator.validate(startDateTime, durationMinutes.toMinutes(), doctor.get());
         var appointment = new Appointment(startDateTime, durationMinutes.toMinutes(), doctor.get());
-        if (checkForConflictingSlots(appointment.getStartDateTime(), appointment.getEndDateTime(), doctor.get().getId()) != 0) {
+        if (appointmentRepository.checkForConflictingSlotsForDoctor(appointment.getStartDateTime(),
+                appointment.getEndDateTime(), doctorId) != 0) {
             throw new AppointmentConflictDateException("Timeslot unavailable");
         }
         return appointmentMapper.toDTO(appointmentRepository.save(appointment));
@@ -67,10 +69,6 @@ public class AppointmentServiceImpl implements AppointmentService {
         }
         appointment.get().setPatient(patient.get());
         return appointmentMapper.toDTO(appointmentRepository.findById(appointmentId).get());
-    }
-
-    private int checkForConflictingSlots(LocalDateTime startDateTime, LocalDateTime endDateTime, long doctorId) {
-        return appointmentRepository.checkForConflictingSlotsForDoctor(startDateTime, endDateTime, doctorId);
     }
 }
 

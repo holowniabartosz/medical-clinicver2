@@ -41,8 +41,7 @@ public interface DoctorMapper {
     static Set<LocalDateTime> appointmentsSetToDateSet(Set<Appointment> appointments) {
         if (appointments == null) {
             return new HashSet<>();
-        } else {
-            return appointments.stream().map(Appointment::getStartDateTime).collect(Collectors.toSet());
         }
+        return appointments.stream().map(Appointment::getStartDateTime).collect(Collectors.toSet());
     }
 }

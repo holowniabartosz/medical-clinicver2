@@ -3,12 +3,15 @@ package com.bobi89.medicalclinic.model.entity.appointment;
 import com.bobi89.medicalclinic.exception.exc.AppointmentNotQuarterException;
 import com.bobi89.medicalclinic.exception.exc.DateInThePastException;
 import com.bobi89.medicalclinic.model.entity.doctor.Doctor;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
-public class AppointmentValidator {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class AppointmentValidator {
 
-    public static void validate(LocalDateTime startDateTime, long durationMinutes, Doctor doctor) {
+    public static boolean validate(LocalDateTime startDateTime, long durationMinutes, Doctor doctor) {
         if (startDateTime.isBefore(LocalDateTime.now())) {
             throw new DateInThePastException("Appointment cannot be in the past");
         }
@@ -21,5 +24,6 @@ public class AppointmentValidator {
         if (doctor == null) {
             throw new IllegalArgumentException("Doctor cannot be null");
         }
+        return true;
     }
 }

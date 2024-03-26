@@ -32,8 +32,6 @@ public class Appointment {
 
     public Appointment(LocalDateTime startDateTime, long durationMinutes, Doctor doctor) {
 
-        AppointmentValidator.validate(startDateTime, durationMinutes, doctor);
-
         this.startDateTime = startDateTime.truncatedTo(ChronoUnit.MINUTES);
         this.duration = Duration.ofMinutes(durationMinutes);
         this.endDateTime = this.startDateTime.plus(duration).truncatedTo(ChronoUnit.MINUTES);

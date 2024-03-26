@@ -24,8 +24,7 @@ public interface LocationMapper {
     static Set<String> locationListToIdList(Set<Doctor> doctors) {
         if (doctors == null) {
             return new HashSet<>();
-        } else {
-            return doctors.stream().map(Doctor::getEmail).collect(Collectors.toSet());
         }
+        return doctors.stream().map(Doctor::getEmail).collect(Collectors.toSet());
     }
 }

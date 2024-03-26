@@ -20,5 +20,5 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
                     "OR (:endDateTime BETWEEN start_date_time AND end_date_time) " +
                     "OR (start_date_time BETWEEN :startDateTime AND :endDateTime) " +
                     ")")
-    int checkForConflictingSlotsForDoctor(LocalDateTime startDateTime, LocalDateTime endDateTime, long doctorId);
+    int checkForConflictingSlotsForDoctor(LocalDateTime startDateTime, LocalDateTime endDateTime, Long doctorId);
 }
