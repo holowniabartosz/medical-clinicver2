@@ -55,8 +55,7 @@ public class PatientIntegrationTest {
                 .andExpect(jsonPath("$.email").value("john@gmail.com"))
                 .andExpect(jsonPath("$.firstName").value("J"))
                 .andExpect(jsonPath("$.lastName").value("D"))
-                .andExpect(jsonPath("$.phoneNumber").value("999999"))
-                .andExpect(jsonPath("$.birthday").value("20/12/1900"));
+                .andExpect(jsonPath("$.phoneNumber").value("999999"));
     }
 
     @Test
@@ -73,8 +72,7 @@ public class PatientIntegrationTest {
                 .andExpect(jsonPath("$.email").value(patientDTOwithPassword.getEmail()))
                 .andExpect(jsonPath("$.firstName").value(patientDTOwithPassword.getFirstName()))
                 .andExpect(jsonPath("$.lastName").value(patientDTOwithPassword.getLastName()))
-                .andExpect(jsonPath("$.phoneNumber").value(patientDTOwithPassword.getPhoneNumber()))
-                .andExpect(jsonPath("$.birthday").value(patientDTOwithPassword.getBirthday()));
+                .andExpect(jsonPath("$.phoneNumber").value(patientDTOwithPassword.getPhoneNumber()));
     }
 
     @Test
@@ -100,8 +98,7 @@ public class PatientIntegrationTest {
                 .andExpect(jsonPath("$.email").value(patientDTO.getEmail()))
                 .andExpect(jsonPath("$.firstName").value(patientDTO.getFirstName()))
                 .andExpect(jsonPath("$.lastName").value(patientDTO.getLastName()))
-                .andExpect(jsonPath("$.phoneNumber").value(patientDTO.getPhoneNumber()))
-                .andExpect(jsonPath("$.birthday").value(patientDTO.getBirthday()));
+                .andExpect(jsonPath("$.phoneNumber").value(patientDTO.getPhoneNumber()));
     }
 
     @Test

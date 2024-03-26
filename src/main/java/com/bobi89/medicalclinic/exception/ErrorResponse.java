@@ -11,7 +11,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class ErrorResponse {
 
-//    private HttpStatus status;
+    //    private HttpStatus status;
     private int status;
     private String message;
     private long timestamp;

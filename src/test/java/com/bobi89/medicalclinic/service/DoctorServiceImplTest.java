@@ -7,6 +7,7 @@ import com.bobi89.medicalclinic.model.entity.location.Location;
 import com.bobi89.medicalclinic.model.entity.mapper.DoctorMapper;
 import com.bobi89.medicalclinic.model.entity.util.DoctorCreator;
 import com.bobi89.medicalclinic.model.entity.util.LocationCreator;
+import com.bobi89.medicalclinic.repository.AppointmentRepository;
 import com.bobi89.medicalclinic.repository.DoctorJpaRepository;
 import com.bobi89.medicalclinic.repository.LocationJpaRepository;
 import com.bobi89.medicalclinic.service.doctor_service.DoctorService;
@@ -29,6 +30,7 @@ class DoctorServiceImplTest {
     private DoctorJpaRepository doctorJpaRepository;
     private DoctorService doctorService;
     private LocationJpaRepository locationJpaRepository;
+    private AppointmentRepository appointmentRepository;
 
 
     @BeforeEach
@@ -36,7 +38,8 @@ class DoctorServiceImplTest {
         this.doctorJpaRepository = Mockito.mock(DoctorJpaRepository.class);
         this.doctorMapper = Mappers.getMapper(DoctorMapper.class);
         this.locationJpaRepository = Mockito.mock(LocationJpaRepository.class);
-        this.doctorService = new DoctorServiceImpl(doctorJpaRepository, doctorMapper, locationJpaRepository);
+        this.appointmentRepository = Mockito.mock(AppointmentRepository.class);
+        this.doctorService = new DoctorServiceImpl(doctorJpaRepository, doctorMapper, locationJpaRepository, appointmentRepository);
     }
 
     @Test

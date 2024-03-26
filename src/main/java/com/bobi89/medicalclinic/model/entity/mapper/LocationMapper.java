@@ -17,15 +17,14 @@ public interface LocationMapper {
     @Mapping(source = "doctors",
             target = "doctorsEmails", qualifiedByName = "doctorsSetToIdSet")
     LocationDTO toDTO(Location location);
+
     Location toLocation(LocationDTO locationDTO);
 
     @Named("doctorsSetToIdSet")
-    static Set<String> locationListToIdList(Set<Doctor> doctors){
-        if(doctors == null){
+    static Set<String> locationListToIdList(Set<Doctor> doctors) {
+        if (doctors == null) {
             return new HashSet<>();
         }
-        else{
         return doctors.stream().map(Doctor::getEmail).collect(Collectors.toSet());
-        }
     }
 }

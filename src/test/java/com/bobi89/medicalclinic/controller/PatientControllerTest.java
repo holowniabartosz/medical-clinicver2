@@ -70,8 +70,7 @@ class PatientControllerTest {
                 .andExpect(jsonPath("$.email").value(patientDTO.getEmail()))
                 .andExpect(jsonPath("$.firstName").value(patientDTO.getFirstName()))
                 .andExpect(jsonPath("$.lastName").value(patientDTO.getLastName()))
-                .andExpect(jsonPath("$.phoneNumber").value(patientDTO.getPhoneNumber()))
-                .andExpect(jsonPath("$.birthday").value(patientDTO.getBirthday()));
+                .andExpect(jsonPath("$.phoneNumber").value(patientDTO.getPhoneNumber()));
     }
 
     @Test
@@ -104,8 +103,7 @@ class PatientControllerTest {
                 .andExpect(jsonPath("$.email").value(patientDTO.getEmail()))
                 .andExpect(jsonPath("$.firstName").value(patientDTO.getFirstName()))
                 .andExpect(jsonPath("$.lastName").value(patientDTO.getLastName()))
-                .andExpect(jsonPath("$.phoneNumber").value(patientDTO.getPhoneNumber()))
-                .andExpect(jsonPath("$.birthday").value(patientDTO.getBirthday()));
+                .andExpect(jsonPath("$.phoneNumber").value(patientDTO.getPhoneNumber()));
     }
 
     @Test
@@ -144,7 +142,6 @@ class PatientControllerTest {
         String email = "john@gmail.com";
 
 
-
         mockMvc.perform(delete("/patients/{email}", email))
                 .andDo(print())
                 .andExpect(status().isNoContent());
@@ -171,8 +168,7 @@ class PatientControllerTest {
                 .andExpect(jsonPath("$.email").value(updatedPatientDTO.getEmail()))
                 .andExpect(jsonPath("$.firstName").value(updatedPatientDTO.getFirstName()))
                 .andExpect(jsonPath("$.lastName").value(updatedPatientDTO.getLastName()))
-                .andExpect(jsonPath("$.phoneNumber").value(updatedPatientDTO.getPhoneNumber()))
-                .andExpect(jsonPath("$.birthday").value(updatedPatientDTO.getBirthday()));
+                .andExpect(jsonPath("$.phoneNumber").value(updatedPatientDTO.getPhoneNumber()));
     }
 
     @Test

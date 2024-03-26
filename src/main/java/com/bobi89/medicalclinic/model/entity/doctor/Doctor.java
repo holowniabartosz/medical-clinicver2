@@ -1,5 +1,6 @@
 package com.bobi89.medicalclinic.model.entity.doctor;
 
+import com.bobi89.medicalclinic.model.entity.appointment.Appointment;
 import com.bobi89.medicalclinic.model.entity.location.Location;
 import jakarta.persistence.*;
 import lombok.*;
@@ -24,14 +25,18 @@ public class Doctor {
 
     @ManyToMany(mappedBy = "doctors",
             cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH})
-    private Set<Location> locations;
+    private Set<Location> locations = new HashSet<>();
 
-    public Doctor(long id,String email, String password, FieldOfExpertise fieldOfExpertise) {
+    @OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL)
+    private Set<Appointment> appointments;
+
+    public Doctor(long id, String email, String password, FieldOfExpertise fieldOfExpertise) {
         this.id = id;
         this.email = email;
         this.password = password;
         this.fieldOfExpertise = fieldOfExpertise;
         this.locations = new HashSet<>();
+        this.appointments = new HashSet<>();
     }
 
     @Override

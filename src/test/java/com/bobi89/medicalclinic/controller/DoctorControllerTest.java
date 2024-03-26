@@ -38,8 +38,8 @@ class DoctorControllerTest {
     @Test
     void findAll() throws Exception {
         List<DoctorDTO> doctors = new ArrayList<>();
-        DoctorDTO doctorDTO = DoctorCreator.createDoctorDTO(0,"doctor@gmail.com");
-        DoctorDTO doctorDTO2 = DoctorCreator.createDoctorDTO(0,"doctor@gmail.com1");
+        DoctorDTO doctorDTO = DoctorCreator.createDoctorDTO(0, "doctor@gmail.com");
+        DoctorDTO doctorDTO2 = DoctorCreator.createDoctorDTO(0, "doctor@gmail.com1");
 
         doctors.add(doctorDTO);
         doctors.add(doctorDTO2);
@@ -57,7 +57,7 @@ class DoctorControllerTest {
     void findById_DoctorExists_ReturnDoctor() throws Exception {
         long id = 1;
         String email = "doctor@gmail.com";
-        DoctorDTO doctorDTO = DoctorCreator.createDoctorDTO(id,email);
+        DoctorDTO doctorDTO = DoctorCreator.createDoctorDTO(id, email);
 
         when(doctorService.findById(id)).thenReturn(doctorDTO);
 
@@ -72,7 +72,7 @@ class DoctorControllerTest {
     void save_CorrectDoctor_ReturnDoctor() throws Exception {
         long id = 10;
         String email = "doctor@gmail.com";
-        DoctorDTO doctorDTO = DoctorCreator.createDoctorDTO(id,email);
+        DoctorDTO doctorDTO = DoctorCreator.createDoctorDTO(id, email);
         DoctorDTOwithPassword doctorDTOwithPassword = DoctorCreator.createDoctorDTOwithPassword(id, email);
 
         when(doctorService.save(any())).thenReturn(doctorDTO);
@@ -93,9 +93,9 @@ class DoctorControllerTest {
         String email = "doctor@gmail.com";
         DoctorDTO doctorDTO = DoctorCreator.createDoctorDTO(doctorId, email);
 
-        when(doctorService.addLocationToDoctor(locationId,doctorId)).thenReturn(doctorDTO);
+        when(doctorService.addLocationToDoctor(locationId, doctorId)).thenReturn(doctorDTO);
 
-        mockMvc.perform(post("/doctors/{doctorId}/assign", doctorId)
+        mockMvc.perform(post("/doctors/{doctorId}/assign-location", doctorId)
                         .content(objectMapper.writeValueAsString(locationId))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())

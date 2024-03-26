@@ -1,14 +1,16 @@
 package com.bobi89.medicalclinic.service.patient_service;
 
-import com.bobi89.medicalclinic.exception.exc.IncorrectOldPasswordException;
 import com.bobi89.medicalclinic.exception.exc.EntityNotFoundException;
 import com.bobi89.medicalclinic.exception.exc.EntityNullFieldsException;
 import com.bobi89.medicalclinic.exception.exc.EntityWithThisEmailExistsException;
+import com.bobi89.medicalclinic.exception.exc.IncorrectOldPasswordException;
+import com.bobi89.medicalclinic.model.entity.mapper.PatientMapper;
 import com.bobi89.medicalclinic.model.entity.patient.ChangePasswordCommand;
 import com.bobi89.medicalclinic.model.entity.patient.Patient;
 import com.bobi89.medicalclinic.model.entity.patient.PatientDTO;
 import com.bobi89.medicalclinic.model.entity.patient.PatientDTOwithPassword;
-import com.bobi89.medicalclinic.model.entity.mapper.PatientMapper;
+import com.bobi89.medicalclinic.repository.AppointmentRepository;
+import com.bobi89.medicalclinic.repository.DoctorJpaRepository;
 import com.bobi89.medicalclinic.repository.PatientJpaRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
@@ -24,6 +26,9 @@ public class PatientServiceImpl implements PatientService {
 
     private PatientJpaRepository patientJpaRepository;
     private PatientMapper patientMapper;
+    private AppointmentRepository appointmentRepository;
+    private DoctorJpaRepository doctorJpaRepository;
+
 
     @Override
     public List<PatientDTO> findAll() {
@@ -58,6 +63,7 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Transactional
+    @Override
     public PatientDTO update(String email, PatientDTO patientDTO) {
         Optional<Patient> patientToUpdate = patientJpaRepository.findByEmail(email);
         if (patientToUpdate.isEmpty()) {
@@ -73,6 +79,7 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Transactional
+    @Override
     public ChangePasswordCommand editPatientPassword(String email, ChangePasswordCommand pass) {
         Optional<Patient> editedPasswordPatient = patientJpaRepository.findByEmail(email);
         if (editedPasswordPatient.isEmpty()) {
