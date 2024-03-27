@@ -3,9 +3,7 @@ package com.bobi89.medicalclinic.model.entity.appointment;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 
 @Getter
 @Setter
@@ -13,17 +11,13 @@ public class AppointmentDTO {
 
     private Long id;
     private LocalDateTime startDateTime;
-    private Duration duration;
     private LocalDateTime endDateTime;
-
     private Long patientId;
-
     private Long doctorId;
 
-    public AppointmentDTO(LocalDateTime startDateTime, long durationMinutes, long doctorId) {
-        this.startDateTime = startDateTime.truncatedTo(ChronoUnit.MINUTES);
-        this.duration = Duration.ofMinutes(durationMinutes);
-        this.endDateTime = this.startDateTime.plus(duration).truncatedTo(ChronoUnit.MINUTES);
+    public AppointmentDTO(LocalDateTime startDateTime, LocalDateTime endDateTime, long doctorId) {
+        this.startDateTime = startDateTime;
+        this.endDateTime = endDateTime;
         this.doctorId = doctorId;
     }
 

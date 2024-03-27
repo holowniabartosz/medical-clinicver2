@@ -20,7 +20,6 @@ import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
 import org.mockito.Mockito;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -51,11 +50,12 @@ class AppointmentServiceTest {
     void findAll_doctorsExists_returnDoctors() {
         List<Appointment> appointments = new ArrayList<>();
         LocalDateTime startDateTime = LocalDateTime.of(2030, 12, 25, 18, 0);
+        LocalDateTime endDateTime = LocalDateTime.of(2030, 12, 25, 18, 30);
         LocalDateTime startDateTime2 = LocalDateTime.of(2031, 12, 25, 18, 0);
+        LocalDateTime endDateTime2 = LocalDateTime.of(2031, 12, 25, 18, 30);
         long duration = 30;
-        long doctorId = 1;
-        Appointment appointment = AppointmentCreator.createAppointment(startDateTime, duration);
-        Appointment appointment2 = AppointmentCreator.createAppointment(startDateTime2, duration);
+        Appointment appointment = AppointmentCreator.createAppointment(startDateTime, endDateTime);
+        Appointment appointment2 = AppointmentCreator.createAppointment(startDateTime2, endDateTime2);
         appointments.add(appointment);
         appointments.add(appointment2);
 
@@ -67,17 +67,17 @@ class AppointmentServiceTest {
         //then
         Assertions.assertNotNull(result);
         Assertions.assertEquals(2, result.size());
-        Assertions.assertEquals(Duration.ofMinutes(duration), result.get(0).getDuration());
-        Assertions.assertEquals(Duration.ofMinutes(duration), result.get(1).getDuration());
+        Assertions.assertEquals(endDateTime, result.get(0).getEndDateTime());
+        Assertions.assertEquals(endDateTime2, result.get(1).getEndDateTime());
     }
 
     @Test
     void addAppointmentToDoctor_AppointmentAddedToDoctor_ReturnsAppointment() throws Exception {
         LocalDateTime startDateTime = LocalDateTime.of(2030, 12, 25, 18, 0);
-        long duration = 30;
+        LocalDateTime endDateTime = LocalDateTime.of(2030, 12, 25, 18, 30);
         long doctorId = 1;
         Doctor doctor = DoctorCreator.createDoctor(doctorId, "doctor@gmail.com");
-        Appointment appointment = AppointmentCreator.createAppointment(startDateTime, duration);
+        Appointment appointment = AppointmentCreator.createAppointment(startDateTime, endDateTime);
 
         when(doctorJpaRepository.findById(doctorId)).thenReturn(Optional.of(doctor));
         when(appointmentRepository.save(any())).thenReturn(appointment);
@@ -85,24 +85,24 @@ class AppointmentServiceTest {
                 appointment.getEndDateTime(),doctorId)).thenReturn(0);
 
         var result = appointmentService.addAppointmentToDoctor(startDateTime,
-                Duration.ofMinutes(duration), doctorId);
+                endDateTime, doctorId);
 
         Assertions.assertNotNull(result);
-        Assertions.assertEquals(Duration.ofMinutes(duration), result.getDuration());
+        Assertions.assertEquals(endDateTime, result.getEndDateTime());
         Assertions.assertEquals(1, result.getDoctorId());
     }
 
     @Test
     void addAppointmentToDoctor_DoctorNotFound_ThrowsException() throws Exception {
         LocalDateTime startDateTime = LocalDateTime.of(2030, 12, 25, 18, 0);
-        long duration = 30;
+        LocalDateTime endDateTime = LocalDateTime.of(2030, 12, 25, 18, 30);
         long doctorId = 1;
 
         when(doctorJpaRepository.findById(doctorId)).thenReturn(Optional.empty());
 
         var result = Assertions.assertThrows(EntityNotFoundException.class,
                 () -> appointmentService.addAppointmentToDoctor(startDateTime,
-                        Duration.ofMinutes(duration), doctorId));
+                        endDateTime, doctorId));
 
         Assertions.assertEquals("Doctor not found", result.getMessage());
     }
@@ -110,10 +110,10 @@ class AppointmentServiceTest {
     @Test
     void addAppointmentToDoctor_TimeslotUnavailable_ThrowsException() throws Exception {
         LocalDateTime startDateTime = LocalDateTime.of(2030, 12, 25, 18, 0);
-        long duration = 30;
+        LocalDateTime endDateTime = LocalDateTime.of(2030, 12, 25, 18, 30);
         long doctorId = 1;
         Doctor doctor = DoctorCreator.createDoctor(doctorId, "doctor@gmail.com");
-        Appointment appointment = AppointmentCreator.createAppointment(startDateTime, duration);
+        Appointment appointment = AppointmentCreator.createAppointment(startDateTime, endDateTime);
 
         when(doctorJpaRepository.findById(doctorId)).thenReturn(Optional.of(doctor));
         when(appointmentRepository.checkForConflictingSlotsForDoctor(appointment.getStartDateTime(), appointment.getEndDateTime(), doctorId))
@@ -121,7 +121,7 @@ class AppointmentServiceTest {
 
         var result = Assertions.assertThrows(AppointmentConflictDateException.class,
                 () -> appointmentService.addAppointmentToDoctor(startDateTime,
-                        Duration.ofMinutes(duration), doctorId));
+                        endDateTime, doctorId));
 
         Assertions.assertEquals("Timeslot unavailable", result.getMessage());
     }
@@ -129,12 +129,12 @@ class AppointmentServiceTest {
     @Test
     void addPatientToAppointment_PatientAddedToAppointment_ReturnsAppointment() throws Exception {
         LocalDateTime startDateTime = LocalDateTime.of(2030, 12, 25, 18, 0);
-        long duration = 30;
+        LocalDateTime endDateTime = LocalDateTime.of(2030, 12, 25, 18, 30);
         long doctorId = 1;
         long patientId = 1;
         Patient patient = PatientCreator.createPatient(patientId, "john@gmail,com");
         Doctor doctor = DoctorCreator.createDoctor(doctorId, "doctor@gmail.com");
-        Appointment appointment = AppointmentCreator.createAppointment(startDateTime, duration);
+        Appointment appointment = AppointmentCreator.createAppointment(startDateTime, endDateTime);
         appointment.setDoctor(doctor);
         appointment.setId(1L);
 
@@ -145,17 +145,17 @@ class AppointmentServiceTest {
         var result = appointmentService.addPatientToAppointment(appointment.getId(), patientId);
 
         Assertions.assertNotNull(result);
-        Assertions.assertEquals(Duration.ofMinutes(duration), result.getDuration());
+        Assertions.assertEquals(endDateTime, result.getEndDateTime());
         Assertions.assertEquals(1, result.getDoctorId());
     }
 
     @Test
     void addPatientToAppointment_PatientNotFound_ThrowsException() throws Exception {
         LocalDateTime startDateTime = LocalDateTime.of(2030, 12, 25, 18, 0);
-        long duration = 30;
+        LocalDateTime endDateTime = LocalDateTime.of(2030, 12, 25, 18, 30);
         long appointmentId = 1;
         long patientId = 1;
-        Appointment appointment = AppointmentCreator.createAppointment(startDateTime, duration);
+        Appointment appointment = AppointmentCreator.createAppointment(startDateTime, endDateTime);
 
         when(patientJpaRepository.findById(patientId)).thenReturn(Optional.empty());
         when(appointmentRepository.findById(appointment.getId())).thenReturn(Optional.of(appointment));
@@ -169,11 +169,11 @@ class AppointmentServiceTest {
     @Test
     void addPatientToAppointment_AppointmentNotFound_ThrowsException() throws Exception {
         LocalDateTime startDateTime = LocalDateTime.of(2030, 12, 25, 18, 0);
-        long duration = 30;
+        LocalDateTime endDateTime = LocalDateTime.of(2030, 12, 25, 18, 30);
         long appointmentId = 1;
         long patientId = 1;
         Patient patient = PatientCreator.createPatient(patientId, "john@gmail,com");
-        Appointment appointment = AppointmentCreator.createAppointment(startDateTime, duration);
+        Appointment appointment = AppointmentCreator.createAppointment(startDateTime, endDateTime);
 
         when(patientJpaRepository.findById(patientId)).thenReturn(Optional.of(patient));
         when(appointmentRepository.findById(appointment.getId())).thenReturn(Optional.empty());

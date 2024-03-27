@@ -1,0 +1,41 @@
+databaseChangeLog:
+  - changeSet:
+      id: 5
+      author: Bartosz
+      changes:
+        - createTable:
+            tableName: appointment
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: fk_doctor_id
+                  name: id
+                  type: bigint
+              - column:
+                  name: start_date_time
+                  type: datetime
+              - column:
+                  name: duration
+                  type: time
+              - column:
+                  name: end_date_time
+                  type: datetime
+              - column:
+                  name: patient_id
+                  type: bigint
+                  constraints:
+                    foreignKey: true
+                    references:
+                      tableName: patient
+                      columnNames: id
+              - column:
+                  name: doctor_id
+                  type: bigint
+                  constraints:
+                    foreignKey: true
+                    references:
+                      tableName: doctor
+                      columnNames: id
