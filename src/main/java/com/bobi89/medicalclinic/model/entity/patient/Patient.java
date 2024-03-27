@@ -20,6 +20,7 @@ public class Patient {
     @Column(nullable = false, unique = true)
     private Long id;
     private String idCardNr;
+    @Column(unique = true)
     private String email;
     private String password;
     private String firstName;
