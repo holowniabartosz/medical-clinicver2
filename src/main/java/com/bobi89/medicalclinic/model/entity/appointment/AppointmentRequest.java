@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 @Getter
 @AllArgsConstructor
 public class AppointmentRequest {
-    private LocalDateTime localDateTime;
-    private long durationMinutes;
+    private LocalDateTime startDateTime;
+    private LocalDateTime endDateTime;
     private long doctorId;
 }

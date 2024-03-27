@@ -13,7 +13,6 @@ import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -45,13 +44,13 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Transactional
     @Override
-    public AppointmentDTO addAppointmentToDoctor(LocalDateTime startDateTime, Duration durationMinutes, long doctorId) {
+    public AppointmentDTO addAppointmentToDoctor(LocalDateTime startDateTime, LocalDateTime endDateTime, long doctorId) {
         var doctor = doctorJpaRepository.findById(doctorId);
         if (doctor.isEmpty()) {
             throw new EntityNotFoundException("Doctor not found");
         }
-        AppointmentValidator.validate(startDateTime, durationMinutes.toMinutes(), doctor.get());
-        var appointment = new Appointment(startDateTime, durationMinutes.toMinutes(), doctor.get());
+        AppointmentValidator.validate(startDateTime, endDateTime, doctor.get());
+        var appointment = new Appointment(startDateTime, endDateTime, doctor.get());
         if (appointmentRepository.checkForConflictingSlotsForDoctor(appointment.getStartDateTime(),
                 appointment.getEndDateTime(), doctorId) != 0) {
             throw new AppointmentConflictDateException("Timeslot unavailable");

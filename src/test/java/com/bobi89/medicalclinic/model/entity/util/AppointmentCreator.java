@@ -6,12 +6,12 @@ import com.bobi89.medicalclinic.model.entity.appointment.AppointmentDTO;
 import java.time.LocalDateTime;
 
 public class AppointmentCreator {
-    public static Appointment createAppointment(LocalDateTime startDateTime, long durationMinutes) {
+    public static Appointment createAppointment(LocalDateTime startDateTime, LocalDateTime endDateTime) {
         return new Appointment(startDateTime,
-                durationMinutes, DoctorCreator.createDoctor(1, "doctor@gmail.com"));
+                endDateTime, DoctorCreator.createDoctor(1, "doctor@gmail.com"));
     }
 
-    public static AppointmentDTO createAppointmentDTO(LocalDateTime startDateTime, long durationMinutes, long doctorId) {
-        return new AppointmentDTO(startDateTime, durationMinutes, doctorId);
+    public static AppointmentDTO createAppointmentDTO(LocalDateTime startDateTime, LocalDateTime endDateTime, long doctorId) {
+        return new AppointmentDTO(startDateTime, endDateTime, doctorId);
     }
 }

@@ -37,11 +37,12 @@ class AppointmentControllerTest {
     void findAll_Correct_ListReturned() throws Exception {
         List<AppointmentDTO> appointments = new ArrayList<>();
         LocalDateTime startDateTime = LocalDateTime.of(2030, 12, 25, 18, 0);
+        LocalDateTime endDateTime = LocalDateTime.of(2030, 12, 25, 18, 30);
         LocalDateTime startDateTime2 = LocalDateTime.of(2031, 12, 25, 18, 0);
-        long duration = 30;
+        LocalDateTime endDateTime2 = LocalDateTime.of(2031, 12, 25, 18, 30);
         long doctorId = 1;
-        AppointmentDTO appointmentDTO = AppointmentCreator.createAppointmentDTO(startDateTime, duration, doctorId);
-        AppointmentDTO appointmentDTO2 = AppointmentCreator.createAppointmentDTO(startDateTime2, duration, doctorId);
+        AppointmentDTO appointmentDTO = AppointmentCreator.createAppointmentDTO(startDateTime, endDateTime, doctorId);
+        AppointmentDTO appointmentDTO2 = AppointmentCreator.createAppointmentDTO(startDateTime2, endDateTime2, doctorId);
         appointments.add(appointmentDTO);
         appointments.add(appointmentDTO2);
 
@@ -51,20 +52,20 @@ class AppointmentControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].doctorId").value(1))
-                .andExpect(jsonPath("$[1].duration").value("PT30M"));
+                .andExpect(jsonPath("$[1].endDateTime").value("2031-12-25T18:30:00"));
     }
 
     @Test
     void addAppointmentToDoctor_AppointmentAddedToDoctor_ReturnsAppointment() throws Exception {
         LocalDateTime startDateTime = LocalDateTime.of(2030, 12, 25, 18, 0);
-        long duration = 30;
+        LocalDateTime endDateTime = LocalDateTime.of(2030, 12, 25, 18, 30);
         long doctorId = 1;
-        AppointmentDTO appointmentDTO = AppointmentCreator.createAppointmentDTO(startDateTime, duration, doctorId);
+        AppointmentDTO appointmentDTO = AppointmentCreator.createAppointmentDTO(startDateTime, endDateTime, doctorId);
         AppointmentRequest appointmentRequest = new AppointmentRequest(
-                LocalDateTime.of(2030, 12, 25, 18, 0), duration,doctorId);
+                startDateTime, endDateTime,doctorId);
 
         when(appointmentService.addAppointmentToDoctor(appointmentDTO.getStartDateTime(),
-                appointmentDTO.getDuration(), appointmentDTO.getDoctorId())).thenReturn(appointmentDTO);
+                appointmentDTO.getEndDateTime(), appointmentDTO.getDoctorId())).thenReturn(appointmentDTO);
 
         mockMvc.perform(post("/appointments")
                 .content(objectMapper.writeValueAsString(appointmentRequest))
@@ -72,17 +73,17 @@ class AppointmentControllerTest {
                 .andDo(print())
                 .andExpect(status().is2xxSuccessful())
                 .andExpect(jsonPath("$.doctorId").value(1))
-                .andExpect(jsonPath("$.duration").value("PT30M"));
+                .andExpect(jsonPath("$.endDateTime").value("2030-12-25T18:30:00"));
     }
 
     @Test
     void addPatientToAppointment_PatientAddedToAppointment_ReturnsAppointment() throws Exception {
         LocalDateTime startDateTime = LocalDateTime.of(2030, 12, 25, 18, 0);
-        long duration = 30;
+        LocalDateTime endDateTime = LocalDateTime.of(2030, 12, 25, 18, 30);
         long doctorId = 1;
         long appointmentId = 1;
         long patientId = 1;
-        AppointmentDTO appointmentDTO = AppointmentCreator.createAppointmentDTO(startDateTime, duration, doctorId);
+        AppointmentDTO appointmentDTO = AppointmentCreator.createAppointmentDTO(startDateTime, endDateTime, doctorId);
 
         when(appointmentService.addPatientToAppointment(appointmentId,doctorId)).thenReturn(appointmentDTO);
         appointmentDTO.setPatientId(patientId);
@@ -93,6 +94,6 @@ class AppointmentControllerTest {
                 .andDo(print())
                 .andExpect(status().is2xxSuccessful())
                 .andExpect(jsonPath("$.patientId").value(1))
-                .andExpect(jsonPath("$.duration").value("PT30M"));
+                .andExpect(jsonPath("$.endDateTime").value("2030-12-25T18:30:00"));
     }
 }

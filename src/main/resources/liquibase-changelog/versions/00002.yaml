@@ -1,0 +1,54 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2
+      author: Bartosz
+      changes:
+        - createTable:
+            tableName: doctor
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_doctor_id
+                  name: id
+                  type: bigint
+              - column:
+                  name: email
+                  type: varchar(50)
+              - column:
+                  name: password
+                  type: varchar(50)
+              - column:
+                  name: field_of_expertise
+                  type: varchar(50)
+        - createTable:
+            tableName: location
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_location_id
+                  name: id
+                  type: bigint
+              - column:
+                  constraints:
+                    nullable: false
+                    unique: true
+                  name: name
+                  type: varchar(50)
+              - column:
+                  name: city
+                  type: varchar(50)
+              - column:
+                  name: zip_code
+                  type: varchar(50)
+              - column:
+                  name: street
+                  type: varchar(50)
+              - column:
+                  name: street_nr
+                  type: varchar(50)

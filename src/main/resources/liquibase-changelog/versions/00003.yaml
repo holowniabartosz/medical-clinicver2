@@ -1,0 +1,29 @@
+databaseChangeLog:
+  - changeSet:
+      id: 3
+      author: Bartosz
+      changes:
+        - createTable:
+            tableName: location_doctor
+            columns:
+              - column:
+                  name: location_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_doctor_id
+                    reference: doctor(id)
+              - column:
+                    name: doctor_id
+                    type: bigint
+                    constraints:
+                      nullable: false
+                      foreignKeyName: fk_location_id
+                      reference: location(id)
+  - changeSet:
+      id: 4
+      author: Bartosz
+      changes:
+        - addPrimaryKey:
+            tableName: location_doctor
+            columnNames: location_id, doctor_id

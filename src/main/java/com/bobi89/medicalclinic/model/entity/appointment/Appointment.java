@@ -7,9 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 
 @NoArgsConstructor
 @Entity
@@ -21,7 +19,6 @@ public class Appointment {
     @Column(nullable = false, unique = true)
     private Long id;
     private LocalDateTime startDateTime;
-    private Duration duration;
     private LocalDateTime endDateTime;
 
     @ManyToOne
@@ -30,11 +27,10 @@ public class Appointment {
     @ManyToOne
     private Doctor doctor;
 
-    public Appointment(LocalDateTime startDateTime, long durationMinutes, Doctor doctor) {
+    public Appointment(LocalDateTime startDateTime, LocalDateTime endDateTime, Doctor doctor) {
 
-        this.startDateTime = startDateTime.truncatedTo(ChronoUnit.MINUTES);
-        this.duration = Duration.ofMinutes(durationMinutes);
-        this.endDateTime = this.startDateTime.plus(duration).truncatedTo(ChronoUnit.MINUTES);
+        this.startDateTime = startDateTime;
+        this.endDateTime = endDateTime;
         this.doctor = doctor;
     }
 

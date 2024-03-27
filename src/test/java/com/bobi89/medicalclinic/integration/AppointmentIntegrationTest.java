@@ -45,15 +45,15 @@ class AppointmentIntegrationTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].doctorId").value(1))
-                .andExpect(jsonPath("$[1].duration").value("PT30M"));
+                .andExpect(jsonPath("$[1].endDateTime").value("2031-12-25T18:30:00"));
     }
 
     @Test
     void addAppointmentToDoctor_AppointmentAddedToDoctor_ReturnsAppointment() throws Exception {
-        long duration = 30;
         long doctorId = 1;
         AppointmentRequest appointmentRequest = new AppointmentRequest(
-                LocalDateTime.of(2029, 11, 25, 20, 0), duration, doctorId);
+                LocalDateTime.of(2032, 11, 25, 20, 0),
+                LocalDateTime.of(2032, 11, 25, 20, 30), doctorId);
 
         mockMvc.perform(post("/appointments")
                         .content(objectMapper.writeValueAsString(appointmentRequest))
@@ -61,7 +61,7 @@ class AppointmentIntegrationTest {
                 .andDo(print())
                 .andExpect(status().is2xxSuccessful())
                 .andExpect(jsonPath("$.doctorId").value(1))
-                .andExpect(jsonPath("$.duration").value("PT30M"));
+                .andExpect(jsonPath("$.endDateTime").value("2032-11-25T20:30:00"));
     }
 
     @Test
@@ -75,6 +75,6 @@ class AppointmentIntegrationTest {
                 .andDo(print())
                 .andExpect(status().is2xxSuccessful())
                 .andExpect(jsonPath("$.patientId").value(1))
-                .andExpect(jsonPath("$.duration").value("PT30M"));
+                .andExpect(jsonPath("$.endDateTime").value("2030-12-25T18:30:00"));
     }
 }
