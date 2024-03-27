@@ -20,6 +20,8 @@ databaseChangeLog:
               - column:
                   name: email
                   type: varchar(50)
+                  constraints:
+                    unique: true
               - column:
                   name: password
                   type: varchar(50)
