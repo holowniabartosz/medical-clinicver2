@@ -14,6 +14,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -43,17 +47,23 @@ class PatientControllerTest {
         List<PatientDTO> patients = new ArrayList<>();
         PatientDTO patientDTO = PatientCreator.createPatientDTO(1, "john@gmail.com");
         PatientDTO patientDTO2 = PatientCreator.createPatientDTO(2, "john@gmail.com1");
-
         patients.add(patientDTO);
         patients.add(patientDTO2);
+        int pageSize = 2;
+        int pageNumber = 0;
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
 
-        when(patientServiceImpl.findAll()).thenReturn(patients);
+        Page<PatientDTO> patientPage = new PageImpl<>(patients, pageable, patients.size());
 
-        mockMvc.perform(get("/patients"))
+        when(patientServiceImpl.findAll(pageable)).thenReturn(patientPage);
+
+        mockMvc.perform(get("/patients")
+                        .param("page", String.valueOf(pageNumber))
+                        .param("size", String.valueOf(pageSize)))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].email").value("john@gmail.com"))
-                .andExpect(jsonPath("$[1].email").value("john@gmail.com1"));
+                .andExpect(jsonPath("$.content[0].email").value("john@gmail.com"))
+                .andExpect(jsonPath("$.content[1].email").value("john@gmail.com1"));
     }
 
     @Test

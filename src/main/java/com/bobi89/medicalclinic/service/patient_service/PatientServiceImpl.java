@@ -14,11 +14,11 @@ import com.bobi89.medicalclinic.repository.DoctorJpaRepository;
 import com.bobi89.medicalclinic.repository.PatientJpaRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import org.springframework.data.domain.Pageable;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -31,10 +31,8 @@ public class PatientServiceImpl implements PatientService {
 
 
     @Override
-    public List<PatientDTO> findAll() {
-        return patientJpaRepository.findAll().stream()
-                .map(p -> patientMapper.toDTO(p))
-                .collect(Collectors.toList());
+    public Page<PatientDTO> findAll(Pageable pageable) {
+        return patientJpaRepository.findAll(pageable).map(patientMapper::toDTO);
     }
 
     @Override

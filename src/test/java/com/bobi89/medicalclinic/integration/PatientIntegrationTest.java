@@ -36,12 +36,16 @@ public class PatientIntegrationTest {
 
     @Test
     void findAll() throws Exception {
+        int pageSize = 2;
+        int pageNumber = 0;
 
-        mockMvc.perform(get("/patients"))
+        mockMvc.perform(get("/patients")
+                        .param("page", String.valueOf(pageNumber))
+                        .param("size", String.valueOf(pageSize)))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].email").value("john@gmail.com"))
-                .andExpect(jsonPath("$[1].email").value("john@gmail.com1"));
+                .andExpect(jsonPath("$.content[0].email").value("john@gmail.com"))
+                .andExpect(jsonPath("$.content[1].email").value("john@gmail.com1"));
     }
 
     @Test

@@ -11,10 +11,11 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import org.springframework.data.domain.Pageable;
 
 @RestController
 @AllArgsConstructor
@@ -24,6 +25,7 @@ public class PatientController {
     private PatientService patientService;
 
     @Operation(summary = "Get the list of all patients")
+
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "List returned",
                     content = {@Content(mediaType = "application/json",
@@ -31,8 +33,8 @@ public class PatientController {
                     })
     })
     @GetMapping
-    public List<PatientDTO> findAll() {
-        return patientService.findAll();
+    public Page<PatientDTO> findAll(@RequestParam("page") int page, @RequestParam("size") int size, Pageable pageable) {
+        return patientService.findAll(pageable);
     }
 
     @Operation(summary = "Get a patient by its email address")

@@ -1,13 +1,13 @@
 package com.bobi89.medicalclinic.service;
 
-import com.bobi89.medicalclinic.exception.exc.IncorrectOldPasswordException;
 import com.bobi89.medicalclinic.exception.exc.EntityNotFoundException;
 import com.bobi89.medicalclinic.exception.exc.EntityWithThisEmailExistsException;
+import com.bobi89.medicalclinic.exception.exc.IncorrectOldPasswordException;
+import com.bobi89.medicalclinic.model.entity.mapper.PatientMapper;
 import com.bobi89.medicalclinic.model.entity.patient.ChangePasswordCommand;
 import com.bobi89.medicalclinic.model.entity.patient.Patient;
 import com.bobi89.medicalclinic.model.entity.patient.PatientDTO;
 import com.bobi89.medicalclinic.model.entity.patient.PatientDTOwithPassword;
-import com.bobi89.medicalclinic.model.entity.mapper.PatientMapper;
 import com.bobi89.medicalclinic.model.entity.util.PatientCreator;
 import com.bobi89.medicalclinic.repository.AppointmentRepository;
 import com.bobi89.medicalclinic.repository.DoctorJpaRepository;
@@ -19,6 +19,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
 import org.mockito.Mockito;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,24 +54,26 @@ class PatientServiceImplTest {
 
     @Test
     void findAll_patientsExists_returnPatients() {
-        //given
+        // given
         List<Patient> patients = new ArrayList<>();
         Patient patient = PatientCreator.createPatient(1, "john@gmail.com");
         Patient patient2 = PatientCreator.createPatient(2, "john@gmail.com1");
         patients.add(patient);
         patients.add(patient2);
+        int pageSize = 2;
+        Pageable pageable = PageRequest.of(0, pageSize);
+        Page<Patient> patientPage = new PageImpl<>(patients, pageable, patients.size());
 
-        when(patientJpaRepository.findAll())
-                .thenReturn(patients);
+        when(patientJpaRepository.findAll(pageable))
+                .thenReturn(patientPage);
 
-        //when
-        var result = patientService.findAll();
+        // when
+        var result = patientService.findAll(pageable);
 
-        //then
+        // then
         Assertions.assertNotNull(result);
-        Assertions.assertEquals(2, result.size());
-        Assertions.assertEquals("john@gmail.com", result.get(0).getEmail());
-        Assertions.assertEquals("john@gmail.com1", result.get(1).getEmail());
+        Assertions.assertEquals(pageSize, result.getSize());
+        Assertions.assertEquals("john@gmail.com1", result.getContent().get(1).getEmail());
     }
 
     @Test

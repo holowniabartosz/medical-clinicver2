@@ -3,12 +3,13 @@ package com.bobi89.medicalclinic.service.patient_service;
 import com.bobi89.medicalclinic.model.entity.patient.ChangePasswordCommand;
 import com.bobi89.medicalclinic.model.entity.patient.PatientDTO;
 import com.bobi89.medicalclinic.model.entity.patient.PatientDTOwithPassword;
+import org.springframework.data.domain.Page;
 
-import java.util.List;
+import org.springframework.data.domain.Pageable;
 
 public interface PatientService {
 
-    List<PatientDTO> findAll();
+    Page<PatientDTO> findAll(Pageable pageable);
 
     PatientDTO findByEmail(String email);
 
