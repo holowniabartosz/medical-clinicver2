@@ -7,6 +7,9 @@ import org.springframework.data.domain.Page;
 
 import org.springframework.data.domain.Pageable;
 
+import java.time.LocalDate;
+import java.util.List;
+
 public interface PatientService {
 
     Page<PatientDTO> findAll(Pageable pageable);
@@ -20,4 +23,8 @@ public interface PatientService {
     PatientDTO update(String email, PatientDTO patientDTO);
 
     ChangePasswordCommand editPatientPassword(String email, ChangePasswordCommand pass);
+
+    PatientDTO findById(Long id);
+
+    List<PatientDTO> findPatientsByDate(LocalDate date);
 }

@@ -12,10 +12,12 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import org.springframework.data.domain.Pageable;
+import java.time.LocalDate;
+import java.util.List;
 
 @RestController
 @AllArgsConstructor
@@ -25,7 +27,6 @@ public class PatientController {
     private PatientService patientService;
 
     @Operation(summary = "Get the list of all patients")
-
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "List returned",
                     content = {@Content(mediaType = "application/json",
@@ -49,6 +50,32 @@ public class PatientController {
     @GetMapping("/{email}")
     public PatientDTO findByEmail(@PathVariable String email) {
         return patientService.findByEmail(email);
+    }
+
+    @Operation(summary = "Get a patient by its id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Found the patient",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = PatientDTO.class))
+                    }),
+            @ApiResponse(responseCode = "404", description = "Entity not found",
+                    content = @Content)
+    })
+    @GetMapping("/{id}")
+    public PatientDTO findById(@PathVariable Long id) {
+        return patientService.findById(id);
+    }
+
+    @Operation(summary = "Get patients with a visit on a given day")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Found the patients",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = PatientDTO.class))
+                    }),
+    })
+    @GetMapping("/{date}")
+    public List<PatientDTO> findPatientsByDate(@PathVariable LocalDate date) {
+        return patientService.findPatientsByDate(date);
     }
 
     @Operation(summary = "Add a patient")
