@@ -1,5 +1,6 @@
 package com.bobi89.medicalclinic.service.patient_service;
 
+import com.bobi89.medicalclinic.model.entity.appointment.AppointmentDTO;
 import com.bobi89.medicalclinic.model.entity.patient.ChangePasswordCommand;
 import com.bobi89.medicalclinic.model.entity.patient.PatientDTO;
 import com.bobi89.medicalclinic.model.entity.patient.PatientDTOwithPassword;
@@ -27,4 +28,6 @@ public interface PatientService {
     PatientDTO findById(Long id);
 
     List<PatientDTO> findPatientsByDate(LocalDate date);
+
+    List<AppointmentDTO> findAllPatientAppointmnets(Long patientId);
 }

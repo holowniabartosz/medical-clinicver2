@@ -1,5 +1,6 @@
 package com.bobi89.medicalclinic.controller;
 
+import com.bobi89.medicalclinic.model.entity.appointment.AppointmentDTO;
 import com.bobi89.medicalclinic.model.entity.patient.ChangePasswordCommand;
 import com.bobi89.medicalclinic.model.entity.patient.PatientDTO;
 import com.bobi89.medicalclinic.model.entity.patient.PatientDTOwithPassword;
@@ -38,6 +39,18 @@ public class PatientController {
         return patientService.findAll(pageable);
     }
 
+    @Operation(summary = "Get the list of all patient's appointments")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "List returned",
+                    content = {@Content(mediaType = "application/json",
+                            array = @ArraySchema(schema = @Schema(implementation = PatientDTO.class)))
+                    })
+    })
+    @GetMapping("/{patientId}/appointments")
+    public List<AppointmentDTO> findAllPatientAppointmnets(@PathVariable Long patientId) {
+        return patientService.findAllPatientAppointmnets(patientId);
+    }
+
     @Operation(summary = "Get a patient by its email address")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Found the patient",
@@ -47,7 +60,7 @@ public class PatientController {
             @ApiResponse(responseCode = "404", description = "Entity not found",
                     content = @Content)
     })
-    @GetMapping("/{email}")
+    @GetMapping("/email/{email}")
     public PatientDTO findByEmail(@PathVariable String email) {
         return patientService.findByEmail(email);
     }
@@ -61,7 +74,7 @@ public class PatientController {
             @ApiResponse(responseCode = "404", description = "Entity not found",
                     content = @Content)
     })
-    @GetMapping("/{id}")
+    @GetMapping("/id/{id}")
     public PatientDTO findById(@PathVariable Long id) {
         return patientService.findById(id);
     }
@@ -73,8 +86,8 @@ public class PatientController {
                             schema = @Schema(implementation = PatientDTO.class))
                     }),
     })
-    @GetMapping("/{date}")
-    public List<PatientDTO> findPatientsByDate(@PathVariable LocalDate date) {
+    @GetMapping("/date")
+    public List<PatientDTO> findPatientsByDate(@RequestParam("date") LocalDate date) {
         return patientService.findPatientsByDate(date);
     }
 

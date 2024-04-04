@@ -4,7 +4,6 @@ import com.bobi89.medicalclinic.model.entity.appointment.Appointment;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -24,5 +23,7 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
                     ")")
     int checkForConflictingSlotsForDoctor(LocalDateTime startDateTime, LocalDateTime endDateTime, Long doctorId);
 
-    List<Appointment> findByStartDateTime (LocalDate date);
+    List<Appointment> findByStartDateTimeBetween(LocalDateTime startOfDay, LocalDateTime endOfDay);
+
+    List<Appointment> findByPatientId(Long patientId);
 }
