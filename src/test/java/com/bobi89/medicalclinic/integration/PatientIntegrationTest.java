@@ -52,7 +52,7 @@ public class PatientIntegrationTest {
     void findByEmail_PatientExists_ReturnPatient() throws Exception {
         String email = "john@gmail.com";
 
-        mockMvc.perform(get("/patients/{email}", email))
+        mockMvc.perform(get("/patients/email/{email}", email))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(1))

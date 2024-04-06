@@ -1,7 +1,7 @@
 package com.bobi89.medicalclinic.controller;
 
 import com.bobi89.medicalclinic.model.entity.location.LocationDTO;
-import com.bobi89.medicalclinic.service.location_service.LocationService;
+import com.bobi89.medicalclinic.service.location.LocationService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;

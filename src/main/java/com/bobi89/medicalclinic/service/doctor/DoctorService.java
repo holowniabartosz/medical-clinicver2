@@ -1,4 +1,4 @@
-package com.bobi89.medicalclinic.service.doctor_service;
+package com.bobi89.medicalclinic.service.doctor;
 
 import com.bobi89.medicalclinic.model.entity.doctor.DoctorDTO;
 import com.bobi89.medicalclinic.model.entity.doctor.DoctorDTOwithPassword;

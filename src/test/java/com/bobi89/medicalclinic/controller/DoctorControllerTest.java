@@ -3,7 +3,7 @@ package com.bobi89.medicalclinic.controller;
 import com.bobi89.medicalclinic.model.entity.doctor.DoctorDTO;
 import com.bobi89.medicalclinic.model.entity.doctor.DoctorDTOwithPassword;
 import com.bobi89.medicalclinic.model.entity.util.DoctorCreator;
-import com.bobi89.medicalclinic.service.doctor_service.DoctorService;
+import com.bobi89.medicalclinic.service.doctor.DoctorService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

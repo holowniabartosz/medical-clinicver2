@@ -2,7 +2,7 @@ package com.bobi89.medicalclinic.controller;
 
 import com.bobi89.medicalclinic.model.entity.doctor.DoctorDTO;
 import com.bobi89.medicalclinic.model.entity.doctor.DoctorDTOwithPassword;
-import com.bobi89.medicalclinic.service.doctor_service.DoctorService;
+import com.bobi89.medicalclinic.service.doctor.DoctorService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;

@@ -4,7 +4,7 @@ import com.bobi89.medicalclinic.model.entity.appointment.AppointmentDTO;
 import com.bobi89.medicalclinic.model.entity.patient.ChangePasswordCommand;
 import com.bobi89.medicalclinic.model.entity.patient.PatientDTO;
 import com.bobi89.medicalclinic.model.entity.patient.PatientDTOwithPassword;
-import com.bobi89.medicalclinic.service.patient_service.PatientService;
+import com.bobi89.medicalclinic.service.patient.PatientService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;

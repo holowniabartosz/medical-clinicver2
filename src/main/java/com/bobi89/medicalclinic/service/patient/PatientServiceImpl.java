@@ -1,4 +1,4 @@
-package com.bobi89.medicalclinic.service.patient_service;
+package com.bobi89.medicalclinic.service.patient;
 
 import com.bobi89.medicalclinic.exception.exc.EntityNotFoundException;
 import com.bobi89.medicalclinic.exception.exc.EntityNullFieldsException;
