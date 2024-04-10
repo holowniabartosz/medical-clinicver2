@@ -1,4 +1,4 @@
-package com.bobi89.medicalclinic.service.appointment_service;
+package com.bobi89.medicalclinic.service.appointment;
 
 import com.bobi89.medicalclinic.exception.exc.AppointmentConflictDateException;
 import com.bobi89.medicalclinic.exception.exc.EntityNotFoundException;

@@ -3,7 +3,7 @@ package com.bobi89.medicalclinic.controller;
 import com.bobi89.medicalclinic.model.entity.appointment.AppointmentDTO;
 import com.bobi89.medicalclinic.model.entity.appointment.AppointmentRequest;
 import com.bobi89.medicalclinic.model.entity.util.AppointmentCreator;
-import com.bobi89.medicalclinic.service.appointment_service.AppointmentService;
+import com.bobi89.medicalclinic.service.appointment.AppointmentService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

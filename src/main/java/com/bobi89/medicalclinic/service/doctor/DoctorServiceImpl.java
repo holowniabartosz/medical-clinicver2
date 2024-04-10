@@ -1,10 +1,8 @@
-package com.bobi89.medicalclinic.service.doctor_service;
+package com.bobi89.medicalclinic.service.doctor;
 
-import com.bobi89.medicalclinic.exception.exc.AppointmentConflictDateException;
 import com.bobi89.medicalclinic.exception.exc.EntityNotFoundException;
 import com.bobi89.medicalclinic.exception.exc.EntityNullFieldsException;
 import com.bobi89.medicalclinic.exception.exc.EntityWithThisIdExistsException;
-import com.bobi89.medicalclinic.model.entity.appointment.Appointment;
 import com.bobi89.medicalclinic.model.entity.doctor.Doctor;
 import com.bobi89.medicalclinic.model.entity.doctor.DoctorDTO;
 import com.bobi89.medicalclinic.model.entity.doctor.DoctorDTOwithPassword;
@@ -16,7 +14,6 @@ import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -41,9 +38,8 @@ public class DoctorServiceImpl implements DoctorService {
         var doctor = doctorJpaRepository.findById(id);
         if (doctor.isEmpty()) {
             throw new EntityNotFoundException("No such doctor in the database");
-        } else {
-            return doctorMapper.toDTO(doctor.get());
         }
+            return doctorMapper.toDTO(doctor.get());
     }
 
     @Override

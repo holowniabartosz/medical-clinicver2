@@ -7,7 +7,7 @@ import com.bobi89.medicalclinic.model.entity.patient.ChangePasswordCommand;
 import com.bobi89.medicalclinic.model.entity.patient.PatientDTO;
 import com.bobi89.medicalclinic.model.entity.patient.PatientDTOwithPassword;
 import com.bobi89.medicalclinic.model.entity.util.PatientCreator;
-import com.bobi89.medicalclinic.service.patient_service.PatientServiceImpl;
+import com.bobi89.medicalclinic.service.patient.PatientServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +43,7 @@ class PatientControllerTest {
     private MockMvc mockMvc;
 
     @Test
-    void findAll() throws Exception {
+    void findAll_PageReturned() throws Exception {
         List<PatientDTO> patients = new ArrayList<>();
         PatientDTO patientDTO = PatientCreator.createPatientDTO(1, "john@gmail.com");
         PatientDTO patientDTO2 = PatientCreator.createPatientDTO(2, "john@gmail.com1");
@@ -73,7 +73,7 @@ class PatientControllerTest {
 
         when(patientServiceImpl.findByEmail(email)).thenReturn(patientDTO);
 
-        mockMvc.perform(get("/patients/{email}", email))
+        mockMvc.perform(get("/patients/email/{email}", email))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(patientDTO.getId()))
@@ -90,7 +90,7 @@ class PatientControllerTest {
         when(patientServiceImpl.findByEmail(email))
                 .thenThrow(new EntityNotFoundException("No such patient"));
 
-        mockMvc.perform(get("/patients/{email}", email))
+        mockMvc.perform(get("/patients/email/{email}", email))
                 .andDo(print())
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.message").value("Entity not found"));

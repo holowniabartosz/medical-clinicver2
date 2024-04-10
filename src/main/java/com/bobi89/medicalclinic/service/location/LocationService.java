@@ -1,4 +1,4 @@
-package com.bobi89.medicalclinic.service.location_service;
+package com.bobi89.medicalclinic.service.location;
 
 import com.bobi89.medicalclinic.model.entity.location.LocationDTO;
 

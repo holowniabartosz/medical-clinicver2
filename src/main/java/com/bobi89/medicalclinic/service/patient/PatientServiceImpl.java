@@ -1,23 +1,29 @@
-package com.bobi89.medicalclinic.service.patient_service;
+package com.bobi89.medicalclinic.service.patient;
 
 import com.bobi89.medicalclinic.exception.exc.EntityNotFoundException;
 import com.bobi89.medicalclinic.exception.exc.EntityNullFieldsException;
 import com.bobi89.medicalclinic.exception.exc.EntityWithThisEmailExistsException;
 import com.bobi89.medicalclinic.exception.exc.IncorrectOldPasswordException;
+import com.bobi89.medicalclinic.model.entity.appointment.Appointment;
+import com.bobi89.medicalclinic.model.entity.appointment.AppointmentDTO;
+import com.bobi89.medicalclinic.model.entity.mapper.AppointmentMapper;
 import com.bobi89.medicalclinic.model.entity.mapper.PatientMapper;
 import com.bobi89.medicalclinic.model.entity.patient.ChangePasswordCommand;
 import com.bobi89.medicalclinic.model.entity.patient.Patient;
 import com.bobi89.medicalclinic.model.entity.patient.PatientDTO;
 import com.bobi89.medicalclinic.model.entity.patient.PatientDTOwithPassword;
 import com.bobi89.medicalclinic.repository.AppointmentRepository;
-import com.bobi89.medicalclinic.repository.DoctorJpaRepository;
 import com.bobi89.medicalclinic.repository.PatientJpaRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import org.springframework.data.domain.Pageable;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -26,9 +32,8 @@ public class PatientServiceImpl implements PatientService {
 
     private PatientJpaRepository patientJpaRepository;
     private PatientMapper patientMapper;
+    private AppointmentMapper appointmentMapper;
     private AppointmentRepository appointmentRepository;
-    private DoctorJpaRepository doctorJpaRepository;
-
 
     @Override
     public Page<PatientDTO> findAll(Pageable pageable) {
@@ -40,9 +45,36 @@ public class PatientServiceImpl implements PatientService {
         var patient = patientJpaRepository.findByEmail(email);
         if (patient.isEmpty()) {
             throw new EntityNotFoundException("No such patient in the database");
-        } else {
-            return patientMapper.toDTO(patient.get());
         }
+        return patientMapper.toDTO(patient.get());
+
+    }
+
+    @Override
+    public PatientDTO findById(Long id) {
+        var patient = patientJpaRepository.findById(id);
+        if (patient.isEmpty()) {
+            throw new EntityNotFoundException("No such patient in the database");
+        }
+        return patientMapper.toDTO(patient.get());
+    }
+
+    @Override
+    public List<PatientDTO> findPatientsByDate(LocalDate date) {
+        LocalDateTime startOfDay = date.atStartOfDay();
+        LocalDateTime endOfDay = date.atTime(23, 59, 59);
+        return appointmentRepository.findByStartDateTimeBetween(startOfDay, endOfDay).stream()
+                .map(Appointment::getPatient)
+                .map(patientMapper::toDTO)
+                .filter(Objects::nonNull)
+                .toList();
+    }
+
+    @Override
+    public List<AppointmentDTO> findAllPatientAppointmnets(Long patientId) {
+        return appointmentRepository.findByPatientId(patientId).stream()
+                .map(appointment -> appointmentMapper.toDTO(appointment))
+                .toList();
     }
 
     @Override

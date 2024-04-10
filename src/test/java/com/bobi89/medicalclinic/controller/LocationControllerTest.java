@@ -2,7 +2,7 @@ package com.bobi89.medicalclinic.controller;
 
 import com.bobi89.medicalclinic.model.entity.location.LocationDTO;
 import com.bobi89.medicalclinic.model.entity.util.LocationCreator;
-import com.bobi89.medicalclinic.service.location_service.LocationServiceImpl;
+import com.bobi89.medicalclinic.service.location.LocationServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

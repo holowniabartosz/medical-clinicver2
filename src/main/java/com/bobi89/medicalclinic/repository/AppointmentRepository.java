@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 public interface AppointmentRepository extends JpaRepository<Appointment, Long> {
@@ -21,4 +22,8 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
                     "OR (start_date_time BETWEEN :startDateTime AND :endDateTime) " +
                     ")")
     int checkForConflictingSlotsForDoctor(LocalDateTime startDateTime, LocalDateTime endDateTime, Long doctorId);
+
+    List<Appointment> findByStartDateTimeBetween(LocalDateTime startOfDay, LocalDateTime endOfDay);
+
+    List<Appointment> findByPatientId(Long patientId);
 }

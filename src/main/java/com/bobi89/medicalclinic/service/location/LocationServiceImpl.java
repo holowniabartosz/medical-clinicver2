@@ -1,4 +1,4 @@
-package com.bobi89.medicalclinic.service.location_service;
+package com.bobi89.medicalclinic.service.location;
 
 import com.bobi89.medicalclinic.exception.exc.EntityNotFoundException;
 import com.bobi89.medicalclinic.exception.exc.EntityNullFieldsException;
@@ -34,9 +34,8 @@ public class LocationServiceImpl implements LocationService {
         var location = locationJpaRepository.findById(id);
         if (location.isEmpty()) {
             throw new EntityNotFoundException("No such location in the database");
-        } else {
-            return locationMapper.toDTO(location.get());
         }
+        return locationMapper.toDTO(location.get());
     }
 
     @Override

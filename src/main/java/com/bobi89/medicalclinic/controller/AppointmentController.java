@@ -2,7 +2,7 @@ package com.bobi89.medicalclinic.controller;
 
 import com.bobi89.medicalclinic.model.entity.appointment.AppointmentDTO;
 import com.bobi89.medicalclinic.model.entity.appointment.AppointmentRequest;
-import com.bobi89.medicalclinic.service.appointment_service.AppointmentService;
+import com.bobi89.medicalclinic.service.appointment.AppointmentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;

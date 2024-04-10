@@ -1,9 +1,10 @@
 package com.bobi89.medicalclinic.controller;
 
+import com.bobi89.medicalclinic.model.entity.appointment.AppointmentDTO;
 import com.bobi89.medicalclinic.model.entity.patient.ChangePasswordCommand;
 import com.bobi89.medicalclinic.model.entity.patient.PatientDTO;
 import com.bobi89.medicalclinic.model.entity.patient.PatientDTOwithPassword;
-import com.bobi89.medicalclinic.service.patient_service.PatientService;
+import com.bobi89.medicalclinic.service.patient.PatientService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -12,10 +13,12 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import org.springframework.data.domain.Pageable;
+import java.time.LocalDate;
+import java.util.List;
 
 @RestController
 @AllArgsConstructor
@@ -25,7 +28,6 @@ public class PatientController {
     private PatientService patientService;
 
     @Operation(summary = "Get the list of all patients")
-
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "List returned",
                     content = {@Content(mediaType = "application/json",
@@ -37,6 +39,18 @@ public class PatientController {
         return patientService.findAll(pageable);
     }
 
+    @Operation(summary = "Get the list of all patient's appointments")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "List returned",
+                    content = {@Content(mediaType = "application/json",
+                            array = @ArraySchema(schema = @Schema(implementation = PatientDTO.class)))
+                    })
+    })
+    @GetMapping("/{patientId}/appointments")
+    public List<AppointmentDTO> findAllPatientAppointmnets(@PathVariable Long patientId) {
+        return patientService.findAllPatientAppointmnets(patientId);
+    }
+
     @Operation(summary = "Get a patient by its email address")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Found the patient",
@@ -46,9 +60,35 @@ public class PatientController {
             @ApiResponse(responseCode = "404", description = "Entity not found",
                     content = @Content)
     })
-    @GetMapping("/{email}")
+    @GetMapping("/email/{email}")
     public PatientDTO findByEmail(@PathVariable String email) {
         return patientService.findByEmail(email);
+    }
+
+    @Operation(summary = "Get a patient by its id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Found the patient",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = PatientDTO.class))
+                    }),
+            @ApiResponse(responseCode = "404", description = "Entity not found",
+                    content = @Content)
+    })
+    @GetMapping("/id/{id}")
+    public PatientDTO findById(@PathVariable Long id) {
+        return patientService.findById(id);
+    }
+
+    @Operation(summary = "Get patients with a visit on a given day")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Found the patients",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = PatientDTO.class))
+                    }),
+    })
+    @GetMapping("/date")
+    public List<PatientDTO> findPatientsByDate(@RequestParam("date") LocalDate date) {
+        return patientService.findPatientsByDate(date);
     }
 
     @Operation(summary = "Add a patient")

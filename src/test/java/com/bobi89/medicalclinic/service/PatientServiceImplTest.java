@@ -3,6 +3,7 @@ package com.bobi89.medicalclinic.service;
 import com.bobi89.medicalclinic.exception.exc.EntityNotFoundException;
 import com.bobi89.medicalclinic.exception.exc.EntityWithThisEmailExistsException;
 import com.bobi89.medicalclinic.exception.exc.IncorrectOldPasswordException;
+import com.bobi89.medicalclinic.model.entity.mapper.AppointmentMapper;
 import com.bobi89.medicalclinic.model.entity.mapper.PatientMapper;
 import com.bobi89.medicalclinic.model.entity.patient.ChangePasswordCommand;
 import com.bobi89.medicalclinic.model.entity.patient.Patient;
@@ -10,10 +11,9 @@ import com.bobi89.medicalclinic.model.entity.patient.PatientDTO;
 import com.bobi89.medicalclinic.model.entity.patient.PatientDTOwithPassword;
 import com.bobi89.medicalclinic.model.entity.util.PatientCreator;
 import com.bobi89.medicalclinic.repository.AppointmentRepository;
-import com.bobi89.medicalclinic.repository.DoctorJpaRepository;
 import com.bobi89.medicalclinic.repository.PatientJpaRepository;
-import com.bobi89.medicalclinic.service.patient_service.PatientService;
-import com.bobi89.medicalclinic.service.patient_service.PatientServiceImpl;
+import com.bobi89.medicalclinic.service.patient.PatientService;
+import com.bobi89.medicalclinic.service.patient.PatientServiceImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -35,21 +35,20 @@ import static org.mockito.Mockito.when;
 class PatientServiceImplTest {
 
     private PatientMapper patientMapper;
+    private AppointmentMapper appointmentMapper;
     private PatientJpaRepository patientJpaRepository;
     private PatientService patientService;
     private AppointmentRepository appointmentRepository;
-    private DoctorJpaRepository doctorJpaRepository;
 
 
     @BeforeEach
     void setup() {
         this.patientJpaRepository = Mockito.mock(PatientJpaRepository.class);
         this.patientMapper = Mappers.getMapper(PatientMapper.class);
+        this.appointmentMapper = Mappers.getMapper(AppointmentMapper.class);
         this.appointmentRepository = Mockito.mock(AppointmentRepository.class);
-        this.doctorJpaRepository = Mockito.mock(DoctorJpaRepository.class);
-        this.patientService = new PatientServiceImpl(patientJpaRepository, patientMapper, appointmentRepository,
-                doctorJpaRepository);
-
+        this.patientService = new PatientServiceImpl(patientJpaRepository, patientMapper, appointmentMapper,
+    appointmentRepository);
     }
 
     @Test
