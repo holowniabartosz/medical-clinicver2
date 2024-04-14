@@ -1,0 +1,45 @@
+version: '3.8'
+services:
+  myapp:
+    image: medical-clinic
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/medical-clinic-db
+      - SPRING_DATASOURCE_USERNAME=user
+      - SPRING_DATASOURCE_PASSWORD=password
+    depends_on:
+      - db
+      - proxy
+    ports:
+      - "8080:8080"
+
+  proxy:
+    image: medical-clinic-proxy
+    environment:
+      - FEIGN_CLIENT_medical-clinic-Client_URL=http://myapp:8080
+    ports:
+      - "8088:8088"
+
+  db:
+    image: postgres
+    environment:
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=medical-clinic-db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: 'amin@mail.com'
+      PGADMIN_DEFAULT_PASSWORD: "password"
+    ports:
+      - "5050:80"
+    depends_on:
+      - db
+
+volumes:
+  postgres_data:
+    driver: local
