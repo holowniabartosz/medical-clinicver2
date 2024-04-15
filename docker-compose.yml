@@ -11,13 +11,18 @@ services:
       - proxy
     ports:
       - "8080:8080"
+    networks:
+      - med-net
 
   proxy:
     image: medical-clinic-proxy
     environment:
       - FEIGN_CLIENT_medical-clinic-Client_URL=http://myapp:8080
+      - SPRING_DATASOURCE_MONGODB_URI=mongodb://mongodb:27017/proxy-db
     ports:
       - "8088:8088"
+    networks:
+      - med-net
 
   db:
     image: postgres
@@ -29,17 +34,26 @@ services:
       - postgres_data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
+    networks:
+      - med-net
 
-  pgadmin:
-    image: dpage/pgadmin4
+  mongodb:
+    image: mongo
     environment:
-      PGADMIN_DEFAULT_EMAIL: 'amin@mail.com'
-      PGADMIN_DEFAULT_PASSWORD: "password"
+      MONGO_INITDB_DATABASE: proxy-db
     ports:
-      - "5050:80"
-    depends_on:
-      - db
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - med-net
 
 volumes:
   postgres_data:
     driver: local
+  mongo_data:
+    driver: local
+
+networks:
+  med-net:
+    driver: bridge
